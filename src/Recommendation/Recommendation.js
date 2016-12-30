@@ -3,13 +3,15 @@ import axios from 'axios';
 import './Recommendation.css';
 
 class Recommendation extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {recommendationData: ''};
-	};
+  constructor(props) {
+    super(props);
+    this.state = {
+      recommendationData: ''
+    };
+  };
 
   sendRequest(food) {
-  	var me;
+    var me;
     var config = {
       headers: {
         'Access-Control-Allow-Origin': '*'
@@ -27,19 +29,19 @@ class Recommendation extends Component {
   componentWillReceiveProps(nextProps) {
     // You don't have to do this check first, but it can help prevent an unneeded render
     if (nextProps.input !== this.state.recommendationData) {
-    	console.log(nextProps.input);
-    	this.sendRequest(nextProps.input);
+      console.log(nextProps.input);
+      this.sendRequest(nextProps.input);
     }
   }
 
 	render() {
     if (this.props.input && this.state.recommendationData.hits) {
       return (
-      	<div className="food__card-container">
-      		<div className="food__heading-container">
-		      	<h2 className="food__heading-title">{this.state.recommendationData.hits[0].recipe.label}</h2>
+      	<div className="recommendation__card-container">
+      		<div className="recommendation__heading-container">
+		      	<h2 className="recommendation__heading-title">{this.state.recommendationData.hits[0].recipe.label}</h2>
 	      	</div>
-	      	<img className="image-round-border" src={this.state.recommendationData.hits[0].recipe.image} />
+	      	<img className="recommendation__image-round-border" src={this.state.recommendationData.hits[0].recipe.image} />
 	      	<p>{this.state.recommendationData.hits[0].recipe.ingredientLines}</p>
       	</div>
       );
