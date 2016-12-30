@@ -1,0 +1,21 @@
+.food__card-container {
+  background: linear-gradient(to bottom, #E32351 0%, #E32351 63%,#000000 50%,#DFDDD9 50%,#DFDDD9 100%);
+  display: inline-block;
+  width: 100%;
+}
+
+.image-round-border {
+	border: 1px solid lightgrey;
+	border-radius: 100%;
+}
+
+.food__heading-container {
+  max-width: 61%;
+  margin-left: 7%;
+}
+
+.food__heading-title {
+  text-align: left;
+  line-height: 2.1rem;
+  text-transform: uppercase;
+}
