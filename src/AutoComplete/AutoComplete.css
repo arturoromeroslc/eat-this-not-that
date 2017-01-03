@@ -20,3 +20,23 @@
 	color: #2060aa;
 	font-size: 1.3rem;
 }
+
+.autocomplete__list {
+	display: inline-flex;
+	flex-direction: column;
+	margin: 0;
+	width: 100%;
+	padding: 0;
+	list-style-type: none;
+	background: white;
+}
+
+.autocomplete__list-item {
+	color: black;
+}
+
+.autocomplete__list-item:hover {
+	background-color: lightgray;
+	color: black;
+	cursor: pointer;
+}
