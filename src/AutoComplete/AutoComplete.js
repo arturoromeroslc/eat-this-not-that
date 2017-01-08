@@ -7,9 +7,11 @@ class AutoComplete extends Component {
   constructor(props) {
     super(props);
     this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
-    this.handleClickListItem = this.handleClickListItem.bind(this);
+    this.handleSelectedItem = this.handleSelectedItem.bind(this);
     this.getAutoCompleteResults = this.getAutoCompleteResults.bind(this);
-    this.state = {autoCompleteData: []}
+    this.resetState = this.resetState.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.state = {autoCompleteData: [], selectedIndex: 0};
     this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300);
   }
 
@@ -25,18 +27,17 @@ class AutoComplete extends Component {
       this.props.onChangedInputValue(value);
     } else {
       this.state = {autoCompleteData: []}
-      this.props.onChangedInputValue(value);
     }
+      this.props.onChangedInputValue(value);
   }
 
   /**
    * when we click a list item call the prop onChange which will send an api call to get recipes
    * @param  {String} text item which was clicked
    */
-  handleClickListItem(text) {
+  handleSelectedItem(text) {
     this.props.onChangedInputValue(text);
     this.props.onSelectedItem(text)
-    this.state = {autoCompleteData: []}
   }
 
   /**
@@ -44,7 +45,6 @@ class AutoComplete extends Component {
    * @param  {String} value string to set as query parameter
    */
   getAutoCompleteResults(value) {
-    console.log('hey');
     axios.get(`https://api.nutritionix.com/v2/autocomplete?q=${value}&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4`)
       .then(response => {
         this.setState({autoCompleteData: response.data})
@@ -54,23 +54,60 @@ class AutoComplete extends Component {
       })
   }
 
-  render() {
-    let borderTopStyle = {borderTop: '1px solid lightgray'};
+  handleKeyDown(e) {
+    const DOWN_ARROW_KEY = 40;
+    const UP_ARROW_KEY = 38;
+    const ENTER = 13
 
-    const listItems = this.state.autoCompleteData.map((data) =>
-      <li className="autocomplete__list-item" onClick={(event) => this.handleClickListItem(data.text)} key={data.id}>{data.text}</li>
+    console.log(this.state.selectedIndex);
+
+    if (e.keyCode === DOWN_ARROW_KEY) {
+      this.setState({selectedIndex: this.state.selectedIndex + 1})
+    }
+
+    if (e.keyCode === UP_ARROW_KEY && this.state.selectedIndex !== 0) {
+      this.setState({selectedIndex: this.state.selectedIndex - 1})
+    }
+
+    if (e.keyCode === ENTER) {
+      this.handleSelectedItem(this.state.autoCompleteData[this.state.selectedIndex].text)
+      this.resetState()
+      this.setState({selectedIndex: 0, autoCompleteData: []});
+    }
+  }
+
+  resetState() {
+    this.setState({selectedIndex: 0, autoCompleteData: []});
+  }
+
+  render() {
+    let borderTopStyle = {borderTop: '1px solid lightgray'},
+        seleectedBackgroundColor = {backgroundColor: 'darkgrey'};
+
+    const listItems = this.state.autoCompleteData.map((data, i) =>
+      <li
+        style={(this.state.selectedIndex === i) ? seleectedBackgroundColor : {}}
+        className="autocomplete__list-item"
+        onClick={(event) => {
+            this.handleSelectedItem(data.text);
+            this.resetState();
+          }
+        }
+        key={data.id}>{i} {data.text}
+      </li>
     );
 
     return (
       <span>
         <span className="autocomplete__icon">⚲</span>
         <input
+          autoFocus
           className="autocomplete__input"
           placeholder="search"
           type="search"
-          autoFocus
           value={this.props.value}
           onChange={this.handleInputSearchChange}
+          onKeyDown={this.handleKeyDown}
         />
         <ul style={(this.state.autoCompleteData.length > 0) ? borderTopStyle : {}} className="autocomplete__list">
           {listItems}
@@ -79,5 +116,11 @@ class AutoComplete extends Component {
     )
   }
 }
+
+AutoComplete.propTypes = {
+  onChangedInputValue: React.PropTypes.func,
+  onSelectedItem: React.PropTypes.func,
+  value: React.PropTypes.string
+};
 
 export default AutoComplete;
