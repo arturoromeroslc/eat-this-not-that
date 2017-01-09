@@ -4,22 +4,22 @@
   overflow: hidden;
 }
 
-.recommendation__image-round-border {
+.recommendation__card-image-round-border {
 	border: 1px solid lightgrey;
 	border-radius: 100%;
 }
 
-.recommendation__heading-container {
+.recommendation__card-heading-container {
   max-width: 61%;
   margin-left: 7%;
 }
 
-.recommendation__heading-title {
+.recommendation__card-heading-title {
   text-align: left;
   line-height: 2.1rem;
   text-transform: uppercase;
 }
 
-.displayNone {
+.recommendation__card--is-hidden {
   display: none;
 }
