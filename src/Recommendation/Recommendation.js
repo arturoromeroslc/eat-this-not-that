@@ -13,13 +13,18 @@ class Recommendation extends Component {
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   };
+
+  handleClick(e) {
+    console.log('called click');
+  }
 
   handleTouchStart(e) {
     let touch = e.touches[0]
+    this.setState({direction: null});
     this.setState({initialTouch: touch});
   }
-
 
   handleTouchMove(e) {
     let touch = e.touches[0];
@@ -37,19 +42,16 @@ class Recommendation extends Component {
     let dataLength = this.props.data.hits.length - 1;
 
     if (this.state.direction === 'left') {
-      console.log(this.state.showIndex);
       if (dataLength !== this.state.showIndex) {
         this.setState({showIndex: this.state.showIndex + 1})
       } else {
         this.setState({showIndex: 0})
       }
     } else if (this.state.direction === 'right') {
-      console.log(this.state.showIndex);
-      /*0 end*/
-      if (dataLength !== this.state.showIndex) {
-        this.setState({showIndex: dataLength - 1 + 1})
+      if (this.state.showIndex === 0) {
+        this.setState({showIndex: dataLength})
       } else {
-        this.setState({showIndex: 0})
+        this.setState({showIndex: this.state.showIndex - 1})
       }
     }
   }
@@ -68,7 +70,8 @@ class Recommendation extends Component {
                 key={i}
                 onTouchStart={this.handleTouchStart}
                 onTouchEnd={this.handleTouchEnd}
-                onTouchMove={this.handleTouchMove}>
+                onTouchMove={this.handleTouchMove}
+                onClick={this.handleClick}>
                 <div className="recommendation__card-heading-container">
                   <h2 className="recommendation__card-heading-title">{recipeObject.recipe.label}</h2>
                 </div>
