@@ -9,9 +9,11 @@ class AutoComplete extends Component {
     this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
     this.handleSelectedItem = this.handleSelectedItem.bind(this);
     this.getAutoCompleteResults = this.getAutoCompleteResults.bind(this);
-    this.resetState = this.resetState.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.state = {autoCompleteData: [], selectedIndex: 0};
+    this.state = {
+      autoCompleteData: [],
+      selectedIndex: 0
+    };
     this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300);
   }
 
@@ -21,14 +23,17 @@ class AutoComplete extends Component {
    */
   handleInputSearchChange(e) {
     let value = e.target.value;
-    
+
     if (e.target.value.length > 0) {
       this.getAutoCompleteResults(e.target.value)
       this.props.onChangedInputValue(value);
     } else {
-      this.state = {autoCompleteData: []}
+      this.state = {
+        autoCompleteData: [],
+        selectedIndex: 0
+      }
     }
-      this.props.onChangedInputValue(value);
+    this.props.onChangedInputValue(value);
   }
 
   /**
@@ -37,7 +42,11 @@ class AutoComplete extends Component {
    */
   handleSelectedItem(text) {
     this.props.onChangedInputValue(text);
-    this.props.onSelectedItem(text)
+    this.props.onSelectedItem(text);
+    this.setState({
+      autoCompleteData: [],
+      selectedIndex: 0
+    });
   }
 
   /**
@@ -47,37 +56,57 @@ class AutoComplete extends Component {
   getAutoCompleteResults(value) {
     axios.get(`https://api.nutritionix.com/v2/autocomplete?q=${value}&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4`)
       .then(response => {
-        this.setState({autoCompleteData: response.data})
+        this.setState({
+          autoCompleteData: response.data
+        })
       })
       .catch(response => {
         console.log(response);
       })
   }
 
+  /**
+   * Handle the keydown of the input field.  This function will also handle the highlighted index from the ul element.
+   * @param  {Object} event object passed in by React
+   */
   handleKeyDown(e) {
+    if (this.state.autoCompleteData.length === 0) { return; }
+
     const DOWN_ARROW_KEY = 40;
     const UP_ARROW_KEY = 38;
     const ENTER = 13
 
-    console.log(this.state.selectedIndex);
-
     if (e.keyCode === DOWN_ARROW_KEY) {
-      this.setState({selectedIndex: this.state.selectedIndex + 1})
+      if (this.state.selectedIndex === this.state.autoCompleteData.length - 1) {
+        this.setState({
+          selectedIndex: 0
+        })
+      } else {
+        this.setState({
+          selectedIndex: this.state.selectedIndex + 1
+        })
+      }
     }
 
-    if (e.keyCode === UP_ARROW_KEY && this.state.selectedIndex !== 0) {
-      this.setState({selectedIndex: this.state.selectedIndex - 1})
+    if (e.keyCode === UP_ARROW_KEY) {
+      if (this.state.selectedIndex === 0) {
+        this.setState({
+          selectedIndex: 9
+        });
+      } else {
+        this.setState({
+          selectedIndex: this.state.selectedIndex - 1
+        })
+      }
     }
 
     if (e.keyCode === ENTER) {
       this.handleSelectedItem(this.state.autoCompleteData[this.state.selectedIndex].text)
-      this.resetState()
-      this.setState({selectedIndex: 0, autoCompleteData: []});
+      this.setState({
+        selectedIndex: 0
+      });
+      console.log(this.state.selectedIndex);
     }
-  }
-
-  resetState() {
-    this.setState({selectedIndex: 0, autoCompleteData: []});
   }
 
   render() {
@@ -88,12 +117,8 @@ class AutoComplete extends Component {
       <li
         style={(this.state.selectedIndex === i) ? seleectedBackgroundColor : {}}
         className="autocomplete__list-item"
-        onClick={(event) => {
-            this.handleSelectedItem(data.text);
-            this.resetState();
-          }
-        }
-        key={data.id}>{i} {data.text}
+        onClick={(event) => this.handleSelectedItem(data.text)}
+        key={data.id}>{data.text}
       </li>
     );
 

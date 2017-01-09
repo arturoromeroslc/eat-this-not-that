@@ -44,7 +44,7 @@ class App extends Component {
             <span>menu</span>
           </div>
           <AutoComplete onSelectedItem={this.sendRecommendationRequest} onChangedInputValue={this.handleChangeSetState} value={this.state.foodValue}/>
-          <p>Find alternative cooking recipes for <strong>Cookies</strong>, <strong>hamburgers</strong>, <strong>Kale</strong>, <strong>nutella</strong></p>
+          <p>Find alternative cooking recipes for your cravings.</p>
         </div>
         <Recommendation value={this.state.foodValue} data={this.state.recommendationData}/>
       </div>
