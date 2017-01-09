@@ -9,6 +9,7 @@ class Recommendation extends Component {
       initialTouch: null,
       showIndex: 0,
       direction: null
+
     };
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
@@ -23,6 +24,7 @@ class Recommendation extends Component {
     var touch = e.touches[0]
     this.setState({initialTouch: touch});
   }
+
 
   handleTouchMove(e) {
     let touch = e.touches[0];
@@ -42,6 +44,7 @@ class Recommendation extends Component {
       } else {
         this.setState({showIndex: this.state.showIndex + 1})
       }
+
     }
   }
 
@@ -62,6 +65,7 @@ class Recommendation extends Component {
               </span>
             )
           }.bind(this))}
+
       	</div>
       );
     } else if (this.props.value && isEmpty(this.props.data.hits)) {
