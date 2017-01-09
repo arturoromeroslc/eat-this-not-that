@@ -1,7 +1,7 @@
 .recommendation__card-container {
-  background: linear-gradient(to bottom, #E32351 0%, #E32351 63%,#000000 50%,#DFDDD9 50%,#DFDDD9 100%);
-  display: inline-block;
+  display: flex;
   width: 100%;
+  overflow: hidden;
 }
 
 .recommendation__image-round-border {
@@ -18,4 +18,8 @@
   text-align: left;
   line-height: 2.1rem;
   text-transform: uppercase;
+}
+
+.displayNone {
+  display: none;
 }

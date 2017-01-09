@@ -1,55 +1,79 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import isEmpty from 'lodash.isempty';
 import './Recommendation.css';
 
 class Recommendation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recommendationData: ''
+      initialTouch: null,
+      showIndex: 0,
+      direction: null
+
     };
+    this.handleTouchStart = this.handleTouchStart.bind(this);
+    this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
   };
 
-  sendRequest(food) {
-    var me;
-    var config = {
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      }
-    };
-
-    return axios.get(`https://api.edamam.com/search?q=${food}&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797&from=0&to=3&calories=gte%20591,%20lte%20722&health=alcohol-free`, {}, config)
-      .then(response => {
-        this.setState({
-          recommendationData: response.data
-        });
-      })
+  handleTouchStart(e) {
+    console.log('start');
+    if (e.touches.length !== 1) {
+      return;
+    }
+    var touch = e.touches[0]
+    this.setState({initialTouch: touch});
   }
 
-  componentWillReceiveProps(nextProps) {
-    // You don't have to do this check first, but it can help prevent an unneeded render
-    if (nextProps.input !== this.state.recommendationData) {
-      console.log(nextProps.input);
-      this.sendRequest(nextProps.input);
+
+  handleTouchMove(e) {
+    let touch = e.touches[0];
+    console.log(this.state.initialTouch.pageX - touch.pageX);
+    if (Math.abs(touch.pageX < this.state.initialTouch.pageX) && ((this.state.initialTouch.pageX - touch.pageX) > 70)){
+      this.setState({direction: 'left'});
+    } else {
+      this.setState({direction: null});
+    }
+  }
+
+  handleTouchEnd(e) {
+    console.log(this.props.data.hits.length, this.state.showIndex);
+    if (this.state.direction === 'left') {
+      if (this.props.data.hits.length - 1=== this.state.showIndex) {
+        this.setState({showIndex: 0})
+      } else {
+        this.setState({showIndex: this.state.showIndex + 1})
+      }
+
     }
   }
 
 	render() {
-    if (this.props.input && this.state.recommendationData.hits) {
+    let displayBlock = {display: 'block'};
+
+    if (this.props.value && !isEmpty(this.props.data.hits)) {
       return (
-      	<div className="recommendation__card-container">
-      		<div className="recommendation__heading-container">
-		      	<h2 className="recommendation__heading-title">{this.state.recommendationData.hits[0].recipe.label}</h2>
-	      	</div>
-	      	<img className="recommendation__image-round-border" src={this.state.recommendationData.hits[0].recipe.image} />
-	      	<p>{this.state.recommendationData.hits[0].recipe.ingredientLines}</p>
+      	<div className="">
+          {this.props.data.hits.map(function repeater(recipeObject, i) {
+            return (
+              <span className="displayNone" style={(i === this.state.showIndex) ? displayBlock : {}} key={i} onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd} onTouchMove={this.handleTouchMove}>
+                <div className="recommendation__heading-container">
+                  <h2 className="recommendation__heading-title">{recipeObject.recipe.label}</h2>
+                </div>
+                <img className="recommendation__image-round-border" src={recipeObject.recipe.image} />
+                <p>{recipeObject.recipe.ingredientLines}</p>
+              </span>
+            )
+          }.bind(this))}
+
       	</div>
       );
-    } else if (this.props.input && !this.state.recommendationData.hits) {
-    	return <div>Loading..</div>
+    } else if (this.props.value && isEmpty(this.props.data.hits)) {
+    	return <div>No data for searched term</div>
+    } else {
+      return null;
     }
 
-    return <div>Loading...</div>;
 	}
 }
 
