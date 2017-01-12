@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
-import logo from './logo.svg';
 import AutoComplete from './AutoComplete/AutoComplete';
 import Recommendation from './Recommendation/Recommendation';
 import './App.css';
@@ -9,7 +8,7 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {foodValue: '', recommendationData: ''}
+    this.state = {foodValue: '', recommendationData: '', food: ''}
     this.handleChangeSetState = this.handleChangeSetState.bind(this);
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this);
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300);
@@ -20,18 +19,58 @@ class App extends Component {
   }
 
   sendRecommendationRequest(food) {
+    this.setState({food: food})
     var config = {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
     };
 
-    return axios.get(`https://api.edamam.com/search?q=${food}&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797&from=0&to=3&calories=gte%20591,%20lte%20722&health=alcohol-free`, {}, config)
+    // axios.get(`http://food2fork.com/api/search?key=888d6280d7887e48587971d37c6e88f2&q=${food}`)
+    //   .then(response => {
+    //     return axios.get(`http://food2fork.com/api/get?key=888d6280d7887e48587971d37c6e88f2&rId=${response.data.recipes[0].recipe_id}`)
+
+    //     this.setState({
+    //       recommendationData: response.data
+    //     });
+    //   })
+    //   .then(response => {
+    //     console.log(response.data.recipe.ingredients);
+    //     let ingredients = response.data.recipe.ingredients[0].split(' ').join(',') + response.data.recipe.ingredients[1].split(' ').join(',') + response.data.recipe.ingredients[2].split(' ').join(',') + response.data.recipe.ingredients[3].split(' ').join(',');
+        
+    //     console.log(ingredients);
+    //     ingredients = ingredients.replace(/[0-9]/g, '')
+    //     console.log(ingredients);
+
+    //   axios.get(`http://www.recipepuppy.com/api/?i=${ingredients}`)
+    //     .then(response => {
+    //       console.log(response);
+    //       let recipeNames = response.data.results.map(function getTitle(obj) {
+    //         console.log(obj, obj.title);
+    //         return obj.title
+    //       })
+    //     axios.get(`https://api.edamam.com/search?q=${recipeNames[0]}&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797&from=0&to=3&calories=gte%20591,%20lte%20722&health=alcohol-free`, {}, config)
+    //       .then(response => {
+    //         this.setState({
+    //           recommendationData: response.data
+    //         });
+    //       })
+    //     })
+    //   })
+
+
+    return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&calories=gte%20591,%20lte%20722&health=red-meat-free`, {}, config)
       .then(response => {
         this.setState({
           recommendationData: response.data
         });
       })
+    // return axios.get(`https://api.edamam.com/search?q=${food}&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797&from=0&to=3&calories=gte%20591,%20lte%20722&health=alcohol-free`, {}, config)
+    //   .then(response => {
+    //     this.setState({
+    //       recommendationData: response.data
+    //     });
+    //   })
   }  
 
   render() {

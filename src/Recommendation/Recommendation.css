@@ -1,7 +1,5 @@
 .recommendation__card-container {
-  display: flex;
-  width: 100%;
-  overflow: hidden;
+  height: 73vh;
 }
 
 .recommendation__card-image-round-border {
