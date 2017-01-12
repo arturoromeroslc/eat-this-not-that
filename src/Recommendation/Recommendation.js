@@ -8,7 +8,8 @@ class Recommendation extends Component {
     this.state = {
       initialTouch: null,
       showIndex: 0,
-      direction: null
+      direction: null,
+      showIngredient: false
     };
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
@@ -30,11 +31,20 @@ class Recommendation extends Component {
     let touch = e.touches[0];
     
     if (Math.abs(touch.pageX < this.state.initialTouch.pageX) && ((this.state.initialTouch.pageX - touch.pageX) > 35)){
+      this.setState({showIngredient: false});
       this.setState({direction: 'left'});
     } else if (Math.abs(touch.pageX > this.state.initialTouch.pageX) && ((touch.pageX - this.state.initialTouch.pageX) > 35)) {
+      this.setState({showIngredient: false});
       this.setState({direction: 'right'});
     } else {
       this.setState({direction: null});
+    }
+
+    if (Math.abs(touch.pageY < this.state.initialTouch.pageY) && ((this.state.initialTouch.pageY - touch.pageY) > 35)){
+       this.setState({showIngredient: true});
+      console.log('in down');
+    } else {
+      console.log('nothing');
     }
   }
 
@@ -61,22 +71,32 @@ class Recommendation extends Component {
 
     if (this.props.value && !isEmpty(this.props.data.hits)) {
       return (
-      	<div className="">
-          {this.props.data.hits.map(function repeater(recipeObject, i) {
+      	<div
+          className="recommendation__card-container"
+          onTouchStart={this.handleTouchStart}
+          onTouchEnd={this.handleTouchEnd}
+          onTouchMove={this.handleTouchMove}
+          onClick={this.handleClick}>
+          {this.props.data.hits.map(function(recipeObject, i) {
             return (
               <div
                 className="recommendation__card--is-hidden"
                 style={(i === this.state.showIndex) ? displayBlock : {}}
-                key={i}
-                onTouchStart={this.handleTouchStart}
-                onTouchEnd={this.handleTouchEnd}
-                onTouchMove={this.handleTouchMove}
-                onClick={this.handleClick}>
+                key={i}>
                 <div className="recommendation__card-heading-container">
                   <h2 className="recommendation__card-heading-title">{recipeObject.recipe.label}</h2>
                 </div>
-                <img className="recommendation__card-image-round-border" src={recipeObject.recipe.image} />
-                <p>{recipeObject.recipe.ingredientLines}</p>
+                <img className="recommendation__card-image-round-border" alt={recipeObject.recipe.label} src={recipeObject.recipe.image} />
+                <span>{(this.state.showIngredient === true) ? 
+                  <div
+                    className="recommendation__card">
+                    <h2 className="recommendation__card-heading-title">Ingredients (fix)</h2>
+                    <ul>{recipeObject.recipe.ingredients.map(function(ingredient, i) {
+                      return <li key={`ingredient-${i}`}>{ingredient.food}</li>
+                    })}
+                    </ul>
+                  </div>
+                 : null}</span>
               </div>
             )
           }.bind(this))}
