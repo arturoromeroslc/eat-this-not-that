@@ -1,5 +1,10 @@
 .app {
   text-align: center;
+  height: 100vh;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: #F7CD0F;
 }
 
 .app__logo {
@@ -7,9 +12,8 @@
 }
 
 .app__header {
-  background-color: #F7CD0F;
   height: auto;
-  padding: 20px;
+  margin: auto 0;
   color: white;
 }
 

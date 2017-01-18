@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import isEmpty from 'lodash.isempty';
 import './Recommendation.css';
 

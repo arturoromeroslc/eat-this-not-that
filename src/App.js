@@ -7,8 +7,9 @@ import './App.css';
 
 class App extends Component {
   constructor(props) {
+    console.log('called', props);
     super(props);
-    this.state = {foodValue: '', recommendationData: '', food: ''}
+    this.state = {foodValue: '', recommendationData: false, food: '', initialWindowLoad: true}
     this.handleChangeSetState = this.handleChangeSetState.bind(this);
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this);
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300);
@@ -62,25 +63,27 @@ class App extends Component {
     return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&calories=gte%20591,%20lte%20722&health=red-meat-free`, {}, config)
       .then(response => {
         this.setState({
-          recommendationData: response.data
+          recommendationData: response.data,
+          initialWindowLoad: false
         });
       })
-    // return axios.get(`https://api.edamam.com/search?q=${food}&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797&from=0&to=3&calories=gte%20591,%20lte%20722&health=alcohol-free`, {}, config)
-    //   .then(response => {
-    //     this.setState({
-    //       recommendationData: response.data
-    //     });
-    //   })
   }  
 
   render() {
+    let visible = {display: 'block'};
+    let hidden = {display: 'none'};
+    console.log('called render', this.state.initialWindowLoad);
+
     return (
       <div className="app">
         <div className="app__header">
           <div className="flex-space-between app__header__container">
-            <img src="http://www.clker.com/cliparts/n/H/d/c/L/W/restaurant-hi.png" className="app__logo" alt="logo" />
-            <h2 className="app__header__heading">Eat This, Not That.</h2>
-            <span>menu</span>
+            {/*<img src="http://www.clker.com/cliparts/n/H/d/c/L/W/restaurant-hi.png" className="app__logo" alt="logo" />*/}
+            <h2
+              style={(this.state.initialWindowLoad) ? visible : hidden}
+              className="app__header__heading">
+              Eat This, Not That.
+            </h2>
           </div>
           <AutoComplete onSelectedItem={this.sendRecommendationRequest} onChangedInputValue={this.handleChangeSetState} value={this.state.foodValue}/>
           <p>Find alternative cooking recipes for your cravings.</p>
