@@ -6,6 +6,8 @@ import AutoComplete from './AutoComplete/AutoComplete';
 import Recommendation from './Recommendation/Recommendation';
 import './App.css';
 
+let filtersSelected = [];
+
 class App extends Component {
   constructor(props) {
     console.log('called', props);
@@ -15,11 +17,14 @@ class App extends Component {
       recommendationData: false,
       food: '',
       initialWindowLoad: true,
-      showFilter: false
+      showFilter: false,
+      filtersSelected: []
     }
     this.handleChangeSetState = this.handleChangeSetState.bind(this);
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this);
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this);
+    this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this);
+    this.getReadyToSendRequestWithFilter = this.getReadyToSendRequestWithFilter.bind(this);
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300);
   }
 
@@ -32,15 +37,45 @@ class App extends Component {
     console.log(this.state.showFilter);
   }
 
-  sendRecommendationRequest(food) {
-    this.setState({food: food})
+  setFoodAndMakeApiCall(foodValue) {
+    let dietFilter;
+    
+    if (filtersSelected.length > 0) {
+      dietFilter = `&diet=${filtersSelected}`
+    } else {
+      dietFilter = ''
+    }
+
+    this.setState({food: foodValue});
+    this.sendRecommendationRequest(foodValue, dietFilter);
+  }
+
+  getReadyToSendRequestWithFilter(filter) {
+    filtersSelected = filter.slice(0);
+
+    let dietFilter;
+
+    if (filtersSelected.length > 0) {
+      dietFilter = `&diet=${filtersSelected}`
+    } else {
+      dietFilter = ''
+    }
+
+    let foodValue = this.state.food.trim(); 
+
+    if (foodValue.length > 0) {
+      this.sendRecommendationRequest(foodValue, dietFilter);
+    }
+  }
+
+  sendRecommendationRequest(food, dietFilter) {
     var config = {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
     };
 
-    return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&calories=gte%20591,%20lte%20722&health=red-meat-free`, {}, config)
+    return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&calories=gte%20591,%20lte%20722${dietFilter}`, {}, config)
       .then(response => {
         this.setState({
           recommendationData: response.data,
@@ -56,7 +91,7 @@ class App extends Component {
 
     return (
       <div>
-        <Filter show={this.state.showFilter} onToggleFilterMenu={this.toggleFilterMenu}/>
+        <Filter show={this.state.showFilter} onToggleFilterMenu={this.toggleFilterMenu} onSelectionOfFilters={this.getReadyToSendRequestWithFilter}/>
         <div className="app">
           <div className="app__header">
             <div className="flex-space-between app__header__container">
@@ -67,7 +102,7 @@ class App extends Component {
               </h2>
               <span onClick={this.toggleFilterMenu}>Filter</span>
             </div>
-            <AutoComplete onSelectedItem={this.sendRecommendationRequest} onChangedInputValue={this.handleChangeSetState} value={this.state.foodValue}/>
+            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.handleChangeSetState} value={this.state.foodValue}/>
             <p>Find alternative cooking recipes for your cravings.</p>
           </div>
           <Recommendation value={this.state.foodValue} data={this.state.recommendationData}/>

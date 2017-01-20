@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import './Filter.css';
 
-const checkboxes = ['Low-Fat', 'Low-Carb', 'Vegetarian'];
+const checkboxes = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
+const propTypes = {
+  show: React.PropTypes.bool,
+  onToggleFilterMenu: React.PropTypes.func,
+  onSelectionOfFilters: React.PropTypes.func
+};
 
 class Filter extends Component {
   constructor(props) {
@@ -28,6 +33,9 @@ class Filter extends Component {
     } else {
       this.setState({
         selectedFilters: [...this.state.selectedFilters, filter]
+      }, () => {
+      	console.log(this.state.selectedFilters);
+      	this.props.onSelectionOfFilters(this.state.selectedFilters)
       })
     }
   }
@@ -77,9 +85,6 @@ class Filter extends Component {
 	}
 }
 
-Filter.propTypes = {
-  show: React.PropTypes.bool,
-  onToggleFilterMenu: React.PropTypes.func
-};
+Filter.propTypes = propTypes;
 
 export default Filter;
