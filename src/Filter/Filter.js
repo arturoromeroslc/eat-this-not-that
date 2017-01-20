@@ -4,18 +4,20 @@ import './Filter.css';
 const checkboxes = ['Low-Fat', 'Low-Carb', 'Vegetarian'];
 
 class Filter extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {selectedFilters: []}
-		this.handleFilterClick = this.handleFilterClick.bind(this);
-		this.isActive = this.isActive.bind(this);
-		this.clearFilter = this.clearFilter.bind(this);
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedFilters: []
+    }
+    this.handleFilterClick = this.handleFilterClick.bind(this);
+    this.isActive = this.isActive.bind(this);
+    this.clearFilter = this.clearFilter.bind(this);
+  }
 
   handleFilterClick(filter) {
     let selectedFilters = this.state.selectedFilters,
-      	index = selectedFilters.indexOf(filter);
-    
+      index = selectedFilters.indexOf(filter);
+
     if (index > -1) {
       this.setState({
         selectedFilters: [
@@ -24,23 +26,27 @@ class Filter extends Component {
         ]
       })
     } else {
-      this.setState({selectedFilters: [...this.state.selectedFilters, filter]})
+      this.setState({
+        selectedFilters: [...this.state.selectedFilters, filter]
+      })
     }
   }
 
   clearFilter() {
-  	this.setState({selectedFilters: []})
+    this.setState({
+      selectedFilters: []
+    })
   }
 
-	isActive(filter) {
-		var defaultClass = 'filter__catergory__item';
+  isActive(filter) {
+    var defaultClass = 'filter__catergory__item';
 
-		if (this.state.selectedFilters.includes(filter)) {
-			return defaultClass + ' filter__catergory__item--is-active';
-		} else {
-			return defaultClass;
-		}
-	}
+    if (this.state.selectedFilters.includes(filter)) {
+      return defaultClass + ' filter__catergory__item--is-active';
+    } else {
+      return defaultClass;
+    }
+  }
 
 	render () {
 		let show = this.props.show;
