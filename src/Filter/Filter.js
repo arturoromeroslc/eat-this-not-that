@@ -10,7 +10,7 @@ class Filter extends Component {
       selectedFilters: []
     }
     this.handleFilterClick = this.handleFilterClick.bind(this);
-    this.isActive = this.isActive.bind(this);
+    this.isFilterItemSelected = this.isFilterItemSelected.bind(this);
     this.clearFilter = this.clearFilter.bind(this);
   }
 
@@ -38,7 +38,7 @@ class Filter extends Component {
     })
   }
 
-  isActive(filter) {
+  isFilterItemSelected(filter) {
     var defaultClass = 'filter__catergory__item';
 
     if (this.state.selectedFilters.includes(filter)) {
@@ -63,7 +63,7 @@ class Filter extends Component {
 						<h3>Diet</h3>	
 						<div className="filter__catergory">
 							{checkboxes.map((filter, i) =>
-								<span key={i} className={this.isActive(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
+								<span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
 							)}
 						</div>
 					</div>
