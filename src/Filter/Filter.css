@@ -1,0 +1,32 @@
+.filter__contatiner {
+	height: 100vh;
+	background-color: #B1A58B;
+}
+
+.filter__header-container {
+	display: flex;
+	justify-content: space-between;
+	background-color: #262320;
+}
+
+.filter__catergory {
+	display: flex;
+	justify-content: space-around;
+}
+
+.filter__catergory__item {
+	padding: 3px 10px;
+	border: 1px solid black;
+}
+
+.filter__catergory__item--is-active {
+	background-color: #F7B52D;
+}
+
+.filter__action-text {
+	color: #F7B52D;
+}
+
+.filter__header-heading {
+	color: white;
+}
