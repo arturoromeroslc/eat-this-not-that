@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './Filter.css';
 
-const checkboxes = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
+const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
+const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free'];
 const propTypes = {
   show: React.PropTypes.bool,
   onToggleFilterMenu: React.PropTypes.func,
@@ -12,28 +13,26 @@ class Filter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFilters: []
+      selectedFilters: {}
     }
     this.handleFilterClick = this.handleFilterClick.bind(this);
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this);
     this.clearFilter = this.clearFilter.bind(this);
   }
 
-  handleFilterClick(filter) {
+  handleFilterClick(filter, category) {
     let selectedFilters = this.state.selectedFilters,
-      index = selectedFilters.indexOf(filter);
+      index = selectedFilters[category] ? selectedFilters[category].indexOf(filter) : -1;
 
-    if (index > -1) {
-      this.setState({
-        selectedFilters: [
-          ...selectedFilters.slice(0, index),
-          ...selectedFilters.slice(index + 1)
-        ]
-      }, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
+    if (selectedFilters[category] && index > -1) {
+      selectedFilters[category] = [
+        ...selectedFilters[category].slice(0, index),
+        ...selectedFilters[category].slice(index + 1)
+      ]
+      this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     } else {
-      this.setState({
-        selectedFilters: [...this.state.selectedFilters, filter]
-      }, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
+      selectedFilters[category] = Array.isArray(selectedFilters[category]) ? [...this.state.selectedFilters[category], filter] : selectedFilters[category] = [filter]
+      this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     }
   }
 
@@ -43,11 +42,11 @@ class Filter extends Component {
     })
   }
 
-  isFilterItemSelected(filter) {
-    var defaultClass = 'filter__catergory__item';
+  isFilterItemSelected(filter, category) {
+    var defaultClass = 'filter__category__item';
 
-    if (this.state.selectedFilters.includes(filter)) {
-      return defaultClass + ' filter__catergory__item--is-active';
+    if (this.state.selectedFilters[category] && this.state.selectedFilters[category].includes(filter)) {
+      return defaultClass + ' filter__category__item--is-active';
     } else {
       return defaultClass;
     }
@@ -64,13 +63,22 @@ class Filter extends Component {
 						<span className="filter__header-heading">Refine Search</span>
 						<span className="filter__action-text" onClick={this.clearFilter}>Clear</span>
 					</div>
+          <div className="filter__body-container">
+            <h3>Diet</h3> 
+            <div className="filter__category">
+              {DIET_OPTIONS.map((filter, i) =>
+                <span key={i} className={this.isFilterItemSelected(filter, 'diet')} onClick={() => this.handleFilterClick(filter, 'diet')}>{filter}</span>
+              )}
+            </div>
+          </div>
+
 					<div className="filter__body-container">
-						<h3>Diet</h3>	
-						<div className="filter__catergory">
-							{checkboxes.map((filter, i) =>
-								<span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
-							)}
-						</div>
+						<h3>Health</h3>	
+            <div className="filter__category">
+              {HEALTH_OPTIONS.map((filter, i) =>
+                <span key={i} className={this.isFilterItemSelected(filter, 'health')} onClick={() => this.handleFilterClick(filter, 'health')}>{filter}</span>
+              )}
+            </div>
 					</div>
 				</div>
 			)

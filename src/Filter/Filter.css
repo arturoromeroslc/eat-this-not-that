@@ -9,17 +9,17 @@
 	background-color: #262320;
 }
 
-.filter__catergory {
+.filter__category {
 	display: flex;
 	justify-content: space-around;
 }
 
-.filter__catergory__item {
+.filter__category__item {
 	padding: 3px 10px;
 	border: 1px solid black;
 }
 
-.filter__catergory__item--is-active {
+.filter__category__item--is-active {
 	background-color: #F7B52D;
 }
 
