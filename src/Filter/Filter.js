@@ -29,14 +29,11 @@ class Filter extends Component {
           ...selectedFilters.slice(0, index),
           ...selectedFilters.slice(index + 1)
         ]
-      })
+      }, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     } else {
       this.setState({
         selectedFilters: [...this.state.selectedFilters, filter]
-      }, () => {
-      	console.log(this.state.selectedFilters);
-      	this.props.onSelectionOfFilters(this.state.selectedFilters)
-      })
+      }, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     }
   }
 
