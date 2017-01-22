@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './Filter.css';
 
-const checkboxes = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
+const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
+const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free'];
 const propTypes = {
   show: React.PropTypes.bool,
   onToggleFilterMenu: React.PropTypes.func,
@@ -19,7 +20,7 @@ class Filter extends Component {
     this.clearFilter = this.clearFilter.bind(this);
   }
 
-  handleFilterClick(filter) {
+  handleFilterClick(filter, category) {
     let selectedFilters = this.state.selectedFilters,
       index = selectedFilters.indexOf(filter);
 
@@ -44,10 +45,10 @@ class Filter extends Component {
   }
 
   isFilterItemSelected(filter) {
-    var defaultClass = 'filter__catergory__item';
+    var defaultClass = 'filter__category__item';
 
     if (this.state.selectedFilters.includes(filter)) {
-      return defaultClass + ' filter__catergory__item--is-active';
+      return defaultClass + ' filter__category__item--is-active';
     } else {
       return defaultClass;
     }
@@ -64,13 +65,22 @@ class Filter extends Component {
 						<span className="filter__header-heading">Refine Search</span>
 						<span className="filter__action-text" onClick={this.clearFilter}>Clear</span>
 					</div>
+          <div className="filter__body-container">
+            <h3>Diet</h3> 
+            <div className="filter__category">
+              {DIET_OPTIONS.map((filter, i) =>
+                <span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
+              )}
+            </div>
+          </div>
+
 					<div className="filter__body-container">
-						<h3>Diet</h3>	
-						<div className="filter__catergory">
-							{checkboxes.map((filter, i) =>
-								<span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
-							)}
-						</div>
+						<h3>Health</h3>	
+            <div className="filter__category">
+              {HEALTH_OPTIONS.map((filter, i) =>
+                <span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
+              )}
+            </div>
 					</div>
 				</div>
 			)
