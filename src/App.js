@@ -20,23 +20,35 @@ class App extends Component {
       showFilter: false,
       filtersSelected: []
     }
-    this.handleChangeSetState = this.handleChangeSetState.bind(this);
+    this.updateFoodValue = this.updateFoodValue.bind(this);
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this);
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this);
     this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this);
-    this.getReadyToSendRequestWithFilter = this.getReadyToSendRequestWithFilter.bind(this);
+    this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this);
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300);
   }
 
-  handleChangeSetState(value) {
+  /**
+   * Call back when user selects a value from the auto complete dropdown.
+   * @param  {String} value The value chosen by the user from dropdown.
+   */
+  updateFoodValue(value) {
     this.setState({foodValue: value});
   }
 
+  /**
+   * Show hide the filter menu
+   */
   toggleFilterMenu() {
     this.setState({showFilter: !this.state.showFilter});
     console.log(this.state.showFilter);
   }
 
+  /**
+   * When a user selelects an item from the autoComplete dropdown. setup up the value to called into
+   * the api request.
+   * @param {String} foodValue food value that will be added to the api call.
+   */
   setFoodAndMakeApiCall(foodValue) {
     let dietFilter;
     
@@ -50,7 +62,11 @@ class App extends Component {
     this.sendRecommendationRequest(foodValue, dietFilter);
   }
 
-  getReadyToSendRequestWithFilter(filter) {
+  /**
+   * When a user selects a filter setup a filter object that will be passed to the api call.
+   * @param  {string} filter value of filter selected
+   */
+  sendRequestWithFilter(filter) {
     filtersSelected = filter.slice(0);
 
     let dietFilter;
@@ -68,6 +84,11 @@ class App extends Component {
     }
   }
 
+  /**
+   * Send Api call
+   * @param  {String} food       value of food to send
+   * @param  {String} dietFilter stringified array to send in api call
+   */
   sendRecommendationRequest(food, dietFilter) {
     var config = {
       headers: {
@@ -91,7 +112,7 @@ class App extends Component {
 
     return (
       <div>
-        <Filter show={this.state.showFilter} onToggleFilterMenu={this.toggleFilterMenu} onSelectionOfFilters={this.getReadyToSendRequestWithFilter}/>
+        <Filter show={this.state.showFilter} onToggleFilterMenu={this.toggleFilterMenu} onSelectionOfFilters={this.sendRequestWithFilter}/>
         <div className="app">
           <div className="app__header">
             <div className="flex-space-between app__header__container">
@@ -102,7 +123,7 @@ class App extends Component {
               </h2>
               <span onClick={this.toggleFilterMenu}>Filter</span>
             </div>
-            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.handleChangeSetState} value={this.state.foodValue}/>
+            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
             <p>Find alternative cooking recipes for your cravings.</p>
           </div>
           <Recommendation value={this.state.foodValue} data={this.state.recommendationData}/>
