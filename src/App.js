@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import isEmpty from 'lodash.isempty';
+import forEach from 'lodash.foreach';
 import Filter from './Filter/Filter';
 import AutoComplete from './AutoComplete/AutoComplete';
 import Recommendation from './Recommendation/Recommendation';
 import './App.css';
-
-let filtersSelected = [];
 
 class App extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class App extends Component {
       food: '',
       initialWindowLoad: true,
       showFilter: false,
-      filtersSelected: []
+      dietFilter: ''
     }
     this.updateFoodValue = this.updateFoodValue.bind(this);
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this);
@@ -50,37 +50,31 @@ class App extends Component {
    * @param {String} foodValue food value that will be added to the api call.
    */
   setFoodAndMakeApiCall(foodValue) {
-    let dietFilter;
-    
-    if (filtersSelected.length > 0) {
-      dietFilter = `&diet=${filtersSelected}`
-    } else {
-      dietFilter = ''
-    }
-
     this.setState({food: foodValue});
-    this.sendRecommendationRequest(foodValue, dietFilter);
+    this.sendRecommendationRequest(foodValue, this.state.dietFilter);
   }
 
   /**
    * When a user selects a filter setup a filter object that will be passed to the api call.
    * @param  {string} filter value of filter selected
    */
-  sendRequestWithFilter(filter) {
-    filtersSelected = filter.slice(0);
+  sendRequestWithFilter(filterObject) {
+    let dietFilter = '';
 
-    let dietFilter;
-
-    if (filtersSelected.length > 0) {
-      dietFilter = `&diet=${filtersSelected}`
+    if (!isEmpty(filterObject)) {
+      forEach(filterObject, function (filterArray, key) {
+        if (!isEmpty(filterArray)) {
+          dietFilter += `&${key}=${filterArray}`;
+        }
+      })
     } else {
       dietFilter = ''
     }
 
-    let foodValue = this.state.food.trim(); 
+    this.setState({dietFilter: dietFilter});
 
-    if (foodValue.length > 0) {
-      this.sendRecommendationRequest(foodValue, dietFilter);
+    if (this.state.food.trim().length > 0) {
+      this.sendRecommendationRequest(this.state.food, dietFilter);
     }
   }
 

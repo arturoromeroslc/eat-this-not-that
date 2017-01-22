@@ -13,7 +13,7 @@ class Filter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFilters: []
+      selectedFilters: {}
     }
     this.handleFilterClick = this.handleFilterClick.bind(this);
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this);
@@ -22,19 +22,17 @@ class Filter extends Component {
 
   handleFilterClick(filter, category) {
     let selectedFilters = this.state.selectedFilters,
-      index = selectedFilters.indexOf(filter);
+      index = selectedFilters[category] ? selectedFilters[category].indexOf(filter) : -1;
 
-    if (index > -1) {
-      this.setState({
-        selectedFilters: [
-          ...selectedFilters.slice(0, index),
-          ...selectedFilters.slice(index + 1)
-        ]
-      }, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
+    if (selectedFilters[category] && index > -1) {
+      selectedFilters[category] = [
+        ...selectedFilters[category].slice(0, index),
+        ...selectedFilters[category].slice(index + 1)
+      ]
+      this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     } else {
-      this.setState({
-        selectedFilters: [...this.state.selectedFilters, filter]
-      }, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
+      selectedFilters[category] = Array.isArray(selectedFilters[category]) ? [...this.state.selectedFilters[category], filter] : selectedFilters[category] = [filter]
+      this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     }
   }
 
@@ -44,10 +42,10 @@ class Filter extends Component {
     })
   }
 
-  isFilterItemSelected(filter) {
+  isFilterItemSelected(filter, category) {
     var defaultClass = 'filter__category__item';
 
-    if (this.state.selectedFilters.includes(filter)) {
+    if (this.state.selectedFilters[category] && this.state.selectedFilters[category].includes(filter)) {
       return defaultClass + ' filter__category__item--is-active';
     } else {
       return defaultClass;
@@ -69,7 +67,7 @@ class Filter extends Component {
             <h3>Diet</h3> 
             <div className="filter__category">
               {DIET_OPTIONS.map((filter, i) =>
-                <span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
+                <span key={i} className={this.isFilterItemSelected(filter, 'diet')} onClick={() => this.handleFilterClick(filter, 'diet')}>{filter}</span>
               )}
             </div>
           </div>
@@ -78,7 +76,7 @@ class Filter extends Component {
 						<h3>Health</h3>	
             <div className="filter__category">
               {HEALTH_OPTIONS.map((filter, i) =>
-                <span key={i} className={this.isFilterItemSelected(filter)} onClick={() => this.handleFilterClick(filter)}>{filter}</span>
+                <span key={i} className={this.isFilterItemSelected(filter, 'health')} onClick={() => this.handleFilterClick(filter, 'health')}>{filter}</span>
               )}
             </div>
 					</div>
