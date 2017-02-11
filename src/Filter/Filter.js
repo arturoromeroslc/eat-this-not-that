@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Range from '../Range/Range';
 import './Filter.css';
 
 const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
@@ -63,23 +64,27 @@ class Filter extends Component {
 						<span className="filter__header-heading">Refine Search</span>
 						<span className="filter__action-text" onClick={this.clearFilter}>Clear</span>
 					</div>
-          <div className="filter__body-container">
-            <h3>Diet</h3> 
-            <div className="filter__category">
-              {DIET_OPTIONS.map((filter, i) =>
-                <span key={i} className={this.isFilterItemSelected(filter, 'diet')} onClick={() => this.handleFilterClick(filter, 'diet')}>{filter}</span>
-              )}
+          <div className="filter__content-flex-container">
+            <div className="filter__body-container">
+              <h3>Diet</h3> 
+              <div className="filter__category">
+                {DIET_OPTIONS.map((filter, i) =>
+                  <span key={i} className={this.isFilterItemSelected(filter, 'diet')} onClick={() => this.handleFilterClick(filter, 'diet')}>{filter}</span>
+                )}
+              </div>
             </div>
-          </div>
 
-					<div className="filter__body-container">
-						<h3>Health</h3>	
-            <div className="filter__category">
-              {HEALTH_OPTIONS.map((filter, i) =>
-                <span key={i} className={this.isFilterItemSelected(filter, 'health')} onClick={() => this.handleFilterClick(filter, 'health')}>{filter}</span>
-              )}
-            </div>
-					</div>
+  					<div className="filter__body-container">
+  						<h3>Health</h3>	
+              <div className="filter__category">
+                {HEALTH_OPTIONS.map((filter, i) =>
+                  <span key={i} className={this.isFilterItemSelected(filter, 'health')} onClick={() => this.handleFilterClick(filter, 'health')}>{filter}</span>
+                )}
+              </div>
+  					</div>
+            <h3>Calories</h3> 
+            <Range />
+          </div>
 				</div>
 			)
 		} else {

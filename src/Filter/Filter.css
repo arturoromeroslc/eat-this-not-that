@@ -9,6 +9,11 @@
 	background-color: #262320;
 }
 
+.filter__content-flex-container {
+	display: flex;
+	flex-direction: column;
+}
+
 .filter__category {
 	display: flex;
 	justify-content: space-around;
