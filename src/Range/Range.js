@@ -7,25 +7,59 @@ class Range extends Component {
     this.state = {
       min: 0,
       max: 0,
-      valueMin: 0,
-      valueMax: 30000
+      valueMin: 1000,
+      valueMax: 1600
     }
     this.handleOnChange = this.handleOnChange.bind(this)
   }
 
-  handleOnChange (valueKey, event) {
-    var newState = {};
-    newState[valueKey] = event.target.value
-    this.setState(newState)
+  handleOnChange(valueKey, event) {
+    let targetValue = parseInt(event.target.value);
+      
+      if (targetValue > this.state.valueMax) {
+        let temp = this.state.valueMax
+        this.setState({
+          valueMax: targetValue
+        })
+      } else if (targetValue < this.state.valueMin) {
+        this.setState({
+          valueMin: targetValue
+        })
+      } else if (targetValue > this.state.valueMin && targetValue < this.state.valueMax && valueKey === 'valueMax') {
+        console.log(targetValue, this.state.valueMin, this.state.valueMax);
+        this.setState({
+          valueMax: targetValue
+        })
+      } else {
+        this.setState({
+          valueMin: targetValue
+        })
+      }
+      /*
+      console.log('else', valueKey, targetValue);
+      if (targetValue < this.state.valueMin) {
+        this.setState({
+          valueMin: targetValue,
+          valueMax: this.state.valueMin
+        })
+      } else {
+        let newState = {};
+        newState[valueKey] = targetValue;
+        this.setState(newState)
+      }
+*/    
   }
 
 	render () {
 		return (
-      <section className="range-slider">
-        <span className="range-values">Min{this.state.valueMin}   Max{this.state.valueMax}</span>
-        <input min="1" max="50000" step="100" type="range" value={this.state.valueMin} onChange={this.handleOnChange.bind(this, 'valueMin')}/>
-        <input min="1" max="50000" step="100" type="range" value={this.state.valueMax} onChange={this.handleOnChange.bind(this, 'valueMax')}/>
-      </section>
+      <div className="range-slider">
+        <div className="range-value-container">
+          <span className="range-values">Min: {this.state.valueMin}</span>
+          <span className="range-values">Max: {this.state.valueMax}</span>
+        </div>
+        <input min="0" max="5000" step="400" type="range" defaultValue="1000" onInput={this.handleOnChange.bind(this, 'valueMin')}/>
+        <input min="0" max="5000" step="400" type="range" defaultValue="1600" onInput={this.handleOnChange.bind(this, 'valueMax')}/>
+      </div>
 		)
 	}
 }

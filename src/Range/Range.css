@@ -3,6 +3,7 @@
   width: 95%;
   margin: 20px auto;
 }
+
 .range-slider input[type="range"] {
   pointer-events: none;
   position: absolute; /* Add absolute so both range filters lay side by side */
@@ -21,6 +22,7 @@
   margin: 0;
   padding: 0;
 }
+
 .range-slider input[type="range"]::-webkit-slider-thumb {
   pointer-events: all;
   position: relative;
@@ -38,6 +40,7 @@
   background-image: linear-gradient(to bottom, #dad8da 0, #413F41 100%);
   /* W3C */
 }
+
 .range-slider input[type="range"]::-moz-range-thumb {
   pointer-events: all;
   position: relative;
@@ -50,6 +53,7 @@
   background-image: linear-gradient(to bottom, #dad8da 0, #413F41 100%);
   /* W3C */
 }
+
 .range-slider input[type="range"]::-ms-thumb {
   pointer-events: all;
   position: relative;
@@ -62,20 +66,29 @@
   background-image: linear-gradient(to bottom, #dad8da 0, #413F41 100%);
   /* W3C */
 }
+
 .range-slider input[type=range]::-moz-range-track {
   position: relative;
   z-index: -1;
   background-color: black;
   border: 0;
 }
+
 .range-slider input[type=range]:last-of-type::-moz-range-track {
   -moz-appearance: none;
   background: none transparent;
   border: 0;
 }
+
 .range-slider input[type=range]::-moz-focus-outer {
   border: 0;
 }
+
+.range-value-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .range-values {
   position: relative;
   top: -22px;
