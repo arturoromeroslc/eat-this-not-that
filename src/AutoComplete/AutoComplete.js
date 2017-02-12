@@ -1,20 +1,20 @@
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import React, { Component } from 'react';
-import './AutoComplete.css';
+import axios from 'axios'
+import debounce from 'lodash.debounce'
+import React, { Component } from 'react'
+import './AutoComplete.css'
 
 export default class AutoComplete extends Component {
   constructor(props) {
-    super(props);
-    this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
-    this.handleSelectedItem = this.handleSelectedItem.bind(this);
-    this.getAutoCompleteResults = this.getAutoCompleteResults.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    super(props)
+    this.handleInputSearchChange = this.handleInputSearchChange.bind(this)
+    this.handleSelectedItem = this.handleSelectedItem.bind(this)
+    this.getAutoCompleteResults = this.getAutoCompleteResults.bind(this)
+    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.state = {
       autoCompleteData: [],
       selectedIndex: 0
-    };
-    this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300);
+    }
+    this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300)
   }
 
   /**
@@ -22,18 +22,18 @@ export default class AutoComplete extends Component {
    * @param  {Object} e event object passed in
    */
   handleInputSearchChange(e) {
-    let value = e.target.value;
+    let value = e.target.value
 
     if (e.target.value.length > 0) {
       this.getAutoCompleteResults(e.target.value)
-      this.props.onChangedInputValue(value);
+      this.props.onChangedInputValue(value)
     } else {
       this.state = {
         autoCompleteData: [],
         selectedIndex: 0
       }
     }
-    this.props.onChangedInputValue(value);
+    this.props.onChangedInputValue(value)
   }
 
   /**
@@ -41,12 +41,12 @@ export default class AutoComplete extends Component {
    * @param  {String} text item which was clicked
    */
   handleSelectedItem(text) {
-    this.props.onChangedInputValue(text);
-    this.props.onSelectedItem(text);
+    this.props.onChangedInputValue(text)
+    this.props.onSelectedItem(text)
     this.setState({
       autoCompleteData: [],
       selectedIndex: 0
-    });
+    })
   }
 
   /**
@@ -61,7 +61,7 @@ export default class AutoComplete extends Component {
         })
       })
       .catch(response => {
-        console.log(response);
+        console.log(response)
       })
   }
 
@@ -70,10 +70,10 @@ export default class AutoComplete extends Component {
    * @param  {Object} event object passed in by React
    */
   handleKeyDown(e) {
-    if (this.state.autoCompleteData.length === 0) { return; }
+    if (this.state.autoCompleteData.length === 0) { return }
 
-    const DOWN_ARROW_KEY = 40;
-    const UP_ARROW_KEY = 38;
+    const DOWN_ARROW_KEY = 40
+    const UP_ARROW_KEY = 38
     const ENTER = 13
 
     if (e.keyCode === DOWN_ARROW_KEY) {
@@ -92,7 +92,7 @@ export default class AutoComplete extends Component {
       if (this.state.selectedIndex === 0) {
         this.setState({
           selectedIndex: 9
-        });
+        })
       } else {
         this.setState({
           selectedIndex: this.state.selectedIndex - 1
@@ -104,14 +104,14 @@ export default class AutoComplete extends Component {
       this.handleSelectedItem(this.state.autoCompleteData[this.state.selectedIndex].text)
       this.setState({
         selectedIndex: 0
-      });
-      console.log(this.state.selectedIndex);
+      })
+      console.log(this.state.selectedIndex)
     }
   }
 
   render() {
     let borderTopStyle = {borderTop: '1px solid lightgray'},
-        seleectedBackgroundColor = {backgroundColor: 'darkgrey'};
+        seleectedBackgroundColor = {backgroundColor: 'darkgrey'}
 
     const listItems = this.state.autoCompleteData.map((data, i) =>
       <li
@@ -120,7 +120,7 @@ export default class AutoComplete extends Component {
         onClick={(event) => this.handleSelectedItem(data.text)}
         key={data.id}>{data.text}
       </li>
-    );
+    )
 
     return (
       <span>
@@ -146,4 +146,4 @@ AutoComplete.propTypes = {
   onChangedInputValue: React.PropTypes.func,
   onSelectedItem: React.PropTypes.func,
   value: React.PropTypes.string
-};
+}
