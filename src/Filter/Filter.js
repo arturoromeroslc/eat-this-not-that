@@ -1,38 +1,39 @@
-import React, { Component } from 'react';
-import Range from '../Range/Range';
-import './Filter.css';
+import React, { Component } from 'react'
+import Range from '../Range/Range'
+import {getFilterSelectedIndex, addFilterToCategory, isFilterSelected} from '../utils/filterSelections'
+import './Filter.css'
 
-const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium'];
-const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free'];
+const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium']
+const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free']
 const propTypes = {
   show: React.PropTypes.bool,
   onToggleFilterMenu: React.PropTypes.func,
   onSelectionOfFilters: React.PropTypes.func
-};
+}
 
-class Filter extends Component {
+export default class Filter extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       selectedFilters: {}
     }
-    this.handleFilterClick = this.handleFilterClick.bind(this);
-    this.isFilterItemSelected = this.isFilterItemSelected.bind(this);
-    this.clearFilter = this.clearFilter.bind(this);
+    this.handleFilterClick = this.handleFilterClick.bind(this)
+    this.isFilterItemSelected = this.isFilterItemSelected.bind(this)
+    this.clearFilter = this.clearFilter.bind(this)
   }
 
   handleFilterClick(filter, category) {
     let selectedFilters = this.state.selectedFilters,
-      index = selectedFilters[category] ? selectedFilters[category].indexOf(filter) : -1;
+      filterSelectedIndex = getFilterSelectedIndex(selectedFilters[category], filter)
 
-    if (selectedFilters[category] && index > -1) {
+    if (filterSelectedIndex > -1) {
       selectedFilters[category] = [
-        ...selectedFilters[category].slice(0, index),
-        ...selectedFilters[category].slice(index + 1)
+        ...selectedFilters[category].slice(0, filterSelectedIndex),
+        ...selectedFilters[category].slice(filterSelectedIndex + 1)
       ]
       this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     } else {
-      selectedFilters[category] = Array.isArray(selectedFilters[category]) ? [...this.state.selectedFilters[category], filter] : selectedFilters[category] = [filter]
+      selectedFilters[category] = addFilterToCategory(selectedFilters[category], filter)
       this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     }
   }
@@ -44,17 +45,17 @@ class Filter extends Component {
   }
 
   isFilterItemSelected(filter, category) {
-    var defaultClass = 'filter__category__item';
+    var defaultClass = 'filter__category__item'
 
-    if (this.state.selectedFilters[category] && this.state.selectedFilters[category].includes(filter)) {
-      return defaultClass + ' filter__category__item--is-active';
+    if (isFilterSelected(this.state.selectedFilters[category], filter)) {
+      return defaultClass + ' filter__category__item--is-active'
     } else {
-      return defaultClass;
+      return defaultClass
     }
   }
 
 	render () {
-		let show = this.props.show;
+		let show = this.props.show
 
 		if (show) {
 			return (
@@ -95,6 +96,4 @@ class Filter extends Component {
 	}
 }
 
-Filter.propTypes = propTypes;
-
-export default Filter;
+Filter.propTypes = propTypes

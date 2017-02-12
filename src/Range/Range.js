@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import isNewMaxValue from '../utils/isNewMaxValue'
+import isNewMinValue from '../utils/isNewMinValue'
 import './Range.css'
 
-class Range extends Component {
+export default class Range extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -14,21 +16,21 @@ class Range extends Component {
   }
 
   handleOnChange(valueKey, event) {
-    let targetValue = parseInt(event.target.value);
+    let targetValue = parseInt(event.target.value)
       
-      if (targetValue > this.state.valueMax) {
+      if (isNewMaxValue(targetValue, this.state.valueMax)) {
         let temp = this.state.valueMax
         this.setState({
           valueMax: targetValue
         })
-      } else if (targetValue < this.state.valueMin) {
+      } else if (isNewMinValue(targetValue, this.state.valueMin)) {
         this.setState({
           valueMin: targetValue
         })
-      } else if (targetValue > this.state.valueMin && targetValue < this.state.valueMax && valueKey === 'valueMax') {
-        console.log(targetValue, this.state.valueMin, this.state.valueMax);
+      } else if (targetValue > this.state.valueMin && targetValue < this.state.valueMax && this.state.valueMin < this.state.valueMax) {
+        console.log(targetValue, this.state.valueMin, this.state.valueMax)
         this.setState({
-          valueMax: targetValue
+          valueMin: targetValue
         })
       } else {
         this.setState({
@@ -36,19 +38,24 @@ class Range extends Component {
         })
       }
       /*
-      console.log('else', valueKey, targetValue);
+      console.log('else', valueKey, targetValue)
       if (targetValue < this.state.valueMin) {
         this.setState({
           valueMin: targetValue,
           valueMax: this.state.valueMin
         })
       } else {
-        let newState = {};
-        newState[valueKey] = targetValue;
+        let newState = {}
+        newState[valueKey] = targetValue
         this.setState(newState)
       }
 */    
   }
+
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log(nextProps, nextState)
+  }  
 
 	render () {
 		return (
@@ -63,5 +70,3 @@ class Range extends Component {
 		)
 	}
 }
-
-export default Range

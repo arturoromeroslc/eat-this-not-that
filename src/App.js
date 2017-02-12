@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import isEmpty from 'lodash.isempty';
-import forEach from 'lodash.foreach';
-import Filter from './Filter/Filter';
-import AutoComplete from './AutoComplete/AutoComplete';
-import Recommendation from './Recommendation/Recommendation';
-import './App.css';
+import React, { Component } from 'react'
+import axios from 'axios'
+import debounce from 'lodash.debounce'
+import isEmpty from 'lodash.isempty'
+import forEach from 'lodash.foreach'
+import Filter from './Filter/Filter'
+import AutoComplete from './AutoComplete/AutoComplete'
+import Recommendation from './Recommendation/Recommendation'
+import './App.css'
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
-    console.log('called', props);
-    super(props);
+    console.log('called', props)
+    super(props)
     this.state = {
       foodValue: '',
       recommendationData: false,
@@ -20,12 +20,12 @@ class App extends Component {
       showFilter: false,
       dietFilter: ''
     }
-    this.updateFoodValue = this.updateFoodValue.bind(this);
-    this.toggleFilterMenu = this.toggleFilterMenu.bind(this);
-    this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this);
-    this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this);
-    this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this);
-    this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300);
+    this.updateFoodValue = this.updateFoodValue.bind(this)
+    this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
+    this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
+    this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
+    this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this)
+    this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
   }
 
   /**
@@ -33,15 +33,15 @@ class App extends Component {
    * @param  {String} value The value chosen by the user from dropdown.
    */
   updateFoodValue(value) {
-    this.setState({foodValue: value});
+    this.setState({foodValue: value})
   }
 
   /**
    * Show hide the filter menu
    */
   toggleFilterMenu() {
-    this.setState({showFilter: !this.state.showFilter});
-    console.log(this.state.showFilter);
+    this.setState({showFilter: !this.state.showFilter})
+    console.log(this.state.showFilter)
   }
 
   /**
@@ -50,8 +50,8 @@ class App extends Component {
    * @param {String} foodValue food value that will be added to the api call.
    */
   setFoodAndMakeApiCall(foodValue) {
-    this.setState({food: foodValue});
-    this.sendRecommendationRequest(foodValue, this.state.dietFilter);
+    this.setState({food: foodValue})
+    this.sendRecommendationRequest(foodValue, this.state.dietFilter)
   }
 
   /**
@@ -59,22 +59,22 @@ class App extends Component {
    * @param  {string} filter value of filter selected
    */
   sendRequestWithFilter(filterObject) {
-    let dietFilter = '';
+    let dietFilter = ''
 
     if (!isEmpty(filterObject)) {
       forEach(filterObject, function (filterArray, key) {
         if (!isEmpty(filterArray)) {
-          dietFilter += `&${key}=${filterArray}`;
+          dietFilter += `&${key}=${filterArray}`
         }
       })
     } else {
       dietFilter = ''
     }
 
-    this.setState({dietFilter: dietFilter});
+    this.setState({dietFilter: dietFilter})
 
     if (this.state.food.trim().length > 0) {
-      this.sendRecommendationRequest(this.state.food, dietFilter);
+      this.sendRecommendationRequest(this.state.food, dietFilter)
     }
   }
 
@@ -88,21 +88,21 @@ class App extends Component {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
-    };
+    }
 
     return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&calories=gte%20591,%20lte%20722${dietFilter}`, {}, config)
       .then(response => {
         this.setState({
           recommendationData: response.data,
           initialWindowLoad: false
-        });
+        })
       })
   }  
 
   render() {
-    let visible = {display: 'block'};
-    let hidden = {display: 'none'};
-    console.log('called render', this.state.initialWindowLoad);
+    let visible = {display: 'block'}
+    let hidden = {display: 'none'}
+    console.log('called render', this.state.initialWindowLoad)
 
     return (
       <div>
@@ -123,8 +123,6 @@ class App extends Component {
           <Recommendation value={this.state.foodValue} data={this.state.recommendationData}/>
         </div>
       </div>
-    );
+    )
   }
 }
-
-export default App;

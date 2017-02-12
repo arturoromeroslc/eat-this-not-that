@@ -1,56 +1,56 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import isEmpty from 'lodash.isempty';
-import './Recommendation.css';
+import isEmpty from 'lodash.isempty'
+import './Recommendation.css'
 
-class Recommendation extends Component {
+export default class Recommendation extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       initialTouch: null,
       showIndex: 0,
       direction: null,
       showIngredient: false
-    };
-    this.handleTouchStart = this.handleTouchStart.bind(this);
-    this.handleTouchEnd = this.handleTouchEnd.bind(this);
-    this.handleTouchMove = this.handleTouchMove.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  };
+    }
+    this.handleTouchStart = this.handleTouchStart.bind(this)
+    this.handleTouchEnd = this.handleTouchEnd.bind(this)
+    this.handleTouchMove = this.handleTouchMove.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+  }
 
   handleClick(e) {
-    console.log('called click');
+    console.log('called click')
   }
 
   handleTouchStart(e) {
     let touch = e.touches[0]
-    this.setState({direction: null});
-    this.setState({initialTouch: touch});
+    this.setState({direction: null})
+    this.setState({initialTouch: touch})
   }
 
   handleTouchMove(e) {
-    let touch = e.touches[0];
+    let touch = e.touches[0]
     
     if (Math.abs(touch.pageX < this.state.initialTouch.pageX) && ((this.state.initialTouch.pageX - touch.pageX) > 35)){
-      this.setState({showIngredient: false});
-      this.setState({direction: 'left'});
+      this.setState({showIngredient: false})
+      this.setState({direction: 'left'})
     } else if (Math.abs(touch.pageX > this.state.initialTouch.pageX) && ((touch.pageX - this.state.initialTouch.pageX) > 35)) {
-      this.setState({showIngredient: false});
-      this.setState({direction: 'right'});
+      this.setState({showIngredient: false})
+      this.setState({direction: 'right'})
     } else {
-      this.setState({direction: null});
+      this.setState({direction: null})
     }
 
     if (Math.abs(touch.pageY < this.state.initialTouch.pageY) && ((this.state.initialTouch.pageY - touch.pageY) > 35)){
-       this.setState({showIngredient: true});
-      console.log('in down');
+       this.setState({showIngredient: true})
+      console.log('in down')
     } else {
-      console.log('nothing');
+      console.log('nothing')
     }
   }
 
   handleTouchEnd(e) {
-    let dataLength = this.props.data.hits.length - 1;
+    let dataLength = this.props.data.hits.length - 1
 
     if (this.state.direction === 'left') {
       if (dataLength !== this.state.showIndex) {
@@ -68,7 +68,7 @@ class Recommendation extends Component {
   }
 
 	render() {
-    let displayBlock = {display: 'block'};
+    let displayBlock = {display: 'block'}
 
     if (this.props.value && !isEmpty(this.props.data.hits)) {
       return (
@@ -102,14 +102,12 @@ class Recommendation extends Component {
             )
           }.bind(this))}
       	</div>
-      );
+      )
     } else if (this.props.value && isEmpty(this.props.data.hits)) {
     	return <div>No data for searched term</div>
     } else {
-      return null;
+      return null
     }
 
 	}
 }
-
-export default Recommendation;
