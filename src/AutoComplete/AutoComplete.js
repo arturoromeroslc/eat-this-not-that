@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import React, { Component } from 'react';
 import './AutoComplete.css';
 
-class AutoComplete extends Component {
+export default class AutoComplete extends Component {
   constructor(props) {
     super(props);
     this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
@@ -147,5 +147,3 @@ AutoComplete.propTypes = {
   onSelectedItem: React.PropTypes.func,
   value: React.PropTypes.string
 };
-
-export default AutoComplete;

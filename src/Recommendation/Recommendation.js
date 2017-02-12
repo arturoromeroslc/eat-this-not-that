@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import isEmpty from 'lodash.isempty';
 import './Recommendation.css';
 
-class Recommendation extends Component {
+export default class Recommendation extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -111,5 +111,3 @@ class Recommendation extends Component {
 
 	}
 }
-
-export default Recommendation;

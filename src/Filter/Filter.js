@@ -10,7 +10,7 @@ const propTypes = {
   onSelectionOfFilters: React.PropTypes.func
 };
 
-class Filter extends Component {
+export default class Filter extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,5 +96,3 @@ class Filter extends Component {
 }
 
 Filter.propTypes = propTypes;
-
-export default Filter;

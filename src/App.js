@@ -8,7 +8,7 @@ import AutoComplete from './AutoComplete/AutoComplete';
 import Recommendation from './Recommendation/Recommendation';
 import './App.css';
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     console.log('called', props);
     super(props);
@@ -126,5 +126,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Range.css'
 
-class Range extends Component {
+export default class Range extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -63,5 +63,3 @@ class Range extends Component {
 		)
 	}
 }
-
-export default Range
