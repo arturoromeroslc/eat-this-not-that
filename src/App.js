@@ -80,7 +80,7 @@ export default class App extends Component {
 
   /**
    * Send Api call
-   * @param  {String} food       value of food to send
+   * @param  {String} food value of food to send
    * @param  {String} dietFilter stringified array to send in api call
    */
   sendRecommendationRequest(food, dietFilter) {

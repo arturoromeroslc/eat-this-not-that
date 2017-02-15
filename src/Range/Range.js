@@ -27,29 +27,16 @@ export default class Range extends Component {
         this.setState({
           valueMin: targetValue
         })
-      } else if (targetValue > this.state.valueMin && targetValue < this.state.valueMax && this.state.valueMin < this.state.valueMax) {
+      } else if (targetValue > this.state.valueMin && targetValue < this.state.valueMax && valueKey === 'valueKey') {
         console.log(targetValue, this.state.valueMin, this.state.valueMax)
         this.setState({
           valueMin: targetValue
         })
       } else {
         this.setState({
-          valueMin: targetValue
+          valueMax: targetValue
         })
       }
-      /*
-      console.log('else', valueKey, targetValue)
-      if (targetValue < this.state.valueMin) {
-        this.setState({
-          valueMin: targetValue,
-          valueMax: this.state.valueMin
-        })
-      } else {
-        let newState = {}
-        newState[valueKey] = targetValue
-        this.setState(newState)
-      }
-*/    
   }
 
 

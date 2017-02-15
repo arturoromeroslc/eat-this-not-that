@@ -3,11 +3,15 @@ export function getFilterSelectedIndex(category, filter) {
 }
 
 export function addFilterToCategory(category, filter) {
+	let categoryUpdated;
+
 	if (Array.isArray(category)) {
-		return [...category, filter] 
+		categoryUpdated = [...category, filter]
 	} else {
-		return [filter]
+		categoryUpdated = [filter]
 	}
+
+	return categoryUpdated
 }
 
 export function isFilterSelected(category, filter) {

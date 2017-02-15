@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import shortid from 'shortid'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import isEmpty from 'lodash.isempty'
 import './Recommendation.css'
@@ -59,10 +60,10 @@ export default class Recommendation extends Component {
         this.setState({showIndex: 0})
       }
     } else if (this.state.direction === 'right') {
-      if (this.state.showIndex === 0) {
-        this.setState({showIndex: dataLength})
-      } else {
+      if (this.state.showIndex !== 0) {
         this.setState({showIndex: this.state.showIndex - 1})
+      } else {
+        this.setState({showIndex: dataLength})
       }
     }
   }
@@ -83,7 +84,7 @@ export default class Recommendation extends Component {
               <div
                 className="recommendation__card--is-hidden"
                 style={(i === this.state.showIndex) ? displayBlock : {}}
-                key={i}>
+                key={shortid.generate()}>
                 <div className="recommendation__card-heading-container">
                   <h2 className="recommendation__card-heading-title">{recipeObject.recipe.label}</h2>
                 </div>
@@ -92,8 +93,8 @@ export default class Recommendation extends Component {
                   <div
                     className="recommendation__card">
                     <h2 className="recommendation__card-heading-title">Ingredients (fix)</h2>
-                    <ul>{recipeObject.recipe.ingredients.map(function(ingredient, i) {
-                      return <li key={`ingredient-${i}`}>{ingredient.food}</li>
+                    <ul>{recipeObject.recipe.ingredients.map(function(ingredient, key) {
+                      return <li key={`ingredient-${key}`}>{ingredient.food}</li>
                     })}
                     </ul>
                   </div>
