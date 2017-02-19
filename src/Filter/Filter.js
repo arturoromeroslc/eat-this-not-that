@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import shortid from 'shortid'
 import Range from '../Range/Range'
 import {getFilterSelectedIndex, addFilterToCategory, isFilterSelected} from '../utils/filterSelections'
 import './Filter.css'
@@ -60,7 +61,7 @@ export default class Filter extends Component {
 		if (show) {
 			return (
 				<div className="filter__contatiner">
-					<div className="filter__header-container">
+          <div className="filter__header-container">
 						<span className="filter__action-text" onClick={this.props.onToggleFilterMenu}>Close</span>
 						<span className="filter__header-heading">Refine Search</span>
 						<span className="filter__action-text" onClick={this.clearFilter}>Clear</span>
@@ -69,17 +70,26 @@ export default class Filter extends Component {
             <div className="filter__body-container">
               <h3>Diet</h3> 
               <div className="filter__category">
-                {DIET_OPTIONS.map((filter, i) =>
-                  <span key={i} className={this.isFilterItemSelected(filter, 'diet')} onClick={() => this.handleFilterClick(filter, 'diet')}>{filter}</span>
+                {DIET_OPTIONS.map((filter) =>
+                  <span
+                    className={this.isFilterItemSelected(filter, 'diet')}
+                    key={shortid.generate()}
+                    onClick={() => this.handleFilterClick(filter, 'diet')}>
+                      {filter}
+                  </span>
                 )}
               </div>
             </div>
-
   					<div className="filter__body-container">
   						<h3>Health</h3>	
               <div className="filter__category">
-                {HEALTH_OPTIONS.map((filter, i) =>
-                  <span key={i} className={this.isFilterItemSelected(filter, 'health')} onClick={() => this.handleFilterClick(filter, 'health')}>{filter}</span>
+                {HEALTH_OPTIONS.map((filter) =>
+                  <span
+                    className={this.isFilterItemSelected(filter, 'health')}
+                    key={shortid.generate()}
+                    onClick={() => this.handleFilterClick(filter, 'health')}>
+                      {filter}
+                  </span>
                 )}
               </div>
   					</div>
