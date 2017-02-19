@@ -1,8 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import shortid from 'shortid'
 import Range from '../Range/Range'
 import {getFilterSelectedIndex, addFilterToCategory, isFilterSelected} from '../utils/filterSelections'
 import './Filter.css'
+
+class TextClick extends PureComponent {
+  render() {
+    return <span className="filter__action-text" onClick={this.props.onClicked}>{this.props.text}</span>
+  }
+}
 
 const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium']
 const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free']
@@ -21,28 +27,36 @@ export default class Filter extends Component {
     this.handleFilterClick = this.handleFilterClick.bind(this)
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this)
     this.clearFilter = this.clearFilter.bind(this)
+    this.applyFilters = this.applyFilters.bind(this)
   }
 
   handleFilterClick(filter, category) {
     let selectedFilters = this.state.selectedFilters,
       filterSelectedIndex = getFilterSelectedIndex(selectedFilters[category], filter)
-
-    if (filterSelectedIndex > -1) {
+    
+    if (category === 'calories') {
+      selectedFilters[category] = filter
+    } else if (filterSelectedIndex > -1) {
       selectedFilters[category] = [
         ...selectedFilters[category].slice(0, filterSelectedIndex),
         ...selectedFilters[category].slice(filterSelectedIndex + 1)
       ]
-      this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     } else {
       selectedFilters[category] = addFilterToCategory(selectedFilters[category], filter)
-      this.setState({selectedFilters: selectedFilters}, () => {this.props.onSelectionOfFilters(this.state.selectedFilters)})
     }
+    
+    this.setState({selectedFilters: selectedFilters})
   }
 
   clearFilter() {
     this.setState({
       selectedFilters: []
     })
+  }
+
+  applyFilters() {
+    this.props.onSelectionOfFilters(this.state.selectedFilters);
+    this.props.onToggleFilterMenu()
   }
 
   isFilterItemSelected(filter, category) {
@@ -57,15 +71,24 @@ export default class Filter extends Component {
 
 	render () {
 		let show = this.props.show
+    let hasFilters = Object.keys(this.state.selectedFilters).length > 0
+    let close = <TextClick onClicked={this.props.onToggleFilterMenu} text="Close" />
+    let apply = <TextClick onClicked={this.applyFilters} text="Apply" />
+    let clear = null
+
+    if (hasFilters) {
+      clear = <TextClick onClicked={this.clearFilter} text="Clear" />
+    } 
 
 		if (show) {
 			return (
 				<div className="filter__contatiner">
           <div className="filter__header-container">
-						<span className="filter__action-text" onClick={this.props.onToggleFilterMenu}>Close</span>
-						<span className="filter__header-heading">Refine Search</span>
-						<span className="filter__action-text" onClick={this.clearFilter}>Clear</span>
-					</div>
+						{close}
+            <span className="filter__header-heading">Refine Search</span>
+            {apply}
+          </div>
+          {clear}
           <div className="filter__content-flex-container">
             <div className="filter__body-container">
               <h3>Diet</h3> 
@@ -94,7 +117,7 @@ export default class Filter extends Component {
               </div>
   					</div>
             <h3>Calories</h3> 
-            <Range />
+            <Range onhandleFilterRange={this.handleFilterClick}/>
           </div>
 				</div>
 			)
