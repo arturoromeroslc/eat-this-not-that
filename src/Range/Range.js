@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import './Range.css'
 
+const propTypes = {
+  onhandleFilterRange: React.PropTypes.func
+}
+
 export default class Range extends Component {
   constructor(props) {
     super(props)
@@ -21,10 +25,13 @@ export default class Range extends Component {
       min = tmp; 
     }
     
-    this.setState({
+    let rangeFilter = {
       valueMin: min,
       valueMax: max
-    })
+    }
+    let backendString = `gte ${min}, lte ${max}`
+    this.setState(rangeFilter)
+    this.props.onhandleFilterRange(backendString, 'calories')
   }
 
 	render () {
@@ -40,3 +47,5 @@ export default class Range extends Component {
 		)
 	}
 }
+
+Range.propTypes = propTypes

@@ -90,7 +90,7 @@ export default class App extends Component {
       }
     }
 
-    return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&calories=gte%20591,%20lte%20722${dietFilter}`, {}, config)
+    return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&${dietFilter}`, {}, config)
       .then(response => {
         this.setState({
           recommendationData: response.data,
