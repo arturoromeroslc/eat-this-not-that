@@ -30,17 +30,12 @@ export default class Recommendation extends Component {
 
     let listItem = e.target.closest('.recommendation-list__item')
     let parent = listItem.parentNode;
-    // let index = Array.prototype.indexOf.call(parent.children, listItem);
     let totalChildren = listItems.length;
 
     listItem.parentNode.classList.remove('selection--active')
     listItem.classList.toggle('active')
     listItem.parentNode.classList.add('selection--active')
 
-    // if (index !== 0) {
-      // let marginValue = index / totalChildren * 100 * -1
-      // listItem.style.marginTop = marginValue + 'vh';
-    // }
   }
 
   onBackClick(e) {
