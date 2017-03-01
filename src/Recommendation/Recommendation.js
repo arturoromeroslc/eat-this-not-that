@@ -27,7 +27,7 @@ export default class Recommendation extends Component {
       listItems[i].classList.remove('active');
     }
 
-    
+
     let listItem = e.target.closest('.recommendation-list__item')
     let parent = listItem.parentNode;
     // let index = Array.prototype.indexOf.call(parent.children, listItem);
@@ -59,12 +59,26 @@ export default class Recommendation extends Component {
       <div className="recommendation-list">
           {this.props.data.hits.map(function(recipeObject, i) {
             return (
-              <div className="recommendation-list__item"
+              <div
+                className="recommendation-list__item"
                 key={shortid.generate()}>
-                <span onClick={this.onTitleClick} className="recommendation-list__item-title">{recipeObject.recipe.label}</span>
+                <span
+                  onClick={this.onTitleClick}
+                  className="recommendation-list__item-title">
+                  {recipeObject.recipe.label}
+                </span>
                 <p>
-                  <a className="back-arrow" onClick={this.onBackClick} tabIndex="-1">X</a>
-                  <img className="recommendation-list__item-img" alt={recipeObject.recipe.label} src={recipeObject.recipe.image} />
+                  <a
+                    className="back-arrow"
+                    onClick={this.onBackClick}
+                    tabIndex="-1">
+                    X
+                  </a>
+                  <img
+                    className="recommendation-list__item-img"
+                    alt={recipeObject.recipe.label}
+                    src={recipeObject.recipe.image}
+                  />
                   <p>
                     <ul>{recipeObject.recipe.ingredients.map(function(ingredient, key) {
                         return <li key={`ingredient-${key}`}>{ingredient.food}</li>
@@ -82,6 +96,5 @@ export default class Recommendation extends Component {
     } else {
       return null
     }
-
 	}
 }
