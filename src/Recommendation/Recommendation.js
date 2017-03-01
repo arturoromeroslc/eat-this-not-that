@@ -4,6 +4,8 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import isEmpty from 'lodash.isempty'
 import './Recommendation.css'
 
+let cacheLastActiveListItem;
+
 export default class Recommendation extends Component {
   constructor(props) {
     super(props)
@@ -13,36 +15,35 @@ export default class Recommendation extends Component {
       direction: null,
       showIngredient: false
     }
+    this.cacheLastActiveListItem = false;
     this.onTitleClick = this.onTitleClick.bind(this)
     this.onBackClick = this.onBackClick.bind(this)
   }
 
+  /**
+   * Expand the clicked list card
+   * @param  {Object} e the event object
+   */
   onTitleClick(e) {
-    
-    /**
-     * get the current active item and remove the active class, so we only have one item expanded at a time.
-     */
-    let listItems = document.getElementsByClassName('recommendation-list__item active')
-    for (var i = listItems.length - 1; i >= 0; i--) {
-      listItems[i].classList.remove('active');
+    let listItem = e.target.closest('.recommendation-list__item')
+
+    if (this.cacheLastActiveListItem) {
+      this.cacheLastActiveListItem.classList.remove('active');  
     }
 
-
-    let listItem = e.target.closest('.recommendation-list__item')
-    let parent = listItem.parentNode;
-    let totalChildren = listItems.length;
-
-    listItem.parentNode.classList.remove('selection--active')
-    listItem.classList.toggle('active')
-    listItem.parentNode.classList.add('selection--active')
-
+    listItem.classList.add('active')
+    this.listParentElement.classList.add('selection--active')
+    this.cacheLastActiveListItem = listItem;
   }
 
+  /**
+   * Close the current expanded list card
+   * @param  {Object} e event object from click
+   */
   onBackClick(e) {
     e.stopPropagation()
     let listItem = e.target.closest('.recommendation-list__item')
-    // listItem.style.marginTop = 0
-    listItem.parentNode.classList.toggle('selection--active')
+    this.listParentElement.classList.remove('selection--active')
     listItem.classList.toggle('active')
   }
 
@@ -51,7 +52,7 @@ export default class Recommendation extends Component {
 
     if (this.props.value && !isEmpty(this.props.data.hits)) {
       return (
-      <div className="recommendation-list">
+      <div ref={(div) => { this.listParentElement = div; }} className="recommendation-list">
           {this.props.data.hits.map(function(recipeObject, i) {
             return (
               <div
