@@ -48,8 +48,6 @@ export default class Recommendation extends Component {
   }
 
 	render() {
-    let displayBlock = {display: 'block'}
-
     if (this.props.value && !isEmpty(this.props.data.hits)) {
       return (
       <div ref={(div) => { this.listParentElement = div; }} className="recommendation-list">
