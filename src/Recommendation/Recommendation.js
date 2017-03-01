@@ -13,59 +13,42 @@ export default class Recommendation extends Component {
       direction: null,
       showIngredient: false
     }
-    this.handleTouchStart = this.handleTouchStart.bind(this)
-    this.handleTouchEnd = this.handleTouchEnd.bind(this)
-    this.handleTouchMove = this.handleTouchMove.bind(this)
-    this.handleClick = this.handleClick.bind(this)
+    this.onTitleClick = this.onTitleClick.bind(this)
+    this.onBackClick = this.onBackClick.bind(this)
   }
 
-  handleClick(e) {
-    console.log('called click')
-  }
-
-  handleTouchStart(e) {
-    let touch = e.touches[0]
-    this.setState({direction: null})
-    this.setState({initialTouch: touch})
-  }
-
-  handleTouchMove(e) {
-    let touch = e.touches[0]
+  onTitleClick(e) {
     
-    if (Math.abs(touch.pageX < this.state.initialTouch.pageX) && ((this.state.initialTouch.pageX - touch.pageX) > 35)){
-      this.setState({showIngredient: false})
-      this.setState({direction: 'left'})
-    } else if (Math.abs(touch.pageX > this.state.initialTouch.pageX) && ((touch.pageX - this.state.initialTouch.pageX) > 35)) {
-      this.setState({showIngredient: false})
-      this.setState({direction: 'right'})
-    } else {
-      this.setState({direction: null})
+    /**
+     * get the current active item and remove the active class, so we only have one item expanded at a time.
+     */
+    let listItems = document.getElementsByClassName('recommendation-list__item active')
+    for (var i = listItems.length - 1; i >= 0; i--) {
+      listItems[i].classList.remove('active');
     }
 
-    if (Math.abs(touch.pageY < this.state.initialTouch.pageY) && ((this.state.initialTouch.pageY - touch.pageY) > 35)){
-       this.setState({showIngredient: true})
-      console.log('in down')
-    } else {
-      console.log('nothing')
-    }
+    
+    let listItem = e.target.closest('.recommendation-list__item')
+    let parent = listItem.parentNode;
+    // let index = Array.prototype.indexOf.call(parent.children, listItem);
+    let totalChildren = listItems.length;
+
+    listItem.parentNode.classList.remove('selection--active')
+    listItem.classList.toggle('active')
+    listItem.parentNode.classList.add('selection--active')
+
+    // if (index !== 0) {
+      // let marginValue = index / totalChildren * 100 * -1
+      // listItem.style.marginTop = marginValue + 'vh';
+    // }
   }
 
-  handleTouchEnd(e) {
-    let dataLength = this.props.data.hits.length - 1
-
-    if (this.state.direction === 'left') {
-      if (dataLength !== this.state.showIndex) {
-        this.setState({showIndex: this.state.showIndex + 1})
-      } else {
-        this.setState({showIndex: 0})
-      }
-    } else if (this.state.direction === 'right') {
-      if (this.state.showIndex !== 0) {
-        this.setState({showIndex: this.state.showIndex - 1})
-      } else {
-        this.setState({showIndex: dataLength})
-      }
-    }
+  onBackClick(e) {
+    e.stopPropagation()
+    let listItem = e.target.closest('.recommendation-list__item')
+    // listItem.style.marginTop = 0
+    listItem.parentNode.classList.toggle('selection--active')
+    listItem.classList.toggle('active')
   }
 
 	render() {
@@ -73,32 +56,22 @@ export default class Recommendation extends Component {
 
     if (this.props.value && !isEmpty(this.props.data.hits)) {
       return (
-      	<div
-          className="recommendation__card-container"
-          onTouchStart={this.handleTouchStart}
-          onTouchEnd={this.handleTouchEnd}
-          onTouchMove={this.handleTouchMove}
-          onClick={this.handleClick}>
+      <div className="recommendation-list">
           {this.props.data.hits.map(function(recipeObject, i) {
             return (
-              <div
-                className="recommendation__card--is-hidden"
-                style={(i === this.state.showIndex) ? displayBlock : {}}
+              <div className="recommendation-list__item"
                 key={shortid.generate()}>
-                <div className="recommendation__card-heading-container">
-                  <h2 className="recommendation__card-heading-title">{recipeObject.recipe.label}</h2>
-                </div>
-                <img className="recommendation__card-image-round-border" alt={recipeObject.recipe.label} src={recipeObject.recipe.image} />
-                <span>{(this.state.showIngredient === true) ? 
-                  <div
-                    className="recommendation__card">
-                    <h2 className="recommendation__card-heading-title">Ingredients (fix)</h2>
+                <span onClick={this.onTitleClick} className="recommendation-list__item-title">{recipeObject.recipe.label}</span>
+                <p>
+                  <a className="back-arrow" onClick={this.onBackClick} tabIndex="-1">X</a>
+                  <img className="recommendation-list__item-img" alt={recipeObject.recipe.label} src={recipeObject.recipe.image} />
+                  <p>
                     <ul>{recipeObject.recipe.ingredients.map(function(ingredient, key) {
-                      return <li key={`ingredient-${key}`}>{ingredient.food}</li>
-                    })}
+                        return <li key={`ingredient-${key}`}>{ingredient.food}</li>
+                      })}
                     </ul>
-                  </div>
-                 : null}</span>
+                  </p>
+                </p>
               </div>
             )
           }.bind(this))}
