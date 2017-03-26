@@ -1,0 +1,30 @@
+exports[`test Range snapshot test 1`] = `
+<div
+  className="range-slider">
+  <div
+    className="range-value-container">
+    <span
+      className="range-values">
+      Min: 
+      0
+    </span>
+    <span
+      className="range-values">
+      Max: 
+      0
+    </span>
+  </div>
+  <input
+    max="5000"
+    min="0"
+    onChange={[Function]}
+    step="200"
+    type="range" />
+  <input
+    max="5000"
+    min="0"
+    onChange={[Function]}
+    step="200"
+    type="range" />
+</div>
+`;
