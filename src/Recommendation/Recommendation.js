@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import isEmpty from 'lodash.isempty'
 import './Recommendation.css'
-
-let cacheLastActiveListItem;
 
 export default class Recommendation extends Component {
   constructor(props) {

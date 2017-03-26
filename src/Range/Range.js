@@ -17,8 +17,8 @@ export default class Range extends Component {
 
   handleOnChange(valueKey, event) {
     let tmp, backendString, rangeFilter,
-      max = parseInt(this.refs.maxVal.value),
-      min = parseInt(this.refs.minVal.value)
+      max = parseInt(this.refs.maxVal.value, 10),
+      min = parseInt(this.refs.minVal.value, 10)
       
     if ( min > max ) { 
       tmp = max; 

@@ -15,7 +15,6 @@
     "lodash.foreach": "^4.5.0",
     "lodash.isempty": "^4.4.0",
     "react": "^15.4.1",
-    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.1",
     "shortid": "^2.2.6"
   },
