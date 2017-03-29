@@ -4,6 +4,7 @@
   "private": true,
   "devDependencies": {
     "enzyme": "^2.7.0",
+    "enzyme-to-json": "^1.5.0",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "0.8.4",
     "react-test-renderer": "^15.4.2"
@@ -14,7 +15,6 @@
     "lodash.foreach": "^4.5.0",
     "lodash.isempty": "^4.4.0",
     "react": "^15.4.1",
-    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.1",
     "shortid": "^2.2.6"
   },
