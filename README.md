@@ -5,3 +5,5 @@
 
 # To run production code 
 `yarn build` && `node server.js`
+
+### For dev code run create-react-app scripts
