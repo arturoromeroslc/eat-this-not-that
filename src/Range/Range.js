@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import './Range.css'
 
 const propTypes = {
-  onhandleFilterRange: React.PropTypes.func
+  onhandleFilterRange: PropTypes.func
 }
 
 export default class Range extends Component {

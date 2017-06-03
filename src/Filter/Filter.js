@@ -1,21 +1,22 @@
-import React, { Component, PureComponent } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import shortid from 'shortid'
 import Range from '../Range/Range'
 import {getFilterSelectedIndex, addFilterToCategory, isFilterSelected} from '../utils/filterSelections'
 import './Filter.css'
 
-class TextClick extends PureComponent {
-  render() {
-    return <span className="filter__action-text" onClick={this.props.onClicked}>{this.props.text}</span>
-  }
-}
-
 const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium']
 const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free']
 const propTypes = {
-  show: React.PropTypes.bool,
-  onToggleFilterMenu: React.PropTypes.func,
-  onSelectionOfFilters: React.PropTypes.func
+  show: PropTypes.bool,
+  onToggleFilterMenu: PropTypes.func,
+  onSelectionOfFilters: PropTypes.func
+}
+
+function TextClick({ onClicked, text }) {
+  return (
+    <span className="filter__action-text" onClick={onClicked}>{text}</span>
+  )
 }
 
 export default class Filter extends Component {

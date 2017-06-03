@@ -1,7 +1,14 @@
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import './AutoComplete.css'
+
+const propTypes = {
+  onChangedInputValue: PropTypes.func,
+  onSelectedItem: PropTypes.func,
+  value: PropTypes.string
+}
 
 export default class AutoComplete extends Component {
   constructor(props) {
@@ -142,8 +149,4 @@ export default class AutoComplete extends Component {
   }
 }
 
-AutoComplete.propTypes = {
-  onChangedInputValue: React.PropTypes.func,
-  onSelectedItem: React.PropTypes.func,
-  value: React.PropTypes.string
-}
+AutoComplete.propTypes = propTypes
