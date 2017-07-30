@@ -16,8 +16,8 @@
     "lodash.foreach": "^4.5.0",
     "lodash.isempty": "^4.4.0",
     "prop-types": "^15.5.10",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
+    "react": "next",
+    "react-dom": "next",
     "shortid": "^2.2.6"
   },
   "scripts": {
