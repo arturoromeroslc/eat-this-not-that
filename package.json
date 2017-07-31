@@ -5,6 +5,7 @@
   "devDependencies": {
     "enzyme": "^2.7.0",
     "enzyme-to-json": "^1.5.0",
+    "pm2": "^2.6.1",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "0.8.4",
     "react-test-renderer": "^15.4.2"
@@ -21,6 +22,8 @@
     "shortid": "^2.2.6"
   },
   "scripts": {
+    "stop": "pm2 stop all",
+    "deploy": "npm run build && pm2 start server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
