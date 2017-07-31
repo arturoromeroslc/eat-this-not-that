@@ -27,13 +27,13 @@ export default class Range extends Component {
       min = tmp; 
     }
     
-    const rangeFilter = {
+    const rangeValue = {
       valueMin: min,
       valueMax: max
     }
     
     const filterString = `gte ${min}, lte ${max}`
-    this.props.onhandleFilterRange(filterString, 'calories', rangeFilter)
+    this.props.onhandleFilterRange(filterString, rangeValue)
   }
 
 	render () {
