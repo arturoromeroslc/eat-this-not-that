@@ -12,6 +12,10 @@ const propTypes = {
   onToggleFilterMenu: PropTypes.func,
   onSelectionOfFilters: PropTypes.func
 }
+const DEFAULT_RANGE_FILTER = {
+  valueMin: 0,
+  valueMax: 0
+}
 
 function TextClick({ onClicked, text }) {
   return (
@@ -22,13 +26,7 @@ function TextClick({ onClicked, text }) {
 export default class Filter extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      selectedFilters: {},
-      rangeFilter: {
-        valueMin: 0,
-        valueMax: 0
-      }
-    }
+    this.state = { selectedFilters: {}, rangeFilter: DEFAULT_RANGE_FILTER }
     this.handleFilterClick = this.handleFilterClick.bind(this)
     this.handleRanageChange = this.handleRanageChange.bind(this)
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this)
@@ -59,7 +57,8 @@ export default class Filter extends Component {
 
   clearFilter() {
     this.setState({
-      selectedFilters: []
+      selectedFilters: [],
+      rangeFilter: DEFAULT_RANGE_FILTER
     })
   }
 

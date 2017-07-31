@@ -17,6 +17,17 @@ export default class Range extends Component {
     this.refs.maxVal.value = parseInt(this.props.valueMax, 10)
   }
 
+  /**
+   * Need to call this lifecycle so we can reset the value when a user clears their filters
+   * @param  {Object} nextProps props object with min and max values set to zero
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.valueMin === 0 && nextProps.valueMax === 0) {
+      this.refs.minVal.value = nextProps.valueMin
+      this.refs.maxVal.value = nextProps.valueMax
+    }
+  }
+
   handleOnChange(valueKey, event) {
     let max = parseInt(this.refs.maxVal.value, 10),
         min = parseInt(this.refs.minVal.value, 10)
