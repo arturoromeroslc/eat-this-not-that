@@ -23,7 +23,11 @@ export default class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedFilters: {}
+      selectedFilters: {},
+      rangeFilter: {
+        valueMin: 0,
+        valueMax: 0
+      }
     }
     this.handleFilterClick = this.handleFilterClick.bind(this)
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this)
@@ -31,12 +35,13 @@ export default class Filter extends Component {
     this.applyFilters = this.applyFilters.bind(this)
   }
 
-  handleFilterClick(filter, category) {
+  handleFilterClick(filter, category, value) {
     let selectedFilters = this.state.selectedFilters,
       filterSelectedIndex = getFilterSelectedIndex(selectedFilters[category], filter)
     
     if (category === 'calories') {
       selectedFilters[category] = filter
+      this.setState({rangeFilter: value})
     } else if (filterSelectedIndex > -1) {
       selectedFilters[category] = [
         ...selectedFilters[category].slice(0, filterSelectedIndex),
@@ -118,7 +123,7 @@ export default class Filter extends Component {
               </div>
   					</div>
             <h3>Calories</h3> 
-            <Range onhandleFilterRange={this.handleFilterClick}/>
+            <Range valueMin={this.state.rangeFilter.valueMin} valueMax={this.state.rangeFilter.valueMax} onhandleFilterRange={this.handleFilterClick}/>
           </div>
 				</div>
 			)

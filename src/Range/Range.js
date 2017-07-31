@@ -9,11 +9,12 @@ const propTypes = {
 export default class Range extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      valueMin: 0,
-      valueMax: 0
-    }
     this.handleOnChange = this.handleOnChange.bind(this)
+  }
+
+  componentDidMount() {
+    this.refs.minVal.value = parseInt(this.props.valueMin, 10)
+    this.refs.maxVal.value = parseInt(this.props.valueMax, 10)
   }
 
   handleOnChange(valueKey, event) {
@@ -33,16 +34,15 @@ export default class Range extends Component {
     }
     
     backendString = `gte ${min}, lte ${max}`
-    this.setState(rangeFilter)
-    this.props.onhandleFilterRange(backendString, 'calories')
+    this.props.onhandleFilterRange(backendString, 'calories', rangeFilter)
   }
 
 	render () {
 		return (
       <div className="range-slider">
         <div className="range-value-container">
-          <span className="range-values">Min: {this.state.valueMin}</span>
-          <span className="range-values">Max: {this.state.valueMax}</span>
+          <span className="range-values">Min: {this.props.valueMin}</span>
+          <span className="range-values">Max: {this.props.valueMax}</span>
         </div>
         <input ref="minVal" min="0" max="5000" step="200" type="range" onChange={this.handleOnChange}/>
         <input ref="maxVal" min="0" max="5000" step="200" type="range" onChange={this.handleOnChange}/>
