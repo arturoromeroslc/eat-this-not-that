@@ -18,23 +18,22 @@ export default class Range extends Component {
   }
 
   handleOnChange(valueKey, event) {
-    let tmp, backendString, rangeFilter,
-      max = parseInt(this.refs.maxVal.value, 10),
-      min = parseInt(this.refs.minVal.value, 10)
+    let max = parseInt(this.refs.maxVal.value, 10),
+        min = parseInt(this.refs.minVal.value, 10)
       
     if ( min > max ) { 
-      tmp = max; 
+      const tmp = max; 
       max = min; 
       min = tmp; 
     }
     
-    rangeFilter = {
+    const rangeFilter = {
       valueMin: min,
       valueMax: max
     }
     
-    backendString = `gte ${min}, lte ${max}`
-    this.props.onhandleFilterRange(backendString, 'calories', rangeFilter)
+    const filterString = `gte ${min}, lte ${max}`
+    this.props.onhandleFilterRange(filterString, 'calories', rangeFilter)
   }
 
 	render () {
