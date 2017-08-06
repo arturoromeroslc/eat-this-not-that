@@ -51,8 +51,9 @@ export default class Filter extends Component {
   }
 
   handleRanageChange(filterString, rangeValue) {
-      this.state.selectedFilters.calories = filterString
-      this.setState({rangeFilter: rangeValue, selectedFilters: this.state.selectedFilters})
+    const updatedSelectedFilters = Object.assign({}, this.state.selectedFilters)
+    updatedSelectedFilters.calories = filterString
+    this.setState({rangeFilter: rangeValue, selectedFilters: updatedSelectedFilters})
   }
 
   clearFilter() {
