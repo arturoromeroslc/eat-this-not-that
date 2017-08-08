@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import isEmpty from 'lodash.isempty'
 import './Recommendation.css'
 
 export default class Recommendation extends Component {
@@ -45,7 +44,7 @@ export default class Recommendation extends Component {
   }
 
 	render() {
-    if (this.props.value && !isEmpty(this.props.data.hits)) {
+    if (this.props.value && this.props.data.hits !== undefined) {
       return (
       <div ref={(div) => { this.listParentElement = div; }} className="recommendation-list">
           {this.props.data.hits.map(function(recipeObject, i) {
@@ -82,7 +81,7 @@ export default class Recommendation extends Component {
           }.bind(this))}
       	</div>
       )
-    } else if (this.props.value && isEmpty(this.props.data.hits)) {
+    } else if (this.props.value && this.props.data.hits && this.props.data.hits.length === 0) {
     	return <div>No data for searched term</div>
     } else {
       return null
