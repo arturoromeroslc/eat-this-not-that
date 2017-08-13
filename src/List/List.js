@@ -7,7 +7,7 @@ import './List.css'
 function objectWithoutProperties(obj, keys) {
   const target = {};
   for (let i in obj) {
-      if (keys.indexOf(parseInt(i)) >= 0) continue;
+      if (keys.indexOf(parseInt(i, 10)) >= 0) continue;
       if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
       target[i] = obj[i];
   }
@@ -25,11 +25,9 @@ export default class List extends Component {
       showIngredient: false
     }
     this.cardClick = this.cardClick.bind(this)
-    this.state.selectedCards = {}
   }
 
   cardClick(index, label) {
-    debugger;
     let newState
 
     if (this.state.selectedCards[index] === label) {
