@@ -5,12 +5,11 @@ import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
-import Recommendation from './Recommendation/Recommendation'
+import List from './List/List'
 import './App.css'
 
 export default class App extends Component {
   constructor(props) {
-    console.log('called', props)
     super(props)
     this.state = {
       foodValue: '',
@@ -41,7 +40,6 @@ export default class App extends Component {
    */
   toggleFilterMenu() {
     this.setState({showFilter: !this.state.showFilter})
-    console.log(this.state.showFilter)
   }
 
   /**
@@ -97,12 +95,11 @@ export default class App extends Component {
           initialWindowLoad: false
         })
       })
-  }  
+  }
 
   render() {
     let visible = {display: 'block'}
     let hidden = {display: 'none'}
-    console.log('called render', this.state.initialWindowLoad)
 
     return (
       <div>
@@ -120,7 +117,7 @@ export default class App extends Component {
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
             <p>Find alternative cooking recipes for your cravings.</p>
           </div>
-          <Recommendation value={this.state.foodValue} data={this.state.recommendationData}/>
+          <List value={this.state.foodValue} data={this.state.recommendationData}/>
         </div>
       </div>
     )
