@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import './Recommendation.css'
+import './Card.css'
 
-export default class Recommendation extends Component {
+export default class Card extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -24,7 +24,7 @@ export default class Recommendation extends Component {
     let listItem = e.target.closest('.recommendation-list__item')
 
     if (this.cacheLastActiveListItem) {
-      this.cacheLastActiveListItem.classList.remove('active');  
+      this.cacheLastActiveListItem.classList.remove('active');
     }
 
     listItem.classList.add('active')

@@ -5,7 +5,7 @@ import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
-import Recommendation from './Recommendation/Recommendation'
+import Card from './Card/Card'
 import './App.css'
 
 export default class App extends Component {
@@ -97,7 +97,7 @@ export default class App extends Component {
           initialWindowLoad: false
         })
       })
-  }  
+  }
 
   render() {
     let visible = {display: 'block'}
@@ -120,7 +120,7 @@ export default class App extends Component {
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
             <p>Find alternative cooking recipes for your cravings.</p>
           </div>
-          <Recommendation value={this.state.foodValue} data={this.state.recommendationData}/>
+          <Card value={this.state.foodValue} data={this.state.recommendationData}/>
         </div>
       </div>
     )
