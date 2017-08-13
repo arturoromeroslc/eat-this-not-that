@@ -42,23 +42,11 @@ export default class FoodCard extends Component {
   }
 
   onTitleClick(event, index) {
-    const listItem = event.target.closest('.recommendation-list__item')
-
-    // if (this.cacheLastActiveListItem) {
-    //   this.cacheLastActiveListItem.classList.remove('active');
-    // }
-
-    // listItem.classList.add('active')
     this.props.cardClicked(index, this.props.recipeObject.recipe.label)
-    // this.cacheLastActiveListItem = listItem;
   }
 
   onBackClick(event, index) {
-    const expanded = false
-    event.stopPropagation()
-    let listItem = event.target.closest('.recommendation-list__item')
     this.props.cardClicked(index, this.props.recipeObject.recipe.label)
-    // listItem.classList.toggle('active')
   }
 
   render() {

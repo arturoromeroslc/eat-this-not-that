@@ -34,12 +34,12 @@ export default class List extends Component {
 
     if (this.state.selectedCards[index] === label) {
       newState = objectWithoutProperties(this.state.selectedCards, [index])
-      this.setState({selectedCards: newState})
     } else {
       const newPropertyObject = {[index]: label}
       newState = Object.assign({}, this.state.selectedCards, newPropertyObject)
-      this.setState({selectedCards: newState})
     }
+
+    this.setState({selectedCards: newState})
   }
 
 	render() {
