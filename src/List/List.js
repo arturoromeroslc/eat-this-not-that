@@ -43,20 +43,22 @@ export default class List extends Component {
   }
 
 	render() {
-    if (this.props.data.hits !== undefined) {
-      const listClass = isEmpty(this.state.selectedCards) ? "recommendation-list" : "recommendation-list selection--active"
+    if (this.props.data) {
+      if (this.props.data.hits !== undefined) {
+        const listClass = isEmpty(this.state.selectedCards) ? "recommendation-list" : "recommendation-list selection--active"
 
-      return (
-      <ul className={listClass}>
-          {this.props.data.hits.map((recipeObject, i) => {
-            return (
-              <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
-            )
-          })}
-      	</ul>
-      )
-    } else if (this.props.data.hits && this.props.data.hits.length === 0) {
-    	return <div>No data for searched term</div>
+        return (
+        <ul className={listClass}>
+            {this.props.data.hits.map((recipeObject, i) => {
+              return (
+                <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
+              )
+            })}
+        	</ul>
+        )
+      } else if (this.props.data.hits && this.props.data.hits.length === 0) {
+      	return <div>No data for searched term</div>
+      }
     } else {
       return null
     }
