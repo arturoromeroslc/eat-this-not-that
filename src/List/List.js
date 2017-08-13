@@ -43,7 +43,7 @@ export default class List extends Component {
   }
 
 	render() {
-    if (this.props.value && this.props.data.hits !== undefined) {
+    if (this.props.data.hits !== undefined) {
       const listClass = isEmpty(this.state.selectedCards) ? "recommendation-list" : "recommendation-list selection--active"
 
       return (
@@ -55,7 +55,7 @@ export default class List extends Component {
           })}
       	</ul>
       )
-    } else if (this.props.value && this.props.data.hits && this.props.data.hits.length === 0) {
+    } else if (this.props.data.hits && this.props.data.hits.length === 0) {
     	return <div>No data for searched term</div>
     } else {
       return null
