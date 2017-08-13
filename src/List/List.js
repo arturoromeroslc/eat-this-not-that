@@ -4,40 +4,53 @@ import isEmpty from 'lodash.isempty'
 import FoodCard from '../FoodCard/FoodCard'
 import './List.css'
 
+function objectWithoutProperties(obj, keys) {
+  const target = {};
+  for (let i in obj) {
+      if (keys.indexOf(parseInt(i)) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+  }
+  return target;
+}
+
 export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
       initialTouch: null,
+      selectedCards: {},
       showIndex: 0,
       direction: null,
       showIngredient: false
     }
     this.cardClick = this.cardClick.bind(this)
-    this.selectedCards = {}
+    this.state.selectedCards = {}
   }
 
   cardClick(index, label) {
-    if (this.selectedCards[index] === label) {
-      delete this.selectedCards[index];
-    } else {
-      this.selectedCards[index] = label
-    }
+    debugger;
+    let newState
 
-    if (isEmpty(this.selectedCards)) {
-      this.listParentElement.classList.remove('selection--active')
+    if (this.state.selectedCards[index] === label) {
+      newState = objectWithoutProperties(this.state.selectedCards, [index])
+      this.setState({selectedCards: newState})
     } else {
-      this.listParentElement.classList.add('selection--active')
+      const newPropertyObject = {[index]: label}
+      newState = Object.assign({}, this.state.selectedCards, newPropertyObject)
+      this.setState({selectedCards: newState})
     }
   }
 
 	render() {
     if (this.props.value && this.props.data.hits !== undefined) {
+      const listClass = isEmpty(this.state.selectedCards) ? "recommendation-list" : "recommendation-list selection--active"
+
       return (
-      <ul ref={(div) => { this.listParentElement = div; }} className="recommendation-list">
+      <ul className={listClass}>
           {this.props.data.hits.map((recipeObject, i) => {
             return (
-              <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick}/>
+              <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
             )
           })}
       	</ul>

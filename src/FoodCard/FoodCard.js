@@ -42,16 +42,15 @@ export default class FoodCard extends Component {
   }
 
   onTitleClick(event, index) {
-    const expanded = true
     const listItem = event.target.closest('.recommendation-list__item')
 
-    if (this.cacheLastActiveListItem) {
-      this.cacheLastActiveListItem.classList.remove('active');
-    }
+    // if (this.cacheLastActiveListItem) {
+    //   this.cacheLastActiveListItem.classList.remove('active');
+    // }
 
-    listItem.classList.add('active')
+    // listItem.classList.add('active')
     this.props.cardClicked(index, this.props.recipeObject.recipe.label)
-    this.cacheLastActiveListItem = listItem;
+    // this.cacheLastActiveListItem = listItem;
   }
 
   onBackClick(event, index) {
@@ -59,14 +58,16 @@ export default class FoodCard extends Component {
     event.stopPropagation()
     let listItem = event.target.closest('.recommendation-list__item')
     this.props.cardClicked(index, this.props.recipeObject.recipe.label)
-    listItem.classList.toggle('active')
+    // listItem.classList.toggle('active')
   }
 
   render() {
     const index = this.props.index
     const recipe = this.props.recipeObject.recipe
+    const activeListItem = (this.props.selectedCards[index] === recipe.label) ? "recommendation-list__item active" : "recommendation-list__item"
+
     return (
-      <li className="recommendation-list__item">
+      <li className={activeListItem}>
         <Title onClicked={(event) => this.onTitleClick(event, index)} label={recipe.label}/>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
         <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>

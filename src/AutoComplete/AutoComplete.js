@@ -68,7 +68,6 @@ export default class AutoComplete extends Component {
         })
       })
       .catch(response => {
-        console.log(response)
       })
   }
 
@@ -112,7 +111,6 @@ export default class AutoComplete extends Component {
       this.setState({
         selectedIndex: 0
       })
-      console.log(this.state.selectedIndex)
     }
   }
 

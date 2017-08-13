@@ -10,7 +10,6 @@ import './App.css'
 
 export default class App extends Component {
   constructor(props) {
-    console.log('called', props)
     super(props)
     this.state = {
       foodValue: '',
@@ -41,7 +40,6 @@ export default class App extends Component {
    */
   toggleFilterMenu() {
     this.setState({showFilter: !this.state.showFilter})
-    console.log(this.state.showFilter)
   }
 
   /**
@@ -102,7 +100,6 @@ export default class App extends Component {
   render() {
     let visible = {display: 'block'}
     let hidden = {display: 'none'}
-    console.log('called render', this.state.initialWindowLoad)
 
     return (
       <div>
