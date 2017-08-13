@@ -41,7 +41,7 @@ export default class FoodCard extends Component {
     this.onBackClick = this.onBackClick.bind(this)
   }
 
-  onTitleClick(event) {
+  onTitleClick(event, index) {
     const expanded = true
     const listItem = event.target.closest('.recommendation-list__item')
 
@@ -50,25 +50,26 @@ export default class FoodCard extends Component {
     }
 
     listItem.classList.add('active')
-    this.props.cardClicked(expanded)
+    this.props.cardClicked(index, this.props.recipeObject.recipe.label)
     this.cacheLastActiveListItem = listItem;
   }
 
-  onBackClick(event) {
+  onBackClick(event, index) {
     const expanded = false
     event.stopPropagation()
     let listItem = event.target.closest('.recommendation-list__item')
-    this.props.cardClicked(expanded)
+    this.props.cardClicked(index, this.props.recipeObject.recipe.label)
     listItem.classList.toggle('active')
   }
 
   render() {
+    const index = this.props.index
     const recipe = this.props.recipeObject.recipe
     return (
       <li className="recommendation-list__item">
-        <Title onClicked={this.onTitleClick} label={recipe.label}/>
+        <Title onClicked={(event) => this.onTitleClick(event, index)} label={recipe.label}/>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
-        <BackArrow onClicked={this.onBackClick}/>
+        <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
         <IngredientsList ingredients={recipe.ingredients}/>
       </li>
     )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import FoodCard from '../FoodCard/FoodCard'
 import shortid from 'shortid'
+import isEmpty from 'lodash.isempty'
+import FoodCard from '../FoodCard/FoodCard'
 import './List.css'
 
 export default class List extends Component {
@@ -13,13 +14,20 @@ export default class List extends Component {
       showIngredient: false
     }
     this.cardClick = this.cardClick.bind(this)
+    this.selectedCards = {}
   }
 
-  cardClick(isExpanded) {
-    if (isExpanded) {
-      this.listParentElement.classList.add('selection--active')
+  cardClick(index, label) {
+    if (this.selectedCards[index] === label) {
+      delete this.selectedCards[index];
     } else {
+      this.selectedCards[index] = label
+    }
+
+    if (isEmpty(this.selectedCards)) {
       this.listParentElement.classList.remove('selection--active')
+    } else {
+      this.listParentElement.classList.add('selection--active')
     }
   }
 
