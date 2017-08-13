@@ -30,6 +30,7 @@
   -ms-user-select: none;
   user-select: none;
   -o-user-select: none;
+  padding-left: 0;
 }
 
 .recommendation-list__item {
@@ -50,10 +51,10 @@
   letter-spacing: 5px;
   display: block;
   text-align: center;
-  opacity: 0;
-  transition: all .5s, opacity .1s cubic-bezier(1, -0.02, 0, 1.01);
+  /*opacity: 0;*/
+  /*transition: all .5s, opacity .1s cubic-bezier(1, -0.02, 0, 1.01);
   -moz-transition: all .5s, opacity .1s cubic-bezier(1, -0.02, 0, 1.01);
-  -webkit-transition: all .5s, opacity .1s cubic-bezier(1, -0.02, 0, 1.01);
+  -webkit-transition: all .5s, opacity .1s cubic-bezier(1, -0.02, 0, 1.01);*/
 }
 
 .recommendation-list__item.active {

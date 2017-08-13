@@ -2,6 +2,36 @@ import React, { Component } from 'react'
 import shortid from 'shortid'
 import './List.css'
 
+function Title({ onClicked, label }) {
+  return (
+    <span
+      onClick={onClicked}
+      className="recommendation-list__item-title">
+      {label}
+    </span>
+  )
+}
+
+function BackArrow({onClicked}) {
+  return (
+    <a
+      className="back-arrow"
+      onClick={onClicked}
+      tabIndex="-1">
+      X
+    </a>
+  )
+}
+
+function IngredientsList({ingredients}) {
+  return (
+    <ul>{ingredients.map(function(ingredient, key) {
+        return <li key={`ingredient-${key}`}>{ingredient.food}</li>
+      })}
+    </ul>
+  )
+}
+
 export default class List extends Component {
   constructor(props) {
     super(props)
@@ -46,40 +76,18 @@ export default class List extends Component {
 	render() {
     if (this.props.value && this.props.data.hits !== undefined) {
       return (
-      <div ref={(div) => { this.listParentElement = div; }} className="recommendation-list">
+      <ul ref={(div) => { this.listParentElement = div; }} className="recommendation-list">
           {this.props.data.hits.map(function(recipeObject, i) {
             return (
-              <div
-                className="recommendation-list__item"
-                key={shortid.generate()}>
-                <span
-                  onClick={this.onTitleClick}
-                  className="recommendation-list__item-title">
-                  {recipeObject.recipe.label}
-                </span>
-                <p>
-                  <a
-                    className="back-arrow"
-                    onClick={this.onBackClick}
-                    tabIndex="-1">
-                    X
-                  </a>
-                  <img
-                    className="recommendation-list__item-img"
-                    alt={recipeObject.recipe.label}
-                    src={recipeObject.recipe.image}
-                  />
-                  <p>
-                    <ul>{recipeObject.recipe.ingredients.map(function(ingredient, key) {
-                        return <li key={`ingredient-${key}`}>{ingredient.food}</li>
-                      })}
-                    </ul>
-                  </p>
-                </p>
-              </div>
+              <li className="recommendation-list__item" key={shortid.generate()}>
+                <Title onClicked={this.onTitleClick} label={recipeObject.recipe.label}/>
+                <BackArrow onClicked={this.onBackClick}/>
+                <img className="recommendation-list__item-img" alt={recipeObject.recipe.label} src={recipeObject.recipe.image} />
+                <IngredientsList ingredients={recipeObject.recipe.ingredients}/>
+              </li>
             )
           }.bind(this))}
-      	</div>
+      	</ul>
       )
     } else if (this.props.value && this.props.data.hits && this.props.data.hits.length === 0) {
     	return <div>No data for searched term</div>
