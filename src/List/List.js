@@ -25,8 +25,8 @@ function BackArrow({onClicked}) {
 
 function IngredientsList({ingredients}) {
   return (
-    <ul>{ingredients.map(function(ingredient, key) {
-        return <li key={`ingredient-${key}`}>{ingredient.food}</li>
+    <ul>{ingredients.map(function(ingredient) {
+        return <li key={shortid.generate()}>{ingredient.food}</li>
       })}
     </ul>
   )
