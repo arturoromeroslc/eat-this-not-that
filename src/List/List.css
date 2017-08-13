@@ -41,7 +41,7 @@
   transition: all .5s cubic-bezier(0.59, 0, 0, 1.01);
   -moz-transition: all .5s cubic-bezier(0.59, 0, 0, 1.01);
   -webkit-transition: all .5s cubic-bezier(0.59, 0, 0, 1.01);
-  transform: scale(.95, .95);
+  transform: scale(.99, .99);
   cursor: pointer;
 }
 
@@ -127,9 +127,6 @@
 
 .recommendation-list__item:nth-child(1) {
   background: #f3bb72;
-  animation: containerSlideUp .8s 1s forwards;
-  -moz-animation: containerSlideUp .8s 1s forwards;
-  -webkit-animation: containerSlideUp .8s 1s forwards;
 }
 
 .recommendation-list__item:nth-child(1) span {
@@ -140,9 +137,6 @@
 
 .recommendation-list__item:nth-child(2) {
   background: #ff85a7;
-  animation: containerSlideUp .8s 1s forwards;
-  -moz-animation: containerSlideUp .8s 1s forwards;
-  -webkit-animation: containerSlideUp .8s 1s forwards;
 }
 
 .recommendation-list__item:nth-child(2) span {
@@ -157,9 +151,6 @@
 
 .recommendation-list__item:nth-child(even) {
   background: #f3bb72;
-  animation: containerSlideUp .8s 1s forwards;
-  -moz-animation: containerSlideUp .8s 1s forwards;
-  -webkit-animation: containerSlideUp .8s 1s forwards;
 }
 
 .recommendation-list__item:nth-child(even) span {
@@ -174,9 +165,6 @@
 
 .recommendation-list__item:nth-child(odd) {
   background: #ff85a7;
-  animation: containerSlideUp .8s 1s forwards;
-  -moz-animation: containerSlideUp .8s 1s forwards;
-  -webkit-animation: containerSlideUp .8s 1s forwards;
 }
 
 .recommendation-list__item:nth-child(odd) span {
@@ -186,14 +174,11 @@
 }
 
 .selection--active .recommendation-list__item:not(.active) {
-  opacity: 0.3;
+  opacity: 0.9;
 }
 
 .recommendation-list__item:nth-child(5) {
   background: #b1db73;
-  animation: containerSlideUp .8s 1s forwards;
-  -moz-animation: containerSlideUp .8s 1s forwards;
-  -webkit-animation: containerSlideUp .8s 1s forwards;
 }
 
 .recommendation-list__item:nth-child(5) span {
