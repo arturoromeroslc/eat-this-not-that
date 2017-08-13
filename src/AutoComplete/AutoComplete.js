@@ -31,14 +31,14 @@ export default class AutoComplete extends Component {
   handleInputSearchChange(e) {
     let value = e.target.value
 
-    if (e.target.value.length > 0) {
-      this.getAutoCompleteResults(e.target.value)
+    if (value.length > 0) {
+      this.getAutoCompleteResults(value)
       this.props.onChangedInputValue(value)
     } else {
-      this.state = {
+      this.setState({
         autoCompleteData: [],
         selectedIndex: 0
-      }
+      })
     }
     this.props.onChangedInputValue(value)
   }
@@ -143,7 +143,7 @@ export default class AutoComplete extends Component {
         />
         <ul style={(this.state.autoCompleteData.length > 0) ? borderTopStyle : {}} className="autocomplete__list">
           {listItems}
-        </ul> 
+        </ul>
       </span>
     )
   }
