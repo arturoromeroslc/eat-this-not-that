@@ -1,9 +1,9 @@
 import React from 'react'
-import Card from './Card'
+import list from './list'
 import renderer from 'react-test-renderer'
 
-test('Card snapshot test', () =>{
-	const component = renderer.create(<Card />)
+test('list snapshot test', () =>{
+	const component = renderer.create(<list />)
 	const tree = component.toJSON();
 	expect(tree).toMatchSnapshot()
 })

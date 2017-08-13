@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
-import './Card.css'
+import './List.css'
 
-export default class Card extends Component {
+export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
