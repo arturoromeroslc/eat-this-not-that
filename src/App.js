@@ -113,7 +113,7 @@ export default class App extends Component {
             <p>Find alternative cooking recipes for your cravings.</p>
             <span>{totalCountString}</span>
           </div>
-          <List value={this.state.foodValue} data={this.state.recommendationData}/>
+          <List value={this.state.foodValue} data={this.state.recommendationData.hits}/>
         </div>
       </div>
     )

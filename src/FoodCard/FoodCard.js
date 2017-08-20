@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import shortid from 'shortid'
 import './FoodCard.css'
 
-function Title({ onClicked, label }) {
+function ActionText({ className, onClicked, text }) {
   return (
     <span
       onClick={onClicked}
-      className="recommendation-list__item-title">
-      {label}
+      className={className}>
+      {text}
     </span>
   )
 }
@@ -39,6 +39,7 @@ export default class FoodCard extends Component {
     this.cacheLastActiveListItem = false;
     this.onTitleClick = this.onTitleClick.bind(this)
     this.onBackClick = this.onBackClick.bind(this)
+    this.onSaveClick = this.onSaveClick.bind(this)
   }
 
   onTitleClick(event, index) {
@@ -49,6 +50,18 @@ export default class FoodCard extends Component {
     this.props.cardClicked(index, this.props.recipeObject.recipe.label)
   }
 
+  onSaveClick(event, recipe) {
+    let currentSession = JSON.parse(localStorage.getItem('session'));
+
+    if (currentSession) {
+      currentSession.push(recipe)
+      localStorage.setItem('session', JSON.stringify(currentSession));
+    } else {
+      currentSession = [recipe]
+      localStorage.setItem('session', JSON.stringify(currentSession));
+    }
+  }
+
   render() {
     const index = this.props.index
     const recipe = this.props.recipeObject.recipe
@@ -56,9 +69,12 @@ export default class FoodCard extends Component {
 
     return (
       <li className={activeListItem}>
-        <Title onClicked={(event) => this.onTitleClick(event, index)} label={recipe.label}/>
+        <div className="flex-space-between">
+          <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
+          <ActionText className="recommendation-list__item-title" onClicked={(event) => this.onTitleClick(event, index)} text={recipe.label}/>
+          <ActionText className="food-card__action-text" onClicked={(event) => this.onSaveClick(event, recipe)} text="Add to Fave"/>
+        </div>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
-        <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
         <IngredientsList ingredients={recipe.ingredients}/>
       </li>
     )
