@@ -56,9 +56,12 @@ export default class FoodCard extends Component {
 
     return (
       <li className={activeListItem}>
-        <Title onClicked={(event) => this.onTitleClick(event, index)} label={recipe.label}/>
+        <div className="flex-space-between">
+          <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
+          <Title onClicked={(event) => this.onTitleClick(event, index)} label={recipe.label}/>
+          <span className="food-card__action-text">Add to Fave</span>
+        </div>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
-        <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
         <IngredientsList ingredients={recipe.ingredients}/>
       </li>
     )
