@@ -98,8 +98,6 @@ export default class App extends Component {
   }
 
   render() {
-    const visible = {display: 'block'}
-    const hidden = {display: 'none'}
     const totalCountString = this.state.recommendationData.count > 0 ? `Total alternatives: ${this.state.recommendationData.count}` : ''
 
     return (
@@ -108,11 +106,7 @@ export default class App extends Component {
         <div className="app">
           <div className="app__header">
             <div className="flex-space-between app__header__container">
-              <h2
-                style={(this.state.initialWindowLoad) ? visible : hidden}
-                className="app__header__heading">
-                Eat This, Not That.
-              </h2>
+              <h2 className="app__header__heading">Eat This, Not That.</h2>
               <span onClick={this.toggleFilterMenu}>Filter</span>
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
