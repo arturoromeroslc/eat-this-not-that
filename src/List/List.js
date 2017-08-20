@@ -42,19 +42,19 @@ export default class List extends Component {
 
 	render() {
     if (this.props.data) {
-      if (this.props.data.hits !== undefined) {
+      if (this.props.data !== undefined) {
         const listClass = isEmpty(this.state.selectedCards) ? "recommendation-list" : "recommendation-list selection--active"
 
         return (
         <ul className={listClass}>
-            {this.props.data.hits.map((recipeObject, i) => {
+            {this.props.data.map((recipeObject, i) => {
               return (
                 <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
               )
             })}
         	</ul>
         )
-      } else if (this.props.data.hits && this.props.data.hits.length === 0) {
+      } else if (this.props.data && this.props.data.length === 0) {
       	return <div>No data for searched term</div>
       }
     } else {
