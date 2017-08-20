@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import shortid from 'shortid'
 import './FoodCard.css'
 
-function Title({ onClicked, label }) {
+function ActionText({ className, onClicked, text }) {
   return (
     <span
       onClick={onClicked}
-      className="recommendation-list__item-title">
-      {label}
+      className={className}>
+      {text}
     </span>
   )
 }
@@ -39,6 +39,7 @@ export default class FoodCard extends Component {
     this.cacheLastActiveListItem = false;
     this.onTitleClick = this.onTitleClick.bind(this)
     this.onBackClick = this.onBackClick.bind(this)
+    this.onSaveClick = this.onSaveClick.bind(this)
   }
 
   onTitleClick(event, index) {
@@ -47,6 +48,18 @@ export default class FoodCard extends Component {
 
   onBackClick(event, index) {
     this.props.cardClicked(index, this.props.recipeObject.recipe.label)
+  }
+
+  onSaveClick(event, recipe) {
+    let currentSession = JSON.parse(localStorage.getItem('session'));
+
+    if (currentSession) {
+      currentSession.push(recipe)
+      localStorage.setItem('session', JSON.stringify(currentSession));
+    } else {
+      currentSession = [recipe]
+      localStorage.setItem('session', JSON.stringify(currentSession));
+    }
   }
 
   render() {
@@ -58,8 +71,8 @@ export default class FoodCard extends Component {
       <li className={activeListItem}>
         <div className="flex-space-between">
           <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
-          <Title onClicked={(event) => this.onTitleClick(event, index)} label={recipe.label}/>
-          <span className="food-card__action-text">Add to Fave</span>
+          <ActionText className="recommendation-list__item-title" onClicked={(event) => this.onTitleClick(event, index)} text={recipe.label}/>
+          <ActionText className="food-card__action-text" onClicked={(event) => this.onSaveClick(event, recipe)} text="Add to Fave"/>
         </div>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
         <IngredientsList ingredients={recipe.ingredients}/>
