@@ -98,8 +98,9 @@ export default class App extends Component {
   }
 
   render() {
-    let visible = {display: 'block'}
-    let hidden = {display: 'none'}
+    const visible = {display: 'block'}
+    const hidden = {display: 'none'}
+    const totalCountString = this.state.recommendationData.count > 0 ? `Total alternatives: ${this.state.recommendationData.count}` : ''
 
     return (
       <div>
@@ -116,6 +117,7 @@ export default class App extends Component {
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
             <p>Find alternative cooking recipes for your cravings.</p>
+            <span>{totalCountString}</span>
           </div>
           <List value={this.state.foodValue} data={this.state.recommendationData}/>
         </div>
