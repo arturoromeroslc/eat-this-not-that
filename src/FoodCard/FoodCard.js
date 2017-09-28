@@ -35,7 +35,6 @@ function IngredientsList({ingredients}) {
 export default class FoodCard extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
     this.cacheLastActiveListItem = false;
     this.onTitleClick = this.onTitleClick.bind(this)
     this.onBackClick = this.onBackClick.bind(this)
@@ -51,14 +50,14 @@ export default class FoodCard extends Component {
   }
 
   onSaveClick(event, recipe) {
-    let currentSession = JSON.parse(localStorage.getItem('session'));
+    let currentSession = JSON.parse(localStorage.getItem('Favs'));
 
     if (currentSession) {
       currentSession.push(recipe)
-      localStorage.setItem('session', JSON.stringify(currentSession));
+      localStorage.setItem('Favs', JSON.stringify(currentSession));
     } else {
       currentSession = [recipe]
-      localStorage.setItem('session', JSON.stringify(currentSession));
+      localStorage.setItem('Favs', JSON.stringify(currentSession));
     }
   }
 
