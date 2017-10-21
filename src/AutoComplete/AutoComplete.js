@@ -1,8 +1,13 @@
 import axios from 'axios'
 import debounce from 'lodash.debounce'
+import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import './AutoComplete.css'
+
+// const baseEndpoint = 'https://api.github.com/search/repositories?q='
+const baseEndpoint = 'https://api.nutritionix.com/v2/autocomplete?q=';
+const appId = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
 
 const propTypes = {
   onChangedInputValue: PropTypes.func,
@@ -19,7 +24,8 @@ export default class AutoComplete extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.state = {
       autoCompleteData: [],
-      selectedIndex: 0
+      selectedIndex: 0,
+      items: []
     }
     this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300)
   }
@@ -114,34 +120,76 @@ export default class AutoComplete extends Component {
     }
   }
 
+  onChange() {
+    console.log('hi');
+  }
+
   render() {
-    let borderTopStyle = {borderTop: '1px solid lightgray'},
-        seleectedBackgroundColor = {backgroundColor: 'darkgrey'}
-
-    const listItems = this.state.autoCompleteData.map((data, i) =>
-      <li
-        style={(this.state.selectedIndex === i) ? seleectedBackgroundColor : {}}
-        className="autocomplete__list-item"
-        onClick={(event) => this.handleSelectedItem(data.text)}
-        key={data.id}>{data.text}
-      </li>
-    )
-
     return (
       <span>
         <span className="autocomplete__icon">⚲</span>
-        <input
-          autoFocus
-          className="autocomplete__input"
-          placeholder="search"
-          type="search"
-          value={this.props.value}
-          onChange={this.handleInputSearchChange}
-          onKeyDown={this.handleKeyDown}
-        />
-        <ul style={(this.state.autoCompleteData.length > 0) ? borderTopStyle : {}} className="autocomplete__list">
-          {listItems}
-        </ul>
+        <Downshift onChange={this.props.onSelectedItem}>
+          {({
+            selectedItem,
+            getInputProps,
+            getItemProps,
+            highlightedIndex,
+            isOpen,
+          }) => {
+            return (
+              <div>
+                <input
+                  autoFocus
+                  className="autocomplete__input"
+                  placeholder="search"
+                  type="search"
+                  {...getInputProps({
+                    onChange: event => {
+                      // would probably be a good idea to debounce this
+                      // 😅
+                      const value = event.target.value
+                      if (!value) {
+                        return
+                      }
+
+                      axios
+                        .get(baseEndpoint + value + appId)
+                        .then(response => {
+                          debugger;
+                          const items = response.data.map(
+                            item => item.text
+                          ) // Added ID to make it unique
+                          this.setState({items})
+                        })
+                        .catch(error => {
+                          console.log(error)
+                        })
+                    },
+                  })}
+                />
+                {isOpen && (
+                  <div>
+                    {this.state.items.map((item, index) => (
+                      <div
+                        key={index}
+                        {...getItemProps({
+                          item,
+                          style: {
+                            backgroundColor:
+                              highlightedIndex === index ? 'gray' : 'white',
+                            fontWeight: selectedItem === item ? 'bold' : 'normal',
+                          },
+                        })}
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          }}
+        </Downshift>
       </span>
     )
   }
