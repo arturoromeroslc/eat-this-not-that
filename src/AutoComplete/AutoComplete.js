@@ -1,8 +1,11 @@
 import axios from 'axios'
-import debounce from 'lodash.debounce'
+import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import './AutoComplete.css'
+
+const baseEndpoint = 'https://api.nutritionix.com/v2/autocomplete?q=';
+const appId = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
 
 const propTypes = {
   onChangedInputValue: PropTypes.func,
@@ -15,13 +18,11 @@ export default class AutoComplete extends Component {
     super(props)
     this.handleInputSearchChange = this.handleInputSearchChange.bind(this)
     this.handleSelectedItem = this.handleSelectedItem.bind(this)
-    this.getAutoCompleteResults = this.getAutoCompleteResults.bind(this)
-    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.state = {
       autoCompleteData: [],
-      selectedIndex: 0
+      selectedIndex: 0,
+      items: []
     }
-    this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300)
   }
 
   /**
@@ -56,92 +57,69 @@ export default class AutoComplete extends Component {
     })
   }
 
-  /**
-   * Make api call after 300 ms debouce to get auto complete results.  After 200 set autoCompleteData value to return.
-   * @param  {String} value string to set as query parameter
-   */
-  getAutoCompleteResults(value) {
-    axios.get(`https://api.nutritionix.com/v2/autocomplete?q=${value}&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4`)
-      .then(response => {
-        this.setState({
-          autoCompleteData: response.data
-        })
-      })
-      .catch(response => {
-      })
-  }
-
-  /**
-   * Handle the keydown of the input field.  This function will also handle the highlighted index from the ul element.
-   * @param  {Object} event object passed in by React
-   */
-  handleKeyDown(e) {
-    if (this.state.autoCompleteData.length === 0) { return }
-
-    const DOWN_ARROW_KEY = 40
-    const UP_ARROW_KEY = 38
-    const ENTER = 13
-
-    if (e.keyCode === DOWN_ARROW_KEY) {
-      if (this.state.selectedIndex === this.state.autoCompleteData.length - 1) {
-        this.setState({
-          selectedIndex: 0
-        })
-      } else {
-        this.setState({
-          selectedIndex: this.state.selectedIndex + 1
-        })
-      }
-    }
-
-    if (e.keyCode === UP_ARROW_KEY) {
-      if (this.state.selectedIndex === 0) {
-        this.setState({
-          selectedIndex: 9
-        })
-      } else {
-        this.setState({
-          selectedIndex: this.state.selectedIndex - 1
-        })
-      }
-    }
-
-    if (e.keyCode === ENTER) {
-      this.handleSelectedItem(this.state.autoCompleteData[this.state.selectedIndex].text)
-      this.setState({
-        selectedIndex: 0
-      })
-    }
-  }
-
   render() {
-    let borderTopStyle = {borderTop: '1px solid lightgray'},
-        seleectedBackgroundColor = {backgroundColor: 'darkgrey'}
-
-    const listItems = this.state.autoCompleteData.map((data, i) =>
-      <li
-        style={(this.state.selectedIndex === i) ? seleectedBackgroundColor : {}}
-        className="autocomplete__list-item"
-        onClick={(event) => this.handleSelectedItem(data.text)}
-        key={data.id}>{data.text}
-      </li>
-    )
-
     return (
       <span>
         <span className="autocomplete__icon">⚲</span>
-        <input
-          autoFocus
-          className="autocomplete__input"
-          placeholder="search"
-          type="search"
-          value={this.props.value}
-          onChange={this.handleInputSearchChange}
-          onKeyDown={this.handleKeyDown}
-        />
-        <ul style={(this.state.autoCompleteData.length > 0) ? borderTopStyle : {}} className="autocomplete__list">
-          {listItems}
-        </ul>
+        <Downshift onChange={this.props.onSelectedItem}>
+          {({
+            selectedItem,
+            getInputProps,
+            getItemProps,
+            highlightedIndex,
+            isOpen,
+          }) => {
+            return (
+              <div>
+                <input
+                  autoFocus
+                  className="autocomplete__input"
+                  placeholder="search"
+                  type="search"
+                  {...getInputProps({
+                    onChange: event => {
+                      const value = event.target.value
+                      if (!value) {
+                        return
+                      }
+                      setTimeout(() => {
+                        axios
+                          .get(baseEndpoint + value + appId)
+                          .then(response => {
+                            const items = response.data.map(item => item.text)
+                            this.setState({items})
+                          })
+                          .catch(error => {
+                            console.log(error)
+                          })
+                      }, 500);
+                    }
+                  })}
+                />
+                {isOpen && (
+                  <div>
+                    {this.state.items.map((item, index) => (
+                      <div
+                        className="autocomplete__list"
+                        key={index}
+                        {...getItemProps({
+                          item,
+                          style: {
+                            backgroundColor:
+                              highlightedIndex === index ? 'black' : 'orange',
+                            fontWeight: selectedItem === item ? 'bold' : 'normal',
+                          },
+                        })}
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          }}
+        </Downshift>
       </span>
     )
   }
