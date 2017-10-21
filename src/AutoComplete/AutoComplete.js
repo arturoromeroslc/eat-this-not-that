@@ -1,11 +1,9 @@
 import axios from 'axios'
-import debounce from 'lodash.debounce'
 import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import './AutoComplete.css'
 
-// const baseEndpoint = 'https://api.github.com/search/repositories?q='
 const baseEndpoint = 'https://api.nutritionix.com/v2/autocomplete?q=';
 const appId = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
 
@@ -20,14 +18,11 @@ export default class AutoComplete extends Component {
     super(props)
     this.handleInputSearchChange = this.handleInputSearchChange.bind(this)
     this.handleSelectedItem = this.handleSelectedItem.bind(this)
-    this.getAutoCompleteResults = this.getAutoCompleteResults.bind(this)
-    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.state = {
       autoCompleteData: [],
       selectedIndex: 0,
       items: []
     }
-    this.getAutoCompleteResults = debounce(this.getAutoCompleteResults, 300)
   }
 
   /**
@@ -62,68 +57,6 @@ export default class AutoComplete extends Component {
     })
   }
 
-  /**
-   * Make api call after 300 ms debouce to get auto complete results.  After 200 set autoCompleteData value to return.
-   * @param  {String} value string to set as query parameter
-   */
-  getAutoCompleteResults(value) {
-    axios.get(`https://api.nutritionix.com/v2/autocomplete?q=${value}&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4`)
-      .then(response => {
-        this.setState({
-          autoCompleteData: response.data
-        })
-      })
-      .catch(response => {
-      })
-  }
-
-  /**
-   * Handle the keydown of the input field.  This function will also handle the highlighted index from the ul element.
-   * @param  {Object} event object passed in by React
-   */
-  handleKeyDown(e) {
-    if (this.state.autoCompleteData.length === 0) { return }
-
-    const DOWN_ARROW_KEY = 40
-    const UP_ARROW_KEY = 38
-    const ENTER = 13
-
-    if (e.keyCode === DOWN_ARROW_KEY) {
-      if (this.state.selectedIndex === this.state.autoCompleteData.length - 1) {
-        this.setState({
-          selectedIndex: 0
-        })
-      } else {
-        this.setState({
-          selectedIndex: this.state.selectedIndex + 1
-        })
-      }
-    }
-
-    if (e.keyCode === UP_ARROW_KEY) {
-      if (this.state.selectedIndex === 0) {
-        this.setState({
-          selectedIndex: 9
-        })
-      } else {
-        this.setState({
-          selectedIndex: this.state.selectedIndex - 1
-        })
-      }
-    }
-
-    if (e.keyCode === ENTER) {
-      this.handleSelectedItem(this.state.autoCompleteData[this.state.selectedIndex].text)
-      this.setState({
-        selectedIndex: 0
-      })
-    }
-  }
-
-  onChange() {
-    console.log('hi');
-  }
-
   render() {
     return (
       <span>
@@ -145,26 +78,22 @@ export default class AutoComplete extends Component {
                   type="search"
                   {...getInputProps({
                     onChange: event => {
-                      // would probably be a good idea to debounce this
-                      // 😅
                       const value = event.target.value
                       if (!value) {
                         return
                       }
-
-                      axios
-                        .get(baseEndpoint + value + appId)
-                        .then(response => {
-                          debugger;
-                          const items = response.data.map(
-                            item => item.text
-                          ) // Added ID to make it unique
-                          this.setState({items})
-                        })
-                        .catch(error => {
-                          console.log(error)
-                        })
-                    },
+                      setTimeout(() => {
+                        axios
+                          .get(baseEndpoint + value + appId)
+                          .then(response => {
+                            const items = response.data.map(item => item.text)
+                            this.setState({items})
+                          })
+                          .catch(error => {
+                            console.log(error)
+                          })
+                      }, 500);
+                    }
                   })}
                 />
                 {isOpen && (
