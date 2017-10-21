@@ -171,12 +171,13 @@ export default class AutoComplete extends Component {
                   <div>
                     {this.state.items.map((item, index) => (
                       <div
+                        className="autocomplete__list"
                         key={index}
                         {...getItemProps({
                           item,
                           style: {
                             backgroundColor:
-                              highlightedIndex === index ? 'gray' : 'white',
+                              highlightedIndex === index ? 'black' : 'orange',
                             fontWeight: selectedItem === item ? 'bold' : 'normal',
                           },
                         })}
