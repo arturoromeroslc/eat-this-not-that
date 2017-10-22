@@ -1,37 +1,34 @@
-import React, { Component } from "react";
-import axios from "axios";
-import debounce from "lodash.debounce";
-import isEmpty from "lodash.isempty";
-import forEach from "lodash.foreach";
-import Filter from "./Filter/Filter";
-import AutoComplete from "./AutoComplete/AutoComplete";
-import List from "./List/List";
-import "./App.css";
+import React, { Component } from 'react'
+import axios from 'axios'
+import debounce from 'lodash.debounce'
+import isEmpty from 'lodash.isempty'
+import forEach from 'lodash.foreach'
+import Filter from './Filter/Filter'
+import AutoComplete from './AutoComplete/AutoComplete'
+import List from './List/List'
+import './App.css'
 
-const domain = "https://api.edamam.com/search?q=";
-const appKey = "&app_key=0709d5dfba60edefb6abf1ec1d953fe5";
-const anchor = "&from=0&to=25&";
+const domain = 'https://api.edamam.com/search?q='
+const appKey = '&app_key=0709d5dfba60edefb6abf1ec1d953fe5'
+const anchor = '&from=0&to=25&'
 
 export default class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      foodValue: "",
+      foodValue: '',
       recommendationData: false,
-      food: "",
+      food: '',
       initialWindowLoad: true,
       showFilter: false,
-      dietFilter: ""
-    };
-    this.updateFoodValue = this.updateFoodValue.bind(this);
-    this.toggleFilterMenu = this.toggleFilterMenu.bind(this);
-    this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this);
-    this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this);
-    this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this);
-    this.sendRecommendationRequest = debounce(
-      this.sendRecommendationRequest,
-      300
-    );
+      dietFilter: ''
+    }
+    this.updateFoodValue = this.updateFoodValue.bind(this)
+    this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
+    this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
+    this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
+    this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this)
+    this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
   }
 
   /**
@@ -39,14 +36,14 @@ export default class App extends Component {
    * @param  {String} value The value chosen by the user from dropdown.
    */
   updateFoodValue(value) {
-    this.setState({ foodValue: value });
+    this.setState({foodValue: value})
   }
 
   /**
    * Show hide the filter menu
    */
   toggleFilterMenu() {
-    this.setState({ showFilter: !this.state.showFilter });
+    this.setState({showFilter: !this.state.showFilter})
   }
 
   /**
@@ -55,8 +52,8 @@ export default class App extends Component {
    * @param {String} foodValue food value that will be added to the api call.
    */
   setFoodAndMakeApiCall(foodValue) {
-    this.setState({ food: foodValue });
-    this.sendRecommendationRequest(foodValue, this.state.dietFilter);
+    this.setState({food: foodValue})
+    this.sendRecommendationRequest(foodValue, this.state.dietFilter)
   }
 
   /**
@@ -64,22 +61,22 @@ export default class App extends Component {
    * @param  {string} filter value of filter selected
    */
   sendRequestWithFilter(filterObject) {
-    let dietFilter = "";
+    let dietFilter = ''
 
     if (!isEmpty(filterObject)) {
-      forEach(filterObject, function(filterArray, key) {
+      forEach(filterObject, function (filterArray, key) {
         if (!isEmpty(filterArray)) {
-          dietFilter += `&${key}=${filterArray}`;
+          dietFilter += `&${key}=${filterArray}`
         }
-      });
+      })
     } else {
-      dietFilter = "";
+      dietFilter = ''
     }
 
-    this.setState({ dietFilter: dietFilter });
+    this.setState({dietFilter: dietFilter})
 
     if (this.state.food.trim().length > 0) {
-      this.sendRecommendationRequest(this.state.food, dietFilter);
+      this.sendRecommendationRequest(this.state.food, dietFilter)
     }
   }
 
@@ -91,53 +88,38 @@ export default class App extends Component {
   sendRecommendationRequest(food, dietFilter) {
     var config = {
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        'Access-Control-Allow-Origin': '*'
       }
-    };
+    }
 
-    return axios
-      .get(domain + food + appKey + anchor + dietFilter, {}, config)
+    return axios.get(domain + food + appKey + anchor + dietFilter, {}, config)
       .then(response => {
         this.setState({
           recommendationData: response.data,
           initialWindowLoad: false
-        });
-      });
+        })
+      })
   }
 
   render() {
-    const totalCountString =
-      this.state.recommendationData.count > 0
-        ? `Total alternatives: ${this.state.recommendationData.count}`
-        : "";
+    const totalCountString = this.state.recommendationData.count > 0 ? `Total alternatives: ${this.state.recommendationData.count}` : ''
 
     return (
       <div>
-        <Filter
-          show={this.state.showFilter}
-          onToggleFilterMenu={this.toggleFilterMenu}
-          onSelectionOfFilters={this.sendRequestWithFilter}
-        />
+        <Filter show={this.state.showFilter} onToggleFilterMenu={this.toggleFilterMenu} onSelectionOfFilters={this.sendRequestWithFilter}/>
         <div className="app">
           <div className="app__header">
             <div className="flex-space-between app__header__container">
               <h2 className="app__header__heading">Eat This, Not That.</h2>
               <span onClick={this.toggleFilterMenu}>Filter</span>
             </div>
-            <AutoComplete
-              onSelectedItem={this.setFoodAndMakeApiCall}
-              onChangedInputValue={this.updateFoodValue}
-              value={this.state.foodValue}
-            />
+            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
             <p>Find alternative cooking recipes for your cravings.</p>
             <span>{totalCountString}</span>
           </div>
-          <List
-            value={this.state.foodValue}
-            data={this.state.recommendationData.hits}
-          />
+          <List value={this.state.foodValue} data={this.state.recommendationData.hits}/>
         </div>
       </div>
-    );
+    )
   }
 }
