@@ -5,6 +5,7 @@
   "devDependencies": {
     "enzyme": "^3.1.0",
     "enzyme-to-json": "^1.5.0",
+    "jsdom": "^11.1.0",
     "pm2": "^2.6.1",
     "react-dom": "^16.0.0",
     "react-scripts": "0.8.4",
