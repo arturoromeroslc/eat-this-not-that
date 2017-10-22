@@ -7,6 +7,20 @@ import './AutoComplete.css'
 const baseEndpoint = 'https://api.nutritionix.com/v2/autocomplete?q=';
 const appId = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
 
+function debounce(fn, time) {
+  let timeoutId
+  return wrapper
+  function wrapper(...args) {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+    timeoutId = setTimeout(() => {
+      timeoutId = null
+      fn(...args)
+    }, time)
+  }
+}
+
 const propTypes = {
   onChangedInputValue: PropTypes.func,
   onSelectedItem: PropTypes.func,
@@ -82,7 +96,7 @@ export default class AutoComplete extends Component {
                       if (!value) {
                         return
                       }
-                      setTimeout(() => {
+                      debounce(
                         axios
                           .get(baseEndpoint + value + appId)
                           .then(response => {
@@ -92,7 +106,7 @@ export default class AutoComplete extends Component {
                           .catch(error => {
                             console.log(error)
                           })
-                      }, 500);
+                      , 500);
                     }
                   })}
                 />
