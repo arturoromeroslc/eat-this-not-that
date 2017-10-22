@@ -8,6 +8,10 @@ import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
 import './App.css'
 
+const domain = 'https://api.edamam.com/search?q='
+const appKey = '&app_key=0709d5dfba60edefb6abf1ec1d953fe5'
+const anchor = '&from=0&to=25&'
+
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -48,6 +52,7 @@ export default class App extends Component {
    * @param {String} foodValue food value that will be added to the api call.
    */
   setFoodAndMakeApiCall(foodValue) {
+    console.log('hi');
     this.setState({food: foodValue})
     this.sendRecommendationRequest(foodValue, this.state.dietFilter)
   }
@@ -88,7 +93,7 @@ export default class App extends Component {
       }
     }
 
-    return axios.get(`https://api.edamam.com/search?q=${food}&app_key=0709d5dfba60edefb6abf1ec1d953fe5&from=0&to=100&${dietFilter}`, {}, config)
+    return axios.get(domain + food + appKey + anchor + dietFilter, {}, config)
       .then(response => {
         this.setState({
           recommendationData: response.data,
