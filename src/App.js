@@ -61,6 +61,7 @@ export default class App extends Component {
    * @param  {string} filter value of filter selected
    */
   sendRequestWithFilter(filterObject) {
+    console.log('hello')
     let dietFilter = ''
 
     if (!isEmpty(filterObject)) {
