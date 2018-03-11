@@ -1,21 +1,21 @@
-export {getFilterSelectedIndex, addFilterToCategory, isFilterSelected}
+export { getFilterSelectedIndex, addFilterToCategory, isFilterSelected }
 
 function getFilterSelectedIndex(category, filter) {
-	return Array.isArray(category) ? category.indexOf(filter) : -1
+  return Array.isArray(category) ? category.indexOf(filter) : -1
 }
 
 function addFilterToCategory(category, filter) {
-	let categoryUpdated;
+  let categoryUpdated;
 
-	if (Array.isArray(category)) {
-		categoryUpdated = [...category, filter]
-	} else {
-		categoryUpdated = [filter]
-	}
+  if (Array.isArray(category)) {
+    categoryUpdated = [...category, filter]
+  } else {
+    categoryUpdated = [filter]
+  }
 
-	return categoryUpdated
+  return categoryUpdated
 }
 
 function isFilterSelected(category, filter) {
-	return (Array.isArray(category) && category.includes(filter))
+  return (Array.isArray(category) && category.includes(filter))
 }

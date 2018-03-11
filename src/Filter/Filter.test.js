@@ -1,8 +1,8 @@
 import React from 'react'
 import Filter from './Filter'
-import {shallow} from 'enzyme'
+import { shallow } from 'enzyme'
 
-let sum = (x, y) => x + y
+const sum = (x, y) => x + y
 
 it('sums numbers', () => {
   expect(sum(1, 2)).toEqual(3)
@@ -10,7 +10,5 @@ it('sums numbers', () => {
 })
 
 test('isFilterItemSelected()', () => {
-  const component = shallow(
-    <Filter show={true}></Filter>
-  )
+  const component = shallow(<Filter show />)
 })

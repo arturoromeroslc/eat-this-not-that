@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-eslint": "^8.2.2",
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.0",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
     "jsdom": "^11.1.0",
     "pm2": "^2.6.1",
     "react-dom": "^16.0.0",
@@ -29,6 +35,7 @@
     "deploy": "npm run build && pm2 start server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "lint": "eslint --fix 'src/**/*.js'",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

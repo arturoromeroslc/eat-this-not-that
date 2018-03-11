@@ -6,28 +6,28 @@ function ActionText({ className, onClicked, text }) {
   return (
     <span
       onClick={onClicked}
-      className={className}>
+      className={className}
+    >
       {text}
     </span>
   )
 }
 
-function BackArrow({onClicked}) {
+function BackArrow({ onClicked }) {
   return (
     <a
       className="back-arrow"
       onClick={onClicked}
-      tabIndex="-1">
+      tabIndex="-1"
+    >
       X
     </a>
   )
 }
 
-function IngredientsList({ingredients}) {
+function IngredientsList({ ingredients }) {
   return (
-    <ul>{ingredients.map(function(ingredient) {
-        return <li key={shortid.generate()}>{ingredient.food}</li>
-      })}
+    <ul>{ingredients.map(ingredient => <li key={shortid.generate()}>{ingredient.food}</li>)}
     </ul>
   )
 }
@@ -64,14 +64,14 @@ export default class FoodCard extends Component {
   render() {
     const index = this.props.index
     const recipe = this.props.recipeObject.recipe
-    const activeListItem = (this.props.selectedCards[index] === recipe.label) ? "recommendation-list__item active" : "recommendation-list__item"
+    const activeListItem = (this.props.selectedCards[index] === recipe.label) ? 'recommendation-list__item active' : 'recommendation-list__item'
 
     return (
       <li className={activeListItem}>
         <div className="flex-space-between">
-          <BackArrow onClicked={(event) => this.onBackClick(event, index)}/>
-          <ActionText className="recommendation-list__item-title" onClicked={(event) => this.onTitleClick(event, index)} text={recipe.label}/>
-          <ActionText className="food-card__action-text" onClicked={(event) => this.onSaveClick(event, recipe)} text="Add to Fave"/>
+          <BackArrow onClicked={event => this.onBackClick(event, index)}/>
+          <ActionText className="recommendation-list__item-title" onClicked={event => this.onTitleClick(event, index)} text={recipe.label}/>
+          <ActionText className="food-card__action-text" onClicked={event => this.onSaveClick(event, recipe)} text="Add to Fave"/>
         </div>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
         <IngredientsList ingredients={recipe.ingredients}/>
