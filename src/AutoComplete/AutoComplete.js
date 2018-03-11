@@ -44,7 +44,7 @@ export default class AutoComplete extends Component {
    * @param  {Object} e event object passed in
    */
   handleInputSearchChange(e) {
-    let value = e.target.value
+    const value = e.target.value
 
     if (value.length > 0) {
       this.getAutoCompleteResults(value)
@@ -82,16 +82,15 @@ export default class AutoComplete extends Component {
             getItemProps,
             highlightedIndex,
             isOpen,
-          }) => {
-            return (
-              <div>
-                <input
-                  autoFocus
-                  className="autocomplete__input"
-                  placeholder="search"
-                  type="search"
-                  {...getInputProps({
-                    onChange: event => {
+          }) => (
+            <div>
+              <input
+                autoFocus
+                className="autocomplete__input"
+                placeholder="search"
+                type="search"
+                {...getInputProps({
+                    onChange: (event) => {
                       const value = event.target.value
                       if (!value) {
                         return
@@ -99,24 +98,25 @@ export default class AutoComplete extends Component {
                       debounce(
                         axios
                           .get(baseEndpoint + value + appId)
-                          .then(response => {
+                          .then((response) => {
                             const items = response.data.map(item => item.text)
-                            this.setState({items})
+                            this.setState({ items })
                           })
-                          .catch(error => {
+                          .catch((error) => {
                             console.log(error)
                           })
-                      , 500);
+                      , 500
+);
                     }
                   })}
-                />
-                {isOpen && (
-                  <div>
-                    {this.state.items.map((item, index) => (
-                      <div
-                        className="autocomplete__list"
-                        key={index}
-                        {...getItemProps({
+              />
+              {isOpen && (
+              <div>
+                {this.state.items.map((item, index) => (
+                  <div
+                    className="autocomplete__list"
+                    key={index}
+                    {...getItemProps({
                           item,
                           style: {
                             backgroundColor:
@@ -124,15 +124,14 @@ export default class AutoComplete extends Component {
                             fontWeight: selectedItem === item ? 'bold' : 'normal',
                           },
                         })}
-                      >
-                        {item}
-                      </div>
-                    ))}
+                  >
+                    {item}
                   </div>
-                )}
+                    ))}
               </div>
-            )
-          }}
+                )}
+            </div>
+            )}
         </Downshift>
       </span>
     )

@@ -8,9 +8,9 @@ import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
 import './App.css'
 
-const domain = 'https://api.edamam.com/search?q='
-const appKey = '&app_key=0709d5dfba60edefb6abf1ec1d953fe5'
-const anchor = '&from=0&to=25&'
+const DOMAIN = 'https://api.edamam.com/search?q='
+const APP_KEY = '&app_key=0709d5dfba60edefb6abf1ec1d953fe5'
+const ANCHOR = '&from=0&to=25&'
 
 export default class App extends Component {
   constructor(props) {
@@ -36,14 +36,14 @@ export default class App extends Component {
    * @param  {String} value The value chosen by the user from dropdown.
    */
   updateFoodValue(value) {
-    this.setState({foodValue: value})
+    this.setState({ foodValue: value })
   }
 
   /**
    * Show hide the filter menu
    */
   toggleFilterMenu() {
-    this.setState({showFilter: !this.state.showFilter})
+    this.setState({ showFilter: !this.state.showFilter })
   }
 
   /**
@@ -52,7 +52,7 @@ export default class App extends Component {
    * @param {String} foodValue food value that will be added to the api call.
    */
   setFoodAndMakeApiCall(foodValue) {
-    this.setState({food: foodValue})
+    this.setState({ food: foodValue })
     this.sendRecommendationRequest(foodValue, this.state.dietFilter)
   }
 
@@ -64,16 +64,14 @@ export default class App extends Component {
     let dietFilter = ''
 
     if (!isEmpty(filterObject)) {
-      forEach(filterObject, function (filterArray, key) {
+      forEach(filterObject, (filterArray, key) => {
         if (!isEmpty(filterArray)) {
           dietFilter += `&${key}=${filterArray}`
         }
       })
-    } else {
-      dietFilter = ''
     }
 
-    this.setState({dietFilter: dietFilter})
+    this.setState({ dietFilter })
 
     if (this.state.food.trim().length > 0) {
       this.sendRecommendationRequest(this.state.food, dietFilter)
@@ -86,14 +84,14 @@ export default class App extends Component {
    * @param  {String} dietFilter stringified array to send in api call
    */
   sendRecommendationRequest(food, dietFilter) {
-    var config = {
+    const config = {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
     }
 
-    return axios.get(domain + food + appKey + anchor + dietFilter, {}, config)
-      .then(response => {
+    return axios.get(DOMAIN + food + APP_KEY + ANCHOR + dietFilter, {}, config)
+      .then((response) => {
         this.setState({
           recommendationData: response.data,
           initialWindowLoad: false

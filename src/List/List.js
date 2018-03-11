@@ -6,10 +6,10 @@ import './List.css'
 
 function objectWithoutProperties(obj, keys) {
   const target = {};
-  for (let i in obj) {
-      if (keys.indexOf(parseInt(i, 10)) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-      target[i] = obj[i];
+  for (const i in obj) {
+    if (keys.indexOf(parseInt(i, 10)) >= 0) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+    target[i] = obj[i];
   }
   return target;
 }
@@ -33,26 +33,24 @@ export default class List extends Component {
     if (this.state.selectedCards[index] === label) {
       newState = objectWithoutProperties(this.state.selectedCards, [index])
     } else {
-      const newPropertyObject = {[index]: label}
+      const newPropertyObject = { [index]: label }
       newState = Object.assign({}, this.state.selectedCards, newPropertyObject)
     }
 
-    this.setState({selectedCards: newState})
+    this.setState({ selectedCards: newState })
   }
 
-	render() {
+  render() {
     if (this.props.data) {
       if (this.props.data !== undefined) {
-        const listClass = isEmpty(this.state.selectedCards) ? "recommendation-list" : "recommendation-list selection--active"
+        const listClass = isEmpty(this.state.selectedCards) ? 'recommendation-list' : 'recommendation-list selection--active'
 
         return (
-        <ul className={listClass}>
-            {this.props.data.map((recipeObject, i) => {
-              return (
-                <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
-              )
-            })}
-        	</ul>
+          <ul className={listClass}>
+            {this.props.data.map((recipeObject, i) => (
+              <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
+              ))}
+          </ul>
         )
       } else if (this.props.data && this.props.data.length === 0) {
       	return <div>No data for searched term</div>
@@ -60,5 +58,5 @@ export default class List extends Component {
     } else {
       return null
     }
-	}
+  }
 }
