@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import shortid from 'shortid'
 import isEmpty from 'lodash.isempty'
+import PropTypes from 'prop-types';
 import FoodCard from '../FoodCard/FoodCard'
 import './List.css'
 
@@ -18,11 +19,7 @@ export default class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      initialTouch: null,
       selectedCards: {},
-      showIndex: 0,
-      direction: null,
-      showIngredient: false
     }
     this.cardClick = this.cardClick.bind(this)
   }
@@ -48,7 +45,13 @@ export default class List extends Component {
         return (
           <ul className={listClass}>
             {this.props.data.map((recipeObject, i) => (
-              <FoodCard key={shortid.generate()} index={i} recipeObject={recipeObject} cardClicked={this.cardClick} selectedCards={this.state.selectedCards}/>
+              <FoodCard
+                key={shortid.generate()}
+                index={i}
+                recipeObject={recipeObject}
+                cardClicked={this.cardClick}
+                selectedCards={this.state.selectedCards}
+              />
               ))}
           </ul>
         )
@@ -59,4 +62,8 @@ export default class List extends Component {
       return null
     }
   }
+}
+
+List.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({})),
 }

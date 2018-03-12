@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import './Range.css'
 
-const propTypes = {
-  onhandleFilterRange: PropTypes.func
-}
-
 export default class Range extends Component {
   constructor(props) {
     super(props)
@@ -28,9 +24,9 @@ export default class Range extends Component {
     }
   }
 
-  handleOnChange(valueKey, event) {
-    let max = parseInt(this.refs.maxVal.value, 10),
-      min = parseInt(this.refs.minVal.value, 10)
+  handleOnChange(valueKey) {
+    let max = parseInt(this.refs.maxVal.value, 10)
+    let min = parseInt(this.refs.minVal.value, 10)
 
     if (min > max) {
       const tmp = max;
@@ -61,4 +57,8 @@ export default class Range extends Component {
   }
 }
 
-Range.propTypes = propTypes
+Range.propTypes = {
+  onhandleFilterRange: PropTypes.func,
+  valueMin: PropTypes.number,
+  valueMax: PropTypes.number,
+}

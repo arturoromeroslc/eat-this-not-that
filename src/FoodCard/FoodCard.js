@@ -1,36 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import shortid from 'shortid'
 import './FoodCard.css'
-
-function ActionText({ className, onClicked, text }) {
-  return (
-    <span
-      onClick={onClicked}
-      className={className}
-    >
-      {text}
-    </span>
-  )
-}
-
-function BackArrow({ onClicked }) {
-  return (
-    <a
-      className="back-arrow"
-      onClick={onClicked}
-      tabIndex="-1"
-    >
-      X
-    </a>
-  )
-}
-
-function IngredientsList({ ingredients }) {
-  return (
-    <ul>{ingredients.map(ingredient => <li key={shortid.generate()}>{ingredient.food}</li>)}
-    </ul>
-  )
-}
 
 export default class FoodCard extends Component {
   constructor(props) {
@@ -62,20 +33,55 @@ export default class FoodCard extends Component {
   }
 
   render() {
-    const index = this.props.index
-    const recipe = this.props.recipeObject.recipe
+    const { index } = this.props
+    const { recipe } = this.props.recipeObject
     const activeListItem = (this.props.selectedCards[index] === recipe.label) ? 'recommendation-list__item active' : 'recommendation-list__item'
 
     return (
       <li className={activeListItem}>
         <div className="flex-space-between">
-          <BackArrow onClicked={event => this.onBackClick(event, index)}/>
-          <ActionText className="recommendation-list__item-title" onClicked={event => this.onTitleClick(event, index)} text={recipe.label}/>
-          <ActionText className="food-card__action-text" onClicked={event => this.onSaveClick(event, recipe)} text="Add to Fave"/>
+          <button
+            className="back-arrow"
+            onClick={event => this.onBackClick(event, index)}
+            onKeyUp={event => this.onBackClick(event, index)}
+            tabIndex="-1"
+          >
+            X
+          </button>
+          <button
+            className="recommendation-list__item-title"
+            onKeyUp={event => this.onTitleClick(event, index)}
+            onClick={event => this.onTitleClick(event, index)}
+            text={recipe.label}
+          >
+            {recipe.label}
+          </button>
+          <button
+            className="food-card__action-text"
+            onKeyUp={event => this.onSaveClick(event, recipe)}
+            onClick={event => this.onSaveClick(event, recipe)}
+          >
+            Add to Fave
+          </button>
         </div>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
-        <IngredientsList ingredients={recipe.ingredients}/>
+        <ul>
+          {recipe.ingredients.map(ingredient => (
+            <li key={shortid.generate()}>{ingredient.text}</li>
+          ))}
+        </ul>
       </li>
     )
   }
+}
+
+FoodCard.propTypes = {
+  cardClicked: PropTypes.func,
+  recipeObject: PropTypes.shape({
+    recipe: PropTypes.shape({
+      label: PropTypes.string
+    })
+  }),
+  index: PropTypes.number,
+  selectedCards: PropTypes.shape(),
 }

@@ -7,11 +7,7 @@ import './Filter.css'
 
 const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium']
 const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free']
-const propTypes = {
-  show: PropTypes.bool,
-  onToggleFilterMenu: PropTypes.func,
-  onSelectionOfFilters: PropTypes.func
-}
+
 const DEFAULT_RANGE_FILTER = {
   valueMin: 0,
   valueMax: 0
@@ -19,8 +15,20 @@ const DEFAULT_RANGE_FILTER = {
 
 function TextClick({ onClicked, text }) {
   return (
-    <span className="filter__action-text" onClick={onClicked}>{text}</span>
-  )
+    <button
+      className="filter__action-text"
+      onKeyUp={onClicked}
+      onClick={onClicked}
+    >
+      {text}
+    </button>
+  );
+}
+
+
+TextClick.propTypes = {
+  onClicked: PropTypes.func,
+  text: PropTypes.string,
 }
 
 export default class Filter extends Component {
@@ -35,8 +43,8 @@ export default class Filter extends Component {
   }
 
   handleFilterClick(filter, category) {
-    let selectedFilters = this.state.selectedFilters,
-      filterSelectedIndex = getFilterSelectedIndex(selectedFilters[category], filter)
+    const { selectedFilters } = this.state
+    const filterSelectedIndex = getFilterSelectedIndex(selectedFilters[category], filter)
 
     if (filterSelectedIndex > -1) {
       selectedFilters[category] = [
@@ -78,7 +86,7 @@ export default class Filter extends Component {
   }
 
   render () {
-    const show = this.props.show
+    const { show } = this.props
     const hasFilters = Object.keys(this.state.selectedFilters).length > 0
     const close = <TextClick onClicked={this.props.onToggleFilterMenu} text="Close" />
     const apply = <TextClick onClicked={this.applyFilters} text="Apply" />
@@ -102,30 +110,36 @@ export default class Filter extends Component {
               <h3>Diet</h3>
               <div className="filter__category">
                 {DIET_OPTIONS.map(filter =>
-                  (<span
+                  (<button
                     className={this.isFilterItemSelected(filter, 'diet')}
                     key={shortid.generate()}
+                    onKeyUp={() => this.handleFilterClick(filter, 'diet')}
                     onClick={() => this.handleFilterClick(filter, 'diet')}
                   >
                     {filter}
-                  </span>))}
+                  </button>))}
               </div>
             </div>
             <div className="filter__body-container">
               <h3>Health</h3>
               <div className="filter__category">
                 {HEALTH_OPTIONS.map(filter =>
-                  (<span
+                  (<button
                     className={this.isFilterItemSelected(filter, 'health')}
                     key={shortid.generate()}
+                    onKeyUp={() => this.handleFilterClick(filter, 'health')}
                     onClick={() => this.handleFilterClick(filter, 'health')}
                   >
                     {filter}
-                  </span>))}
+                  </button>))}
               </div>
             </div>
             <h3>Calories</h3>
-            <Range valueMin={this.state.rangeFilter.valueMin} valueMax={this.state.rangeFilter.valueMax} onhandleFilterRange={this.handleRanageChange}/>
+            <Range
+              valueMin={this.state.rangeFilter.valueMin}
+              valueMax={this.state.rangeFilter.valueMax}
+              onhandleFilterRange={this.handleRanageChange}
+            />
           </div>
         </div>
       )
@@ -136,4 +150,8 @@ export default class Filter extends Component {
   }
 }
 
-Filter.propTypes = propTypes
+Filter.propTypes = {
+  show: PropTypes.bool,
+  onToggleFilterMenu: PropTypes.func,
+  onSelectionOfFilters: PropTypes.func
+}

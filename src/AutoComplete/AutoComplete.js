@@ -2,14 +2,14 @@ import axios from 'axios'
 import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
+import shortid from 'shortid'
 import './AutoComplete.css'
 
-const baseEndpoint = 'https://api.nutritionix.com/v2/autocomplete?q=';
-const appId = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
+const BASE_END_POINT = 'https://api.nutritionix.com/v2/autocomplete?q=';
+const APP_ID = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
 
 function debounce(fn, time) {
   let timeoutId
-  return wrapper
   function wrapper(...args) {
     if (timeoutId) {
       clearTimeout(timeoutId)
@@ -19,6 +19,7 @@ function debounce(fn, time) {
       fn(...args)
     }, time)
   }
+  return wrapper
 }
 
 const propTypes = {
@@ -33,8 +34,6 @@ export default class AutoComplete extends Component {
     this.handleInputSearchChange = this.handleInputSearchChange.bind(this)
     this.handleSelectedItem = this.handleSelectedItem.bind(this)
     this.state = {
-      autoCompleteData: [],
-      selectedIndex: 0,
       items: []
     }
   }
@@ -44,16 +43,11 @@ export default class AutoComplete extends Component {
    * @param  {Object} e event object passed in
    */
   handleInputSearchChange(e) {
-    const value = e.target.value
+    const { value } = e.target
 
     if (value.length > 0) {
       this.getAutoCompleteResults(value)
       this.props.onChangedInputValue(value)
-    } else {
-      this.setState({
-        autoCompleteData: [],
-        selectedIndex: 0
-      })
     }
     this.props.onChangedInputValue(value)
   }
@@ -65,10 +59,6 @@ export default class AutoComplete extends Component {
   handleSelectedItem(text) {
     this.props.onChangedInputValue(text)
     this.props.onSelectedItem(text)
-    this.setState({
-      autoCompleteData: [],
-      selectedIndex: 0
-    })
   }
 
   render() {
@@ -85,28 +75,27 @@ export default class AutoComplete extends Component {
           }) => (
             <div>
               <input
-                autoFocus
                 className="autocomplete__input"
                 placeholder="search"
                 type="search"
                 {...getInputProps({
                     onChange: (event) => {
-                      const value = event.target.value
+                      const { value } = event.target
                       if (!value) {
                         return
                       }
                       debounce(
                         axios
-                          .get(baseEndpoint + value + appId)
+                          .get(BASE_END_POINT + value + APP_ID)
                           .then((response) => {
                             const items = response.data.map(item => item.text)
                             this.setState({ items })
                           })
                           .catch((error) => {
-                            console.log(error)
+                            console.error(error)
                           })
                       , 500
-);
+                    );
                     }
                   })}
               />
@@ -115,7 +104,7 @@ export default class AutoComplete extends Component {
                 {this.state.items.map((item, index) => (
                   <div
                     className="autocomplete__list"
-                    key={index}
+                    key={shortid.generate()}
                     {...getItemProps({
                           item,
                           style: {
