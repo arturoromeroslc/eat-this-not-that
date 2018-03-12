@@ -65,7 +65,7 @@ export default class FoodCard extends Component {
           </button>
         </div>
         <img className="recommendation-list__item-img" alt={recipe.label} src={recipe.image} />
-        <ul>
+        <ul className="recommendation-list__unordered-container">
           {recipe.ingredients.map(ingredient => (
             <li key={shortid.generate()}>{ingredient.text}</li>
           ))}
