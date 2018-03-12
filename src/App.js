@@ -9,7 +9,7 @@ import List from './List/List'
 import './App.css'
 
 const DOMAIN = 'https://api.edamam.com/search?q='
-const APP_KEY = '&app_key=0709d5dfba60edefb6abf1ec1d953fe5'
+const APP_ID_AND_KEY = '&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797'
 const ANCHOR = '&from=0&to=25&'
 
 export default class App extends Component {
@@ -19,7 +19,6 @@ export default class App extends Component {
       foodValue: '',
       recommendationData: false,
       food: '',
-      initialWindowLoad: true,
       showFilter: false,
       dietFilter: ''
     }
@@ -29,6 +28,16 @@ export default class App extends Component {
     this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
     this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this)
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
+  }
+
+  /**
+   * When a user selelects an item from the autoComplete dropdown. setup up the value to called into
+   * the api request.
+   * @param {String} foodValue food value that will be added to the api call.
+   */
+  setFoodAndMakeApiCall(foodValue) {
+    this.setState({ food: foodValue })
+    this.sendRecommendationRequest(foodValue, this.state.dietFilter)
   }
 
   /**
@@ -44,16 +53,6 @@ export default class App extends Component {
    */
   toggleFilterMenu() {
     this.setState({ showFilter: !this.state.showFilter })
-  }
-
-  /**
-   * When a user selelects an item from the autoComplete dropdown. setup up the value to called into
-   * the api request.
-   * @param {String} foodValue food value that will be added to the api call.
-   */
-  setFoodAndMakeApiCall(foodValue) {
-    this.setState({ food: foodValue })
-    this.sendRecommendationRequest(foodValue, this.state.dietFilter)
   }
 
   /**
@@ -90,11 +89,10 @@ export default class App extends Component {
       }
     }
 
-    return axios.get(DOMAIN + food + APP_KEY + ANCHOR + dietFilter, {}, config)
+    return axios.get(`${DOMAIN}${food}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`, {}, config)
       .then((response) => {
         this.setState({
           recommendationData: response.data,
-          initialWindowLoad: false
         })
       })
   }
@@ -104,14 +102,26 @@ export default class App extends Component {
 
     return (
       <div>
-        <Filter show={this.state.showFilter} onToggleFilterMenu={this.toggleFilterMenu} onSelectionOfFilters={this.sendRequestWithFilter}/>
+        <Filter
+          show={this.state.showFilter}
+          onToggleFilterMenu={this.toggleFilterMenu}
+          onSelectionOfFilters={this.sendRequestWithFilter}
+        />
         <div className="app">
           <div className="app__header">
             <div className="flex-space-between app__header__container">
               <h2 className="app__header__heading">Eat This, Not That.</h2>
-              <span onClick={this.toggleFilterMenu}>Filter</span>
+              <button
+                onKeyDown={this.toggleFilterMenu}
+                onClick={this.toggleFilterMenu}
+              >Filter
+              </button>
             </div>
-            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} onChangedInputValue={this.updateFoodValue} value={this.state.foodValue}/>
+            <AutoComplete
+              onSelectedItem={this.setFoodAndMakeApiCall}
+              onChangedInputValue={this.updateFoodValue}
+              value={this.state.foodValue}
+            />
             <p>Find alternative cooking recipes for your cravings.</p>
             <span>{totalCountString}</span>
           </div>
