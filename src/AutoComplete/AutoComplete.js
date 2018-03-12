@@ -3,30 +3,11 @@ import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import shortid from 'shortid'
+import debounce from 'lodash.debounce'
 import './AutoComplete.css'
 
 const BASE_END_POINT = 'https://api.nutritionix.com/v2/autocomplete?q=';
 const APP_ID = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
-
-function debounce(fn, time) {
-  let timeoutId
-  function wrapper(...args) {
-    if (timeoutId) {
-      clearTimeout(timeoutId)
-    }
-    timeoutId = setTimeout(() => {
-      timeoutId = null
-      fn(...args)
-    }, time)
-  }
-  return wrapper
-}
-
-const propTypes = {
-  onChangedInputValue: PropTypes.func,
-  onSelectedItem: PropTypes.func,
-  value: PropTypes.string
-}
 
 export default class AutoComplete extends Component {
   constructor(props) {
@@ -127,4 +108,8 @@ export default class AutoComplete extends Component {
   }
 }
 
-AutoComplete.propTypes = propTypes
+AutoComplete.propTypes = {
+  onChangedInputValue: PropTypes.func,
+  onSelectedItem: PropTypes.func,
+  value: PropTypes.string
+}
