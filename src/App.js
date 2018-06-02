@@ -24,7 +24,7 @@ export default class App extends Component {
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
     this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
-    this.sendRequestWithFilter = this.sendRequestWithFilter.bind(this)
+    this.getRecoomendationListWithDietFilter = this.getRecoomendationListWithDietFilter.bind(this)
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
   }
 
@@ -49,7 +49,7 @@ export default class App extends Component {
    * When a user selects a filter setup a filter object that will be passed to the api call.
    * @param  {string} filter value of filter selected
    */
-  sendRequestWithFilter(filterObject) {
+  getRecoomendationListWithDietFilter(filterObject) {
     let dietFilter = ''
 
     if (!isEmpty(filterObject)) {
@@ -95,7 +95,7 @@ export default class App extends Component {
         <Filter
           show={this.state.showFilter}
           onToggleFilterMenu={this.toggleFilterMenu}
-          onSelectionOfFilters={this.sendRequestWithFilter}
+          onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
         />
         <div className="app">
           <div className="app__header">
