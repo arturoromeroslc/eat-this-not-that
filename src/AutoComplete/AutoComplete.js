@@ -85,7 +85,5 @@ export default class AutoComplete extends Component {
 }
 
 AutoComplete.propTypes = {
-  onChangedInputValue: PropTypes.func,
-  onSelectedItem: PropTypes.func,
-  value: PropTypes.string
+  onSelectedItem: PropTypes.func
 }

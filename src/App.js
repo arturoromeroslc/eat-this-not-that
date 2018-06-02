@@ -16,13 +16,11 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      foodValue: '',
-      recommendationData: false,
-      food: '',
+      recommendationData: {},
+      foodSearchTerm: '',
       showFilter: false,
       dietFilter: ''
     }
-    this.updateFoodValue = this.updateFoodValue.bind(this)
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
     this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
@@ -35,24 +33,16 @@ export default class App extends Component {
    * the api request.
    * @param {String} foodValue food value that will be added to the api call.
    */
-  setFoodAndMakeApiCall(foodValue) {
-    this.setState({ food: foodValue })
-    this.sendRecommendationRequest(foodValue, this.state.dietFilter)
-  }
-
-  /**
-   * Call back when user selects a value from the auto complete dropdown.
-   * @param  {String} value The value chosen by the user from dropdown.
-   */
-  updateFoodValue(value) {
-    this.setState({ foodValue: value })
+  setFoodAndMakeApiCall(foodSearchTerm) {
+    this.setState({ foodSearchTerm })
+    this.sendRecommendationRequest(foodSearchTerm, this.state.dietFilter)
   }
 
   /**
    * Show hide the filter menu
    */
   toggleFilterMenu() {
-    this.setState({ showFilter: !this.state.showFilter })
+    this.setState(prevState => ({ showFilter: !prevState.showFilter }))
   }
 
   /**
@@ -72,8 +62,8 @@ export default class App extends Component {
 
     this.setState({ dietFilter })
 
-    if (this.state.food.trim().length > 0) {
-      this.sendRecommendationRequest(this.state.food, dietFilter)
+    if (this.state.foodSearchTerm.trim().length > 0) {
+      this.sendRecommendationRequest(this.state.foodSearchTerm, dietFilter)
     }
   }
 
@@ -82,14 +72,14 @@ export default class App extends Component {
    * @param  {String} food value of food to send
    * @param  {String} dietFilter stringified array to send in api call
    */
-  sendRecommendationRequest(food, dietFilter) {
+  sendRecommendationRequest(foodSearchTerm, dietFilter) {
     const config = {
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
     }
 
-    return axios.get(`${DOMAIN}${food}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`, {}, config)
+    return axios.get(`${DOMAIN}${foodSearchTerm}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`, {}, config)
       .then((response) => {
         this.setState({
           recommendationData: response.data,
@@ -119,13 +109,11 @@ export default class App extends Component {
             </div>
             <AutoComplete
               onSelectedItem={this.setFoodAndMakeApiCall}
-              onChangedInputValue={this.updateFoodValue}
-              value={this.state.foodValue}
             />
             <p>Find alternative cooking recipes for your cravings.</p>
             <span>{totalCountString}</span>
           </div>
-          <List value={this.state.foodValue} data={this.state.recommendationData.hits}/>
+          <List data={this.state.recommendationData.hits}/>
         </div>
       </div>
     )
