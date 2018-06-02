@@ -4,17 +4,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 import shortid from 'shortid'
 import debounce from 'lodash.debounce'
-// import { debounce } from '../utils/debounce'
 import './AutoComplete.css'
 
-const BASE_END_POINT = 'https://api.nutritionix.com/v2/autocomplete?q=';
+const BASE_END_POINT = 'https://api.nutritionix.com/v2/';
 const APP_ID = '&appId=be48f72d&appKey=36843f47de3c76347879e12f49cbfcf4';
 
 export default class AutoComplete extends Component {
   constructor(props) {
     super(props)
-    this.handleInputSearchChange = this.handleInputSearchChange.bind(this)
-    this.handleSelectedItem = this.handleSelectedItem.bind(this)
     this.debouncedAutoComplete = debounce(this.AutoComplete.bind(this), 250);
     this.state = {
       items: []
@@ -28,7 +25,7 @@ export default class AutoComplete extends Component {
     }
 
     axios
-      .get(BASE_END_POINT + value + APP_ID)
+      .get(`${BASE_END_POINT}autocomplete?q=${value}${APP_ID}`)
       .then((response) => {
         const items = response.data.map(item => item.text)
         this.setState({ items })
@@ -36,29 +33,6 @@ export default class AutoComplete extends Component {
       .catch((error) => {
         console.error(error)
       })
-  }
-
-  /**
-   * get the value for the input
-   * @param  {Object} e event object passed in
-   */
-  handleInputSearchChange(e) {
-    const { value } = e.target
-
-    if (value.length > 0) {
-      this.getAutoCompleteResults(value)
-      this.props.onChangedInputValue(value)
-    }
-    this.props.onChangedInputValue(value)
-  }
-
-  /**
-   * when we click a list item call the prop onChange which will send an api call to get recipes
-   * @param  {String} text item which was clicked
-   */
-  handleSelectedItem(text) {
-    this.props.onChangedInputValue(text)
-    this.props.onSelectedItem(text)
   }
 
   render() {
@@ -79,7 +53,7 @@ export default class AutoComplete extends Component {
                 placeholder="search"
                 type="search"
                 {...getInputProps({
-                    onChange: (e) => {e.persist(); this.debouncedAutoComplete(e)}
+                    onChange: (e) => { e.persist(); this.debouncedAutoComplete(e) }
                   })}
               />
               {isOpen && (
