@@ -38,16 +38,17 @@ export default class List extends Component {
   }
 
   render() {
-    if (this.props.data !== undefined) {
+    console.log(this.props.data);
+    if (this.props.data) {
       const listClass = isEmpty(this.state.selectedCards) ? 'recommendation-list' : 'recommendation-list selection--active'
 
       return (
         <ul className={listClass}>
-          {this.props.data.map((recipeObject, i) => (
+          {Object.keys(this.props.data).map(key => (
             <FoodCard
               key={shortid.generate()}
-              index={i}
-              recipeObject={recipeObject}
+              index={key}
+              recipeObject={this.props.data[key]}
               cardClicked={this.cardClick}
               selectedCards={this.state.selectedCards}
             />

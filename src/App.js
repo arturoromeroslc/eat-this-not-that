@@ -6,20 +6,22 @@ import forEach from 'lodash.foreach'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
+import dataNormalizer from './utils/normalize'
 import './App.css'
 
 const DOMAIN = 'https://api.edamam.com/search?q='
-const APP_ID_AND_KEY = '&app_id=ecb5988e&app_key=f60f52e1598b9838fa31de996441a797'
+const APP_ID_AND_KEY = '&app_id=334597fd&app_key=1885eb04264cd11a86208ee4c489574e'
 const ANCHOR = '&from=0&to=25&'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      recommendationData: {},
+      recommendationData: undefined,
       foodSearchTerm: '',
       showFilter: false,
-      dietFilter: ''
+      dietFilter: '',
+      totalCount: 0,
     }
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
@@ -82,13 +84,14 @@ export default class App extends Component {
     return axios.get(`${DOMAIN}${foodSearchTerm}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`, {}, config)
       .then((response) => {
         this.setState({
-          recommendationData: response.data,
+          recommendationData: dataNormalizer(response.data),
+          totalCount: response.data.count,
         })
       })
   }
 
   render() {
-    const totalCountString = this.state.recommendationData.count > 0 ? `Total alternatives: ${this.state.recommendationData.count}` : ''
+    const totalCountString = this.state.totalCount > 0 ? `Total alternatives: ${this.state.totalCount}` : ''
 
     return (
       <div>
@@ -113,7 +116,7 @@ export default class App extends Component {
             <p>Find alternative cooking recipes for your cravings.</p>
             <span>{totalCountString}</span>
           </div>
-          <List data={this.state.recommendationData.hits}/>
+          <List data={this.state.recommendationData}/>
         </div>
       </div>
     )
