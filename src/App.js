@@ -41,13 +41,6 @@ export default class App extends Component {
   }
 
   /**
-   * Show hide the filter menu
-   */
-  toggleFilterMenu() {
-    this.setState(prevState => ({ showFilter: !prevState.showFilter }))
-  }
-
-  /**
    * When a user selects a filter setup a filter object that will be passed to the api call.
    * @param  {string} filter value of filter selected
    */
@@ -67,6 +60,13 @@ export default class App extends Component {
     if (this.state.foodSearchTerm.trim().length > 0) {
       this.sendRecommendationRequest(this.state.foodSearchTerm, dietFilter)
     }
+  }
+
+  /**
+  * Show hide the filter menu
+  */
+  toggleFilterMenu() {
+    this.setState(prevState => ({ showFilter: !prevState.showFilter }))
   }
 
   /**

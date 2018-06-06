@@ -7,11 +7,7 @@ import './Filter.css'
 
 const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium']
 const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free']
-
-const DEFAULT_RANGE_FILTER = {
-  valueMin: 0,
-  valueMax: 0
-}
+const DEFAULT_RANGE_FILTER = { valueMin: 0, valueMax: 0 }
 
 function TextClick({ onClicked, text }) {
   return (
@@ -25,18 +21,12 @@ function TextClick({ onClicked, text }) {
   );
 }
 
-
-TextClick.propTypes = {
-  onClicked: PropTypes.func,
-  text: PropTypes.string,
-}
-
 export default class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = { selectedFilters: {}, rangeFilter: DEFAULT_RANGE_FILTER }
     this.handleFilterClick = this.handleFilterClick.bind(this)
-    this.handleRanageChange = this.handleRanageChange.bind(this)
+    this.handleRangeChange = this.handleRangeChange.bind(this)
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this)
     this.clearFilter = this.clearFilter.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
@@ -58,7 +48,7 @@ export default class Filter extends Component {
     this.setState({ selectedFilters })
   }
 
-  handleRanageChange(filterString, rangeValue) {
+  handleRangeChange(filterString, rangeValue) {
     const updatedSelectedFilters = Object.assign({}, this.state.selectedFilters)
     updatedSelectedFilters.calories = filterString
     this.setState({ rangeFilter: rangeValue, selectedFilters: updatedSelectedFilters })
@@ -138,16 +128,21 @@ export default class Filter extends Component {
             <Range
               valueMin={this.state.rangeFilter.valueMin}
               valueMax={this.state.rangeFilter.valueMax}
-              onhandleFilterRange={this.handleRanageChange}
+              onhandleFilterRange={this.handleRangeChange}
             />
-          </div>
+
         </div>
       )
     }
-		 	return (
+    return (
       null
     )
   }
+}
+
+TextClick.propTypes = {
+  onClicked: PropTypes.func,
+  text: PropTypes.string,
 }
 
 Filter.propTypes = {
