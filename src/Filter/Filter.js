@@ -21,12 +21,18 @@ function TextClick({ onClicked, text }) {
   );
 }
 
+
+TextClick.propTypes = {
+  onClicked: PropTypes.func,
+  text: PropTypes.string,
+}
+
 export default class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = { selectedFilters: {}, rangeFilter: DEFAULT_RANGE_FILTER }
     this.handleFilterClick = this.handleFilterClick.bind(this)
-    this.handleRangeChange = this.handleRangeChange.bind(this)
+    this.handleRanageChange = this.handleRanageChange.bind(this)
     this.isFilterItemSelected = this.isFilterItemSelected.bind(this)
     this.clearFilter = this.clearFilter.bind(this)
     this.applyFilters = this.applyFilters.bind(this)
@@ -48,7 +54,7 @@ export default class Filter extends Component {
     this.setState({ selectedFilters })
   }
 
-  handleRangeChange(filterString, rangeValue) {
+  handleRanageChange(filterString, rangeValue) {
     const updatedSelectedFilters = Object.assign({}, this.state.selectedFilters)
     updatedSelectedFilters.calories = filterString
     this.setState({ rangeFilter: rangeValue, selectedFilters: updatedSelectedFilters })
@@ -128,21 +134,16 @@ export default class Filter extends Component {
             <Range
               valueMin={this.state.rangeFilter.valueMin}
               valueMax={this.state.rangeFilter.valueMax}
-              onhandleFilterRange={this.handleRangeChange}
+              onhandleFilterRange={this.handleRanageChange}
             />
-
+          </div>
         </div>
       )
     }
-    return (
+		 	return (
       null
     )
   }
-}
-
-TextClick.propTypes = {
-  onClicked: PropTypes.func,
-  text: PropTypes.string,
 }
 
 Filter.propTypes = {

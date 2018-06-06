@@ -13,11 +13,11 @@ export default class FoodCard extends Component {
   }
 
   onTitleClick(event, index) {
-    this.props.cardClicked(index, this.props.recipeObject.label)
+    this.props.cardClicked(index, this.props.label)
   }
 
   onBackClick(event, index) {
-    this.props.cardClicked(index, this.props.recipeObject.label)
+    this.props.cardClicked(index, this.props.label)
   }
 
   onSaveClick(event, recipe) {
@@ -34,12 +34,13 @@ export default class FoodCard extends Component {
 
   render() {
     const { index } = this.props
-    const activeListItem = (this.props.selectedCards[index] === this.props.recipeObject.label) ? 'recommendation-list__item active' : 'recommendation-list__item'
+    const activeListItem = (this.props.selectedCards[index] === this.props.label) ? 'recommendation-list__item active' : 'recommendation-list__item'
 
     return (
       <li className={activeListItem}>
         <div className="flex-space-between">
           <button
+            data-qa="back-button"
             className="back-arrow"
             onClick={event => this.onBackClick(event, index)}
             onKeyUp={event => this.onBackClick(event, index)}
@@ -51,9 +52,9 @@ export default class FoodCard extends Component {
             className="recommendation-list__item-title"
             onKeyUp={event => this.onTitleClick(event, index)}
             onClick={event => this.onTitleClick(event, index)}
-            text={this.props.recipeObject.label}
+            text={this.props.label}
           >
-            {this.props.recipeObject.label}
+            {this.props.label}
           </button>
           <button
             className="food-card__action-text"
@@ -63,9 +64,9 @@ export default class FoodCard extends Component {
             Add to Fave
           </button>
         </div>
-        <img className="recommendation-list__item-img" alt={this.props.recipeObject.label} src={this.props.recipeObject.image} />
+        <img className="recommendation-list__item-img" alt={this.props.label} src={this.props.image} />
         <ul className="recommendation-list__unordered-container">
-          {this.props.recipeObject.ingredientLines.map(ingredient => (
+          {this.props.ingredientLines.map(ingredient => (
             <li key={shortid.generate()}>{ingredient}</li>
           ))}
         </ul>
@@ -76,11 +77,9 @@ export default class FoodCard extends Component {
 
 FoodCard.propTypes = {
   cardClicked: PropTypes.func,
-  recipeObject: PropTypes.shape({
-    recipe: PropTypes.shape({
-      label: PropTypes.string
-    })
-  }),
+  label: PropTypes.string,
+  image: PropTypes.string,
+  ingredientLines: PropTypes.array,
   index: PropTypes.number,
   selectedCards: PropTypes.shape(),
 }

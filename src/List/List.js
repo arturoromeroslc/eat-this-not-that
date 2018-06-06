@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import shortid from 'shortid'
 import isEmpty from 'lodash.isempty'
 import PropTypes from 'prop-types';
 import FoodCard from '../FoodCard/FoodCard'
@@ -38,21 +37,24 @@ export default class List extends Component {
   }
 
   render() {
-    console.log(this.props.data);
     if (this.props.data) {
       const listClass = isEmpty(this.state.selectedCards) ? 'recommendation-list' : 'recommendation-list selection--active'
 
       return (
         <ul className={listClass}>
-          {Object.keys(this.props.data).map(key => (
-            <FoodCard
-              key={shortid.generate()}
-              index={key}
-              recipeObject={this.props.data[key]}
-              cardClicked={this.cardClick}
-              selectedCards={this.state.selectedCards}
-            />
-            ))}
+          {this.props.data.map(({
+            id, label, image, ingredientLines
+            }, i) => (
+              <FoodCard
+                key={id}
+                index={i}
+                label={label}
+                image={image}
+                ingredientLines={ingredientLines}
+                cardClicked={this.cardClick}
+                selectedCards={this.state.selectedCards}
+              />
+          ))}
         </ul>
       )
     } else if (this.props.data && this.props.data.length === 0) {
