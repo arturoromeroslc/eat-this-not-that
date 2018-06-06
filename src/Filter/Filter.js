@@ -7,11 +7,7 @@ import './Filter.css'
 
 const DIET_OPTIONS = ['balanced', 'high-protein', 'high-fiber', 'low-fat', 'low-carb', 'low-sodium']
 const HEALTH_OPTIONS = ['peanut-free', 'tree-nut-free', 'soy-free', 'fish-free', 'shellfish-free']
-
-const DEFAULT_RANGE_FILTER = {
-  valueMin: 0,
-  valueMax: 0
-}
+const DEFAULT_RANGE_FILTER = { valueMin: 0, valueMax: 0 }
 
 function TextClick({ onClicked, text }) {
   return (
