@@ -30,20 +30,11 @@ export default class App extends Component {
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
   }
 
-  /**
-   * When a user selelects an item from the autoComplete dropdown. setup up the value to called into
-   * the api request.
-   * @param {String} foodValue food value that will be added to the api call.
-   */
   setFoodAndMakeApiCall(foodSearchTerm) {
     this.setState({ foodSearchTerm })
     this.sendRecommendationRequest(foodSearchTerm, this.state.dietFilter)
   }
 
-  /**
-   * When a user selects a filter setup a filter object that will be passed to the api call.
-   * @param  {string} filter value of filter selected
-   */
   getRecoomendationListWithDietFilter(filterObject) {
     let dietFilter = ''
 
@@ -62,18 +53,10 @@ export default class App extends Component {
     }
   }
 
-  /**
-  * Show hide the filter menu
-  */
   toggleFilterMenu() {
     this.setState(prevState => ({ showFilter: !prevState.showFilter }))
   }
 
-  /**
-   * Send Api call
-   * @param  {String} food value of food to send
-   * @param  {String} dietFilter stringified array to send in api call
-   */
   sendRecommendationRequest(foodSearchTerm, dietFilter) {
     const config = {
       headers: {
