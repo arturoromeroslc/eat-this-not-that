@@ -17,6 +17,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      authed: false,
       recommendationData: undefined,
       foodSearchTerm: '',
       showFilter: false,
@@ -24,10 +25,20 @@ export default class App extends Component {
       totalCount: 0,
     }
     this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
+    this.onLoginClick = this.onLoginClick.bind(this)
+    this.onLogoutClick = this.onLogoutClick.bind(this)
     this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
     this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
     this.getRecoomendationListWithDietFilter = this.getRecoomendationListWithDietFilter.bind(this)
     this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
+  }
+
+  onLoginClick() {
+    this.setState({ authed: true })
+  }
+
+  onLogoutClick() {
+    this.setState({ authed: false })
   }
 
   setFoodAndMakeApiCall(foodSearchTerm) {
@@ -75,6 +86,25 @@ export default class App extends Component {
 
   render() {
     const totalCountString = this.state.totalCount > 0 ? `Total alternatives: ${this.state.totalCount}` : ''
+    const loginSection = this.state.authed ? (
+      <button
+        onClick={this.onLogoutClick}
+        data-testid="logout"
+      >Logout
+      </button>
+    ) : (
+      <React.Fragment>
+        <button
+          onClick={this.onLoginClick}
+          data-testid="login"
+        >Login
+        </button>
+        <button
+          data-testid="register"
+        >Register
+        </button>
+      </React.Fragment>
+    )
 
     return (
       <div>
@@ -92,6 +122,7 @@ export default class App extends Component {
                 onClick={this.toggleFilterMenu}
               >Filter
               </button>
+              {loginSection}
             </div>
             <AutoComplete
               onSelectedItem={this.setFoodAndMakeApiCall}
