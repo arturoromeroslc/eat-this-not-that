@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
+import ContentLoader from 'react-content-loader'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
@@ -72,6 +73,7 @@ export default class App extends Component {
         result => {
           this.setState({
             isLoaded: true,
+            fetching: false,
             recommendationData: dataNormalizer(result),
             totalCount: result.count,
           })
@@ -79,6 +81,7 @@ export default class App extends Component {
         error => {
           this.setState({
             isLoaded: true,
+            fetching: false,
             error,
           })
         },
@@ -100,10 +103,93 @@ export default class App extends Component {
     if (error) {
       list = <div>Error: {error.message}</div>
     } else if (fetching && !isLoaded) {
-      list = <div>Loading...</div>
+      list = (
+        <React.Fragment>
+          <div style={{ backgroundColor: 'white', margin: '10px' }}>
+            <ContentLoader
+              height={475}
+              width={400}
+              speed={2}
+              primaryColor="#f3f3f3"
+              secondaryColor="#ecebeb"
+            >
+              <circle cx="625" cy="-50" r="30" />
+              <rect
+                x="51.53"
+                y="24"
+                rx="4"
+                ry="4"
+                width="297"
+                height="31.590000000000003"
+              />
+              <rect x="75" y="37" rx="4" ry="4" width="50" height="8" />
+              <rect x="30" y="76.05" rx="5" ry="5" width="344" height="308" />
+              <rect x="165" y="412.05" rx="0" ry="0" width="0" height="0" />
+              <rect
+                x="50"
+                y="397.05"
+                rx="0"
+                ry="0"
+                width="301.99"
+                height="16"
+              />
+              <rect x="70" y="422.05" rx="0" ry="0" width="258" height="16" />
+              <rect
+                x="92"
+                y="448.05"
+                rx="0"
+                ry="0"
+                width="216.69"
+                height="15"
+              />
+            </ContentLoader>
+          </div>
+          <div style={{ backgroundColor: 'white' }}>
+            <ContentLoader
+              height={475}
+              width={400}
+              speed={2}
+              primaryColor="#f3f3f3"
+              secondaryColor="#ecebeb"
+            >
+              <circle cx="625" cy="-50" r="30" />
+              <rect
+                x="51.53"
+                y="24"
+                rx="4"
+                ry="4"
+                width="297"
+                height="31.590000000000003"
+              />
+              <rect x="75" y="37" rx="4" ry="4" width="50" height="8" />
+              <rect x="30" y="76.05" rx="5" ry="5" width="344" height="308" />
+              <rect x="165" y="412.05" rx="0" ry="0" width="0" height="0" />
+              <rect
+                x="50"
+                y="397.05"
+                rx="0"
+                ry="0"
+                width="301.99"
+                height="16"
+              />
+              <rect x="70" y="422.05" rx="0" ry="0" width="258" height="16" />
+              <rect
+                x="92"
+                y="448.05"
+                rx="0"
+                ry="0"
+                width="216.69"
+                height="15"
+              />
+            </ContentLoader>
+          </div>
+        </React.Fragment>
+      )
     } else {
       list = <List data={recommendationData} />
     }
+
+    const appClass = recommendationData ? 'app app-percent' : 'app app-vh'
 
     const loginSection = authed ? (
       <button onClick={this.onLogoutClick} data-testid="logout">
@@ -129,7 +215,7 @@ export default class App extends Component {
           onToggleFilterMenu={this.toggleFilterMenu}
           onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
         />
-        <div className="app">
+        <div className={appClass}>
           <div className="app__header">
             <div className="flex-space-between app__header__container">
               <h2 className="app__header__heading">Eat This, Not That.</h2>

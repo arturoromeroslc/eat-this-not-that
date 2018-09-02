@@ -9,17 +9,16 @@ export default class List extends Component {
     if (data) {
       return (
         <ul>
-          {data.map(({
- id, label, image, ingredientLines
-}, i) => (
-  <FoodCard
-    key={id}
-    index={i}
-    label={label}
-    image={image}
-    ingredientLines={ingredientLines}
-    cardClicked={this.cardClick}
-  />
+          {data.map(({ id, label, image, ingredientLines, calories }, i) => (
+            <FoodCard
+              key={id}
+              index={i}
+              label={label}
+              image={image}
+              ingredientLines={ingredientLines}
+              cardClicked={this.cardClick}
+              calories={calories}
+            />
           ))}
         </ul>
       )

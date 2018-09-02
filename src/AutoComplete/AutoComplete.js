@@ -94,6 +94,7 @@ class AutoComplete extends Component {
           }) => (
             <div>
               <input
+                autoFocus
                 className="autocomplete__input"
                 placeholder="search"
                 type="search"
