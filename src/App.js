@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
+import Typography from '@material-ui/core/Typography'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
 import dataNormalizer from './utils/normalize'
 import './App.css'
+import Placeholder from './Placeholder/Placeholder'
 
 const DOMAIN = 'https://api.edamam.com/search?q='
 const APP_ID_AND_KEY = process.env.REACT_APP_EDAMAM_API_KEY
@@ -20,7 +22,7 @@ export default class App extends Component {
       fetching: false,
       isLoaded: false,
       authed: false,
-      recommendationData: undefined,
+      data: undefined,
       foodSearchTerm: '',
       showFilter: false,
       dietFilter: '',
@@ -72,13 +74,15 @@ export default class App extends Component {
         result => {
           this.setState({
             isLoaded: true,
-            recommendationData: dataNormalizer(result),
+            fetching: false,
+            data: dataNormalizer(result),
             totalCount: result.count,
           })
         },
         error => {
           this.setState({
             isLoaded: true,
+            fetching: false,
             error,
           })
         },
@@ -86,24 +90,9 @@ export default class App extends Component {
   }
 
   render() {
-    const {
-      error,
-      isLoaded,
-      totalCount,
-      authed,
-      recommendationData,
-      fetching,
-    } = this.state
+    const { error, isLoaded, totalCount, authed, data, fetching } = this.state
 
-    let list
-
-    if (error) {
-      list = <div>Error: {error.message}</div>
-    } else if (fetching && !isLoaded) {
-      list = <div>Loading...</div>
-    } else {
-      list = <List data={recommendationData} />
-    }
+    const appClass = data ? 'app app-percent' : 'app app-vh'
 
     const loginSection = authed ? (
       <button onClick={this.onLogoutClick} data-testid="logout">
@@ -129,7 +118,7 @@ export default class App extends Component {
           onToggleFilterMenu={this.toggleFilterMenu}
           onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
         />
-        <div className="app">
+        <div className={appClass}>
           <div className="app__header">
             <div className="flex-space-between app__header__container">
               <h2 className="app__header__heading">Eat This, Not That.</h2>
@@ -142,10 +131,17 @@ export default class App extends Component {
               {loginSection}
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
-            <p>Find alternative cooking recipes for your cravings.</p>
-            <span>{totalCount > 0 && `Total alternatives: ${totalCount}`}</span>
+            <Typography paragraph>
+              {error
+                ? 'Please search for a different recipe, we could not find an alternative at this time'
+                : 'Find alternative cooking recipes for your cravings.'}
+            </Typography>
+            <Typography span>
+              {totalCount > 0 && `Total alternatives: ${totalCount}`}
+            </Typography>
           </div>
-          {list}
+          {fetching && !isLoaded && <Placeholder />}
+          {isLoaded && !error && <List data={data} />}
         </div>
       </div>
     )

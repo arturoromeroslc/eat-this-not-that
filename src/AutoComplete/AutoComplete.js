@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -93,6 +94,7 @@ class AutoComplete extends Component {
           }) => (
             <div>
               <input
+                autoFocus
                 className="autocomplete__input"
                 placeholder="search"
                 type="search"
@@ -127,6 +129,7 @@ class AutoComplete extends Component {
 
 AutoComplete.propTypes = {
   onSelectedItem: PropTypes.func,
+  classes: PropTypes.string,
 }
 
 export default withStyles(styles)(AutoComplete)

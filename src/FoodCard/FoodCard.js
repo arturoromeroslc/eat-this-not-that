@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import shortid from 'shortid'
 import { withStyles } from '@material-ui/core/styles'
@@ -17,9 +17,18 @@ import ShareIcon from '@material-ui/icons/Share'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 
+import breakpoints from '../utils/breakpoints'
+
 const styles = theme => ({
   card: {
     margin: '10px',
+    display: 'inline-block',
+    [breakpoints.tablet]: {
+      width: '46%',
+    },
+    [breakpoints.desktop]: {
+      width: '30%',
+    },
   },
   media: {
     height: 0,
@@ -46,7 +55,7 @@ const styles = theme => ({
   },
 })
 
-class FoodCard extends Component {
+class FoodCard extends PureComponent {
   state = { expanded: false }
 
   handleExpandClick = () => {
@@ -54,7 +63,7 @@ class FoodCard extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, ingredientLines, label, image, calories } = this.props
 
     return (
       <Card className={classes.card}>
@@ -64,13 +73,13 @@ class FoodCard extends Component {
               <MoreVertIcon />
             </IconButton>
           }
-          title={this.props.label}
+          title={label}
           subheader="September 14, 2016"
         />
-        <CardMedia className={classes.media} image={this.props.image} />
+        <CardMedia className={classes.media} image={image} />
         <CardContent>
           <Typography component="ul">
-            {this.props.ingredientLines.map(ingredient => (
+            {ingredientLines.map(ingredient => (
               <li key={shortid.generate()}>{ingredient}</li>
             ))}
           </Typography>
@@ -82,6 +91,7 @@ class FoodCard extends Component {
           <IconButton aria-label="Share">
             <ShareIcon />
           </IconButton>
+          {calories} cal
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
@@ -104,26 +114,6 @@ class FoodCard extends Component {
             </Typography>
             <Typography paragraph>
               Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-              over medium-high heat. Add chicken, shrimp and chorizo, and cook,
-              stirring occasionally until lightly browned, 6 to 8 minutes.
-              Transfer shrimp to a large plate and set aside, leaving chicken
-              and chorizo in the pan. Add pimentón, bay leaves, garlic,
-              tomatoes, onion, salt and pepper, and cook, stirring often until
-              thickened and fragrant, about 10 minutes. Add saffron broth and
-              remaining 4 1/2 cups chicken broth; bring to a boil.
-            </Typography>
-            <Typography paragraph>
-              Add rice and stir very gently to distribute. Top with artichokes
-              and peppers, and cook without stirring, until most of the liquid
-              is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add
-              reserved shrimp and mussels, tucking them down into the rice, and
-              cook again without stirring, until mussels have opened and rice is
-              just tender, 5 to 7 minutes more. (Discard any mussels that don’t
-              open.)
-            </Typography>
-            <Typography>
-              Set aside off of the heat to let rest for 10 minutes, and then
-              serve.
             </Typography>
           </CardContent>
         </Collapse>
@@ -134,6 +124,10 @@ class FoodCard extends Component {
 
 FoodCard.propTypes = {
   classes: PropTypes.object.isRequired,
+  ingredientLines: PropTypes.array,
+  label: PropTypes.string,
+  image: PropTypes.string,
+  calories: PropTypes.string,
 }
 
 export default withStyles(styles)(FoodCard)

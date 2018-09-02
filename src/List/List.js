@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
-import omit from 'lodash.omit'
 import PropTypes from 'prop-types'
+import Typography from '@material-ui/core/Typography'
 import FoodCard from '../FoodCard/FoodCard'
+
+import './List.css'
 
 export default class List extends Component {
   render() {
     const { data } = this.props
 
-    if (data) {
-      console.log(data)
+    if (data.length > 0) {
       return (
-        <ul>
-          {data.map(({ id, label, image, ingredientLines }, i) => (
+        <ul className="flex">
+          {data.map(({ id, label, image, ingredientLines, calories }, i) => (
             <FoodCard
               key={id}
               index={i}
@@ -19,12 +20,18 @@ export default class List extends Component {
               image={image}
               ingredientLines={ingredientLines}
               cardClicked={this.cardClick}
+              calories={calories}
             />
           ))}
         </ul>
       )
     } else if (data.length === 0) {
-      return <div>No data for searched term</div>
+      return (
+        <Typography paragraph>
+          Please search for a different recipe, we could not find an alternative
+          at this time.
+        </Typography>
+      )
     }
 
     return null
@@ -36,5 +43,13 @@ List.defaultProps = {
 }
 
 List.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({})),
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      label: PropTypes.string,
+      image: PropTypes.string,
+      ingredientLines: PropTypes.array,
+      calories: PropTypes.string,
+    }),
+  ),
 }

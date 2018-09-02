@@ -12,7 +12,16 @@ ul {
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  background-color: #eeeeee;
+  background-color: #f3f2f2;
+  height: 100%;
+}
+
+.app-percent {
+  height: 100%;
+}
+
+.app-vh {
+  height: 100vh;
 }
 
 .app__logo {
