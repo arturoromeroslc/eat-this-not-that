@@ -7,4 +7,6 @@
 `npm run deploy`
 
 # For development run create-react-app scripts.
-`npm run start`
+REACT_APP_EDAMAM_API_KEY={SECRET} REACT_APP_NUTRITIONIX_API_KEY={SECRET} npm start
+
+**Reach out to me to get Edamam and Nutritionix api secrets, or get some yourself**

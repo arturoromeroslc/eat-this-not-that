@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import omit from 'lodash.omit'
 import PropTypes from 'prop-types'
 import FoodCard from '../FoodCard/FoodCard'
 
@@ -8,18 +7,19 @@ export default class List extends Component {
     const { data } = this.props
 
     if (data) {
-      console.log(data)
       return (
         <ul>
-          {data.map(({ id, label, image, ingredientLines }, i) => (
-            <FoodCard
-              key={id}
-              index={i}
-              label={label}
-              image={image}
-              ingredientLines={ingredientLines}
-              cardClicked={this.cardClick}
-            />
+          {data.map(({
+ id, label, image, ingredientLines
+}, i) => (
+  <FoodCard
+    key={id}
+    index={i}
+    label={label}
+    image={image}
+    ingredientLines={ingredientLines}
+    cardClicked={this.cardClick}
+  />
           ))}
         </ul>
       )
