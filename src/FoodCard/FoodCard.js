@@ -134,6 +134,9 @@ class FoodCard extends Component {
 
 FoodCard.propTypes = {
   classes: PropTypes.object.isRequired,
+  ingredientLines: PropTypes.array,
+  label: PropTypes.string,
+  image: PropTypes.string,
 }
 
 export default withStyles(styles)(FoodCard)
