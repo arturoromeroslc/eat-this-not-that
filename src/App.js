@@ -94,11 +94,12 @@ export default class App extends Component {
       </button>
     ) : (
       <React.Fragment>
-        <button
+        <a
+          href="https://eatthis.auth.us-west-2.amazoncognito.com/login?response_type=code&client_id=j0rr0pdrk68hrjrv9phab6qdt&redirect_uri=https://localhost"
           onClick={this.onLoginClick}
           data-testid="login"
         >Login
-        </button>
+        </a>
         <button
           data-testid="register"
         >Register
