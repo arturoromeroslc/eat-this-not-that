@@ -3,7 +3,7 @@ function getFilterSelectedIndex(category, filter) {
 }
 
 function addFilterToCategory(category, filter) {
-  let categoryUpdated;
+  let categoryUpdated
 
   if (Array.isArray(category)) {
     categoryUpdated = [...category, filter]
@@ -15,7 +15,7 @@ function addFilterToCategory(category, filter) {
 }
 
 function isFilterSelected(category, filter) {
-  return (Array.isArray(category) && category.includes(filter))
+  return Array.isArray(category) && category.includes(filter)
 }
 
 export { getFilterSelectedIndex, addFilterToCategory, isFilterSelected }

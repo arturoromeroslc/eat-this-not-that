@@ -27,8 +27,3 @@
 .app__intro {
   font-size: large;
 }
-
-@keyframes app-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}

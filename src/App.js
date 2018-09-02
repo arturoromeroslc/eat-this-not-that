@@ -10,7 +10,7 @@ import dataNormalizer from './utils/normalize'
 import './App.css'
 
 const DOMAIN = 'https://api.edamam.com/search?q='
-const APP_ID_AND_KEY = process.env.REACT_APP_API_KEY;
+const APP_ID_AND_KEY = process.env.REACT_APP_EDAMAM_API_KEY
 const ANCHOR = '&from=0&to=25&'
 
 export default class App extends Component {
@@ -24,29 +24,22 @@ export default class App extends Component {
       dietFilter: '',
       totalCount: 0,
     }
-    this.toggleFilterMenu = this.toggleFilterMenu.bind(this)
-    this.onLoginClick = this.onLoginClick.bind(this)
-    this.onLogoutClick = this.onLogoutClick.bind(this)
-    this.sendRecommendationRequest = this.sendRecommendationRequest.bind(this)
-    this.setFoodAndMakeApiCall = this.setFoodAndMakeApiCall.bind(this)
-    this.getRecoomendationListWithDietFilter = this.getRecoomendationListWithDietFilter.bind(this)
-    this.sendRecommendationRequest = debounce(this.sendRecommendationRequest, 300)
+    this.sendRecommendationRequest = debounce(
+      this.sendRecommendationRequest,
+      300,
+    )
   }
 
-  onLoginClick() {
-    this.setState({ authed: true })
-  }
+  onLoginClick = () => this.setState({ authed: true })
 
-  onLogoutClick() {
-    this.setState({ authed: false })
-  }
+  onLogoutClick = () => this.setState({ authed: false })
 
-  setFoodAndMakeApiCall(foodSearchTerm) {
+  setFoodAndMakeApiCall = foodSearchTerm => {
     this.setState({ foodSearchTerm })
     this.sendRecommendationRequest(foodSearchTerm, this.state.dietFilter)
   }
 
-  getRecoomendationListWithDietFilter(filterObject) {
+  getRecoomendationListWithDietFilter = filterObject => {
     let dietFilter = ''
 
     if (!isEmpty(filterObject)) {
@@ -64,19 +57,23 @@ export default class App extends Component {
     }
   }
 
-  toggleFilterMenu() {
+  toggleFilterMenu = () =>
     this.setState(prevState => ({ showFilter: !prevState.showFilter }))
-  }
 
-  sendRecommendationRequest(foodSearchTerm, dietFilter) {
+  sendRecommendationRequest = (foodSearchTerm, dietFilter) => {
     const config = {
       headers: {
-        'Access-Control-Allow-Origin': '*'
-      }
+        'Access-Control-Allow-Origin': '*',
+      },
     }
 
-    return axios.get(`${DOMAIN}${foodSearchTerm}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`, {}, config)
-      .then((response) => {
+    return axios
+      .get(
+        `${DOMAIN}${foodSearchTerm}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`,
+        {},
+        config,
+      )
+      .then(response => {
         this.setState({
           recommendationData: dataNormalizer(response.data),
           totalCount: response.data.count,
@@ -85,12 +82,13 @@ export default class App extends Component {
   }
 
   render() {
-    const totalCountString = this.state.totalCount > 0 ? `Total alternatives: ${this.state.totalCount}` : ''
+    const totalCountString =
+      this.state.totalCount > 0
+        ? `Total alternatives: ${this.state.totalCount}`
+        : ''
     const loginSection = this.state.authed ? (
-      <button
-        onClick={this.onLogoutClick}
-        data-testid="logout"
-      >Logout
+      <button onClick={this.onLogoutClick} data-testid="logout">
+        Logout
       </button>
     ) : (
       <React.Fragment>
@@ -98,12 +96,10 @@ export default class App extends Component {
           href="https://eatthis.auth.us-west-2.amazoncognito.com/login?response_type=code&client_id=j0rr0pdrk68hrjrv9phab6qdt&redirect_uri=https://localhost"
           onClick={this.onLoginClick}
           data-testid="login"
-        >Login
+        >
+          Login
         </a>
-        <button
-          data-testid="register"
-        >Register
-        </button>
+        <button data-testid="register">Register</button>
       </React.Fragment>
     )
 
@@ -121,17 +117,16 @@ export default class App extends Component {
               <button
                 onKeyDown={this.toggleFilterMenu}
                 onClick={this.toggleFilterMenu}
-              >Filter
+              >
+                Filter
               </button>
               {loginSection}
             </div>
-            <AutoComplete
-              onSelectedItem={this.setFoodAndMakeApiCall}
-            />
+            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
             <p>Find alternative cooking recipes for your cravings.</p>
             <span>{totalCountString}</span>
           </div>
-          <List data={this.state.recommendationData}/>
+          <List data={this.state.recommendationData} />
         </div>
       </div>
     )
