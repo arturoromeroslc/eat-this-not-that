@@ -1,9 +1,18 @@
+body {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 .app {
   text-align: center;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  background-color: #F7CD0F;
+  background-color: #eeeeee;
 }
 
 .app__logo {
@@ -13,7 +22,7 @@
 .app__header {
   height: auto;
   margin: auto 0;
-  color: white;
+  color: black;
 }
 
 .app__header__container {

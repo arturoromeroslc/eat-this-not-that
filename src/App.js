@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
@@ -17,6 +16,9 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      error: null,
+      fetching: false,
+      isLoaded: false,
       authed: false,
       recommendationData: undefined,
       foodSearchTerm: '',
@@ -61,32 +63,49 @@ export default class App extends Component {
     this.setState(prevState => ({ showFilter: !prevState.showFilter }))
 
   sendRecommendationRequest = (foodSearchTerm, dietFilter) => {
-    const config = {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-    }
-
-    return axios
-      .get(
-        `${DOMAIN}${foodSearchTerm}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`,
-        {},
-        config,
+    this.setState({ fetching: true })
+    return fetch(
+      `${DOMAIN}${foodSearchTerm}${APP_ID_AND_KEY}${ANCHOR}${dietFilter}`,
+    )
+      .then(res => res.json())
+      .then(
+        result => {
+          this.setState({
+            isLoaded: true,
+            recommendationData: dataNormalizer(result),
+            totalCount: result.count,
+          })
+        },
+        error => {
+          this.setState({
+            isLoaded: true,
+            error,
+          })
+        },
       )
-      .then(response => {
-        this.setState({
-          recommendationData: dataNormalizer(response.data),
-          totalCount: response.data.count,
-        })
-      })
   }
 
   render() {
-    const totalCountString =
-      this.state.totalCount > 0
-        ? `Total alternatives: ${this.state.totalCount}`
-        : ''
-    const loginSection = this.state.authed ? (
+    const {
+      error,
+      isLoaded,
+      totalCount,
+      authed,
+      recommendationData,
+      fetching,
+    } = this.state
+
+    let list
+
+    if (error) {
+      list = <div>Error: {error.message}</div>
+    } else if (fetching && !isLoaded) {
+      list = <div>Loading...</div>
+    } else {
+      list = <List data={recommendationData} />
+    }
+
+    const loginSection = authed ? (
       <button onClick={this.onLogoutClick} data-testid="logout">
         Logout
       </button>
@@ -124,9 +143,9 @@ export default class App extends Component {
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
             <p>Find alternative cooking recipes for your cravings.</p>
-            <span>{totalCountString}</span>
+            <span>{totalCount > 0 && `Total alternatives: ${totalCount}`}</span>
           </div>
-          <List data={this.state.recommendationData} />
+          {list}
         </div>
       </div>
     )
