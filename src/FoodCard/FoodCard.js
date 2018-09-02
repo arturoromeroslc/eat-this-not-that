@@ -1,40 +1,38 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import shortid from 'shortid'
 import './FoodCard.css'
 
 export default class FoodCard extends Component {
   constructor(props) {
     super(props)
-    this.cacheLastActiveListItem = false;
-    this.onTitleClick = this.onTitleClick.bind(this)
-    this.onBackClick = this.onBackClick.bind(this)
-    this.onSaveClick = this.onSaveClick.bind(this)
+    this.cacheLastActiveListItem = false
   }
 
-  onTitleClick(event, index) {
+  onTitleClick = index =>
     this.props.cardClicked(index, this.props.label)
-  }
 
-  onBackClick(event, index) {
+  onBackClick = index =>
     this.props.cardClicked(index, this.props.label)
-  }
 
-  onSaveClick(event, recipe) {
-    let currentSession = JSON.parse(localStorage.getItem('Favs'));
+  onSaveClick = recipe => {
+    let currentSession = JSON.parse(localStorage.getItem('Favs'))
 
     if (currentSession) {
       currentSession.push(recipe)
-      localStorage.setItem('Favs', JSON.stringify(currentSession));
+      localStorage.setItem('Favs', JSON.stringify(currentSession))
     } else {
       currentSession = [recipe]
-      localStorage.setItem('Favs', JSON.stringify(currentSession));
+      localStorage.setItem('Favs', JSON.stringify(currentSession))
     }
   }
 
   render() {
     const { index } = this.props
-    const activeListItem = (this.props.selectedCards[index] === this.props.label) ? 'recommendation-list__item active' : 'recommendation-list__item'
+    const activeListItem =
+      this.props.selectedCards[index] === this.props.label
+        ? 'recommendation-list__item active'
+        : 'recommendation-list__item'
 
     return (
       <li className={activeListItem}>
@@ -42,29 +40,33 @@ export default class FoodCard extends Component {
           <button
             data-qa="back-button"
             className="back-arrow"
-            onClick={event => this.onBackClick(event, index)}
-            onKeyUp={event => this.onBackClick(event, index)}
+            onClick={() => this.onBackClick(index)}
+            onKeyUp={() => this.onBackClick(index)}
             tabIndex="-1"
           >
             X
           </button>
           <button
             className="recommendation-list__item-title"
-            onKeyUp={event => this.onTitleClick(event, index)}
-            onClick={event => this.onTitleClick(event, index)}
+            onKeyUp={() => this.onTitleClick(index)}
+            onClick={() => this.onTitleClick(index)}
             text={this.props.label}
           >
             {this.props.label}
           </button>
           <button
             className="food-card__action-text"
-            onKeyUp={event => this.onSaveClick(event, this.props.recipeObject)}
-            onClick={event => this.onSaveClick(event, this.props.recipeObject)}
+            onKeyUp={() => this.onSaveClick(this.props.recipeObject)}
+            onClick={() => this.onSaveClick(this.props.recipeObject)}
           >
             Add to Fave
           </button>
         </div>
-        <img className="recommendation-list__item-img" alt={this.props.label} src={this.props.image} />
+        <img
+          className="recommendation-list__item-img"
+          alt={this.props.label}
+          src={this.props.image}
+        />
         <ul className="recommendation-list__unordered-container">
           {this.props.ingredientLines.map(ingredient => (
             <li key={shortid.generate()}>{ingredient}</li>
@@ -82,4 +84,5 @@ FoodCard.propTypes = {
   ingredientLines: PropTypes.array,
   index: PropTypes.number,
   selectedCards: PropTypes.shape(),
+  recipeObject: PropTypes.shape(),
 }

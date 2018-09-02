@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import './Range.css'
 
 export default class Range extends Component {
@@ -7,7 +7,6 @@ export default class Range extends Component {
     super(props)
     this.minValueRef = React.createRef()
     this.maxValueRef = React.createRef()
-    this.handleOnChange = this.handleOnChange.bind(this)
   }
 
   componentDidMount() {
@@ -22,34 +21,48 @@ export default class Range extends Component {
     }
   }
 
-  handleOnChange() {
+  handleOnChange = () => {
     let max = parseInt(this.maxValueRef.current.value, 10)
     let min = parseInt(this.minValueRef.current.value, 10)
 
     if (min > max) {
-      const tmp = max;
-      max = min;
-      min = tmp;
+      const tmp = max
+      max = min
+      min = tmp
     }
 
     const rangeValue = {
       valueMin: min,
-      valueMax: max
+      valueMax: max,
     }
 
     const filterString = `gte ${min}, lte ${max}`
     this.props.onhandleFilterRange(filterString, rangeValue)
   }
 
-  render () {
+  render() {
     return (
       <div className="range-slider">
         <div className="range-value-container">
           <span className="range-values">Min: {this.props.valueMin}</span>
           <span className="range-values">Max: {this.props.valueMax}</span>
         </div>
-        <input ref={this.minValueRef} min="0" max="5000" step="200" type="range" onChange={this.handleOnChange}/>
-        <input ref={this.maxValueRef} min="0" max="5000" step="200" type="range" onChange={this.handleOnChange}/>
+        <input
+          ref={this.minValueRef}
+          min="0"
+          max="5000"
+          step="200"
+          type="range"
+          onChange={this.handleOnChange}
+        />
+        <input
+          ref={this.maxValueRef}
+          min="0"
+          max="5000"
+          step="200"
+          type="range"
+          onChange={this.handleOnChange}
+        />
       </div>
     )
   }
