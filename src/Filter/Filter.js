@@ -102,17 +102,15 @@ export default class Filter extends Component {
   }
 
   render() {
-    const { show } = this.props
-    const hasFilters = Object.keys(this.state.selectedFilters).length > 0
-    const close = (
-      <TextClick onClicked={this.props.onToggleFilterMenu} text="Close" />
-    )
-    const apply = <TextClick onClicked={this.applyFilters} text="Apply" />
-    let clear = null
+    const { show, onToggleFilterMenu } = this.props
+    const { selectedFilters } = this.state
+    const hasFilters = Object.keys(selectedFilters).length > 0
 
-    if (hasFilters) {
-      clear = <TextClick onClicked={this.clearFilter} text="Clear" />
-    }
+    const close = <TextClick onClicked={onToggleFilterMenu} text="Close" />
+    const apply = <TextClick onClicked={this.applyFilters} text="Apply" />
+    const clear = hasFilters ? (
+      <TextClick onClicked={this.clearFilter} text="Clear" />
+    ) : null
 
     if (show) {
       return (

@@ -1,15 +1,56 @@
-import axios from 'axios'
 import Downshift from 'downshift'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import shortid from 'shortid'
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import MenuItem from '@material-ui/core/MenuItem'
 import debounce from 'lodash.debounce'
 import './AutoComplete.css'
 
 const BASE_END_POINT = 'https://api.nutritionix.com/v2/'
 const APP_ID = process.env.REACT_APP_NUTRITIONIX_API_KEY
 
-export default class AutoComplete extends Component {
+function renderSuggestion({
+  suggestion,
+  index,
+  itemProps,
+  highlightedIndex,
+  selectedItem,
+}) {
+  const isHighlighted = highlightedIndex === index
+  const isSelected = (selectedItem || '').indexOf(suggestion) > -1
+
+  return (
+    <MenuItem
+      {...itemProps}
+      key={suggestion}
+      selected={isHighlighted}
+      component="div"
+      style={{
+        fontWeight: isSelected ? 500 : 400,
+      }}
+    >
+      {suggestion}
+    </MenuItem>
+  )
+}
+renderSuggestion.propTypes = {
+  highlightedIndex: PropTypes.number,
+  index: PropTypes.number,
+  itemProps: PropTypes.object,
+  selectedItem: PropTypes.string,
+  suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
+}
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+})
+
+class AutoComplete extends Component {
   constructor(props) {
     super(props)
     this.debouncedAutoComplete = debounce(this.AutoComplete, 250)
@@ -24,18 +65,21 @@ export default class AutoComplete extends Component {
       return
     }
 
-    axios
-      .get(`${BASE_END_POINT}autocomplete?q=${value}${APP_ID}`)
-      .then(response => {
-        const items = response.data.map(item => item.text)
-        this.setState({ items })
-      })
-      .catch(error => {
-        console.error(error)
-      })
+    fetch(`${BASE_END_POINT}autocomplete?q=${value}${APP_ID}`)
+      .then(res => res.json())
+      .then(
+        result => {
+          const items = result.map(item => item.text)
+          this.setState({ items })
+        },
+        error => {
+          console.error(error)
+        },
+      )
   }
 
   render() {
+    const { classes } = this.props
     return (
       <span>
         <span className="autocomplete__icon">⚲</span>
@@ -59,27 +103,21 @@ export default class AutoComplete extends Component {
                   },
                 })}
               />
-              {isOpen && (
-                <div>
-                  {this.state.items.map((item, index) => (
-                    <div
-                      className="autocomplete__list"
-                      key={shortid.generate()}
-                      {...getItemProps({
-                        item,
-                        style: {
-                          backgroundColor:
-                            highlightedIndex === index ? 'black' : 'orange',
-                          fontWeight: selectedItem === item ? 'bold' : 'normal',
-                        },
-                      })}
-                    >
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              )}
+              {isOpen ? (
+                <Paper className={classes.paper} square>
+                  {this.state.items.map((suggestion, index) =>
+                    renderSuggestion({
+                      suggestion,
+                      index,
+                      itemProps: getItemProps({ item: suggestion }),
+                      highlightedIndex,
+                      selectedItem,
+                    }),
+                  )}
+                </Paper>
+              ) : null}
             </div>
+          )}
           )}
         </Downshift>
       </span>
@@ -90,3 +128,5 @@ export default class AutoComplete extends Component {
 AutoComplete.propTypes = {
   onSelectedItem: PropTypes.func,
 }
+
+export default withStyles(styles)(AutoComplete)

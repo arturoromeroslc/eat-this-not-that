@@ -1,88 +1,139 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import shortid from 'shortid'
-import './FoodCard.css'
+import { withStyles } from '@material-ui/core/styles'
+import classnames from 'classnames'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardMedia from '@material-ui/core/CardMedia'
+import CardContent from '@material-ui/core/CardContent'
+import CardActions from '@material-ui/core/CardActions'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+import red from '@material-ui/core/colors/red'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import ShareIcon from '@material-ui/icons/Share'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 
-export default class FoodCard extends Component {
-  constructor(props) {
-    super(props)
-    this.cacheLastActiveListItem = false
-  }
+const styles = theme => ({
+  card: {
+    margin: '10px',
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  actions: {
+    display: 'flex',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginLeft: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      marginRight: -8,
+    },
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
+})
 
-  onTitleClick = index =>
-    this.props.cardClicked(index, this.props.label)
+class FoodCard extends Component {
+  state = { expanded: false }
 
-  onBackClick = index =>
-    this.props.cardClicked(index, this.props.label)
-
-  onSaveClick = recipe => {
-    let currentSession = JSON.parse(localStorage.getItem('Favs'))
-
-    if (currentSession) {
-      currentSession.push(recipe)
-      localStorage.setItem('Favs', JSON.stringify(currentSession))
-    } else {
-      currentSession = [recipe]
-      localStorage.setItem('Favs', JSON.stringify(currentSession))
-    }
+  handleExpandClick = () => {
+    this.setState(state => ({ expanded: !state.expanded }))
   }
 
   render() {
-    const { index } = this.props
-    const activeListItem =
-      this.props.selectedCards[index] === this.props.label
-        ? 'recommendation-list__item active'
-        : 'recommendation-list__item'
+    const { classes } = this.props
 
     return (
-      <li className={activeListItem}>
-        <div className="flex-space-between">
-          <button
-            data-qa="back-button"
-            className="back-arrow"
-            onClick={() => this.onBackClick(index)}
-            onKeyUp={() => this.onBackClick(index)}
-            tabIndex="-1"
-          >
-            X
-          </button>
-          <button
-            className="recommendation-list__item-title"
-            onKeyUp={() => this.onTitleClick(index)}
-            onClick={() => this.onTitleClick(index)}
-            text={this.props.label}
-          >
-            {this.props.label}
-          </button>
-          <button
-            className="food-card__action-text"
-            onKeyUp={() => this.onSaveClick(this.props.recipeObject)}
-            onClick={() => this.onSaveClick(this.props.recipeObject)}
-          >
-            Add to Fave
-          </button>
-        </div>
-        <img
-          className="recommendation-list__item-img"
-          alt={this.props.label}
-          src={this.props.image}
+      <Card className={classes.card}>
+        <CardHeader
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={this.props.label}
+          subheader="September 14, 2016"
         />
-        <ul className="recommendation-list__unordered-container">
-          {this.props.ingredientLines.map(ingredient => (
-            <li key={shortid.generate()}>{ingredient}</li>
-          ))}
-        </ul>
-      </li>
+        <CardMedia className={classes.media} image={this.props.image} />
+        <CardContent>
+          <Typography component="ul">
+            {this.props.ingredientLines.map(ingredient => (
+              <li key={shortid.generate()}>{ingredient}</li>
+            ))}
+          </Typography>
+        </CardContent>
+        <CardActions className={classes.actions} disableActionSpacing>
+          <IconButton aria-label="Add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="Share">
+            <ShareIcon />
+          </IconButton>
+          <IconButton
+            className={classnames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded,
+            })}
+            onClick={this.handleExpandClick}
+            aria-expanded={this.state.expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph variant="body2">
+              Method:
+            </Typography>
+            <Typography paragraph>
+              Heat 1/2 cup of the broth in a pot until simmering, add saffron
+              and set aside for 10 minutes.
+            </Typography>
+            <Typography paragraph>
+              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
+              over medium-high heat. Add chicken, shrimp and chorizo, and cook,
+              stirring occasionally until lightly browned, 6 to 8 minutes.
+              Transfer shrimp to a large plate and set aside, leaving chicken
+              and chorizo in the pan. Add pimentón, bay leaves, garlic,
+              tomatoes, onion, salt and pepper, and cook, stirring often until
+              thickened and fragrant, about 10 minutes. Add saffron broth and
+              remaining 4 1/2 cups chicken broth; bring to a boil.
+            </Typography>
+            <Typography paragraph>
+              Add rice and stir very gently to distribute. Top with artichokes
+              and peppers, and cook without stirring, until most of the liquid
+              is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add
+              reserved shrimp and mussels, tucking them down into the rice, and
+              cook again without stirring, until mussels have opened and rice is
+              just tender, 5 to 7 minutes more. (Discard any mussels that don’t
+              open.)
+            </Typography>
+            <Typography>
+              Set aside off of the heat to let rest for 10 minutes, and then
+              serve.
+            </Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
     )
   }
 }
 
 FoodCard.propTypes = {
-  cardClicked: PropTypes.func,
-  label: PropTypes.string,
-  image: PropTypes.string,
-  ingredientLines: PropTypes.array,
-  index: PropTypes.number,
-  selectedCards: PropTypes.shape(),
-  recipeObject: PropTypes.shape(),
+  classes: PropTypes.object.isRequired,
 }
+
+export default withStyles(styles)(FoodCard)

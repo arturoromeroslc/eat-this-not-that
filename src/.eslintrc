@@ -22,6 +22,7 @@
     "react/no-unused-prop-types": [1],
     "semi": [0],
     "arrow-parens": [0],
+    "function-paren-newline": [0],
 	"jsx-a11y/href-no-hash": "off"
   },
   "globals": {
