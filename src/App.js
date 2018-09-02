@@ -10,7 +10,7 @@ import dataNormalizer from './utils/normalize'
 import './App.css'
 
 const DOMAIN = 'https://api.edamam.com/search?q='
-const APP_ID_AND_KEY = '&app_id=334597fd&app_key=1885eb04264cd11a86208ee4c489574e'
+const APP_ID_AND_KEY = process.env.REACT_APP_API_KEY;
 const ANCHOR = '&from=0&to=25&'
 
 export default class App extends Component {
