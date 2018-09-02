@@ -9,15 +9,13 @@ export default class FoodCard extends Component {
     this.cacheLastActiveListItem = false
   }
 
-  onTitleClick = (event, index) => {
+  onTitleClick = index =>
     this.props.cardClicked(index, this.props.label)
-  }
 
-  onBackClick = (event, index) => {
+  onBackClick = index =>
     this.props.cardClicked(index, this.props.label)
-  }
 
-  onSaveClick = (event, recipe) => {
+  onSaveClick = recipe => {
     let currentSession = JSON.parse(localStorage.getItem('Favs'))
 
     if (currentSession) {
@@ -42,24 +40,24 @@ export default class FoodCard extends Component {
           <button
             data-qa="back-button"
             className="back-arrow"
-            onClick={event => this.onBackClick(event, index)}
-            onKeyUp={event => this.onBackClick(event, index)}
+            onClick={() => this.onBackClick(index)}
+            onKeyUp={() => this.onBackClick(index)}
             tabIndex="-1"
           >
             X
           </button>
           <button
             className="recommendation-list__item-title"
-            onKeyUp={event => this.onTitleClick(event, index)}
-            onClick={event => this.onTitleClick(event, index)}
+            onKeyUp={() => this.onTitleClick(index)}
+            onClick={() => this.onTitleClick(index)}
             text={this.props.label}
           >
             {this.props.label}
           </button>
           <button
             className="food-card__action-text"
-            onKeyUp={event => this.onSaveClick(event, this.props.recipeObject)}
-            onClick={event => this.onSaveClick(event, this.props.recipeObject)}
+            onKeyUp={() => this.onSaveClick(this.props.recipeObject)}
+            onClick={() => this.onSaveClick(this.props.recipeObject)}
           >
             Add to Fave
           </button>
@@ -86,4 +84,5 @@ FoodCard.propTypes = {
   ingredientLines: PropTypes.array,
   index: PropTypes.number,
   selectedCards: PropTypes.shape(),
+  recipeObject: PropTypes.shape(),
 }
