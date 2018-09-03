@@ -17,9 +17,18 @@ import ShareIcon from '@material-ui/icons/Share'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 
+import breakpoints from '../utils/breakpoints'
+
 const styles = theme => ({
   card: {
     margin: '10px',
+    display: 'inline-block',
+    [breakpoints.tablet]: {
+      width: '46%',
+    },
+    [breakpoints.desktop]: {
+      width: '30%',
+    },
   },
   media: {
     height: 0,

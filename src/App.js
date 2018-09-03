@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
-import ContentLoader from 'react-content-loader'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
 import dataNormalizer from './utils/normalize'
 import './App.css'
+import Placeholder from './Placeholder/Placeholder'
 
 const DOMAIN = 'https://api.edamam.com/search?q='
 const APP_ID_AND_KEY = process.env.REACT_APP_EDAMAM_API_KEY
@@ -103,88 +103,7 @@ export default class App extends Component {
     if (error) {
       list = <div>Error: {error.message}</div>
     } else if (fetching && !isLoaded) {
-      list = (
-        <React.Fragment>
-          <div style={{ backgroundColor: 'white', margin: '10px' }}>
-            <ContentLoader
-              height={475}
-              width={400}
-              speed={2}
-              primaryColor="#f3f3f3"
-              secondaryColor="#ecebeb"
-            >
-              <circle cx="625" cy="-50" r="30" />
-              <rect
-                x="51.53"
-                y="24"
-                rx="4"
-                ry="4"
-                width="297"
-                height="31.590000000000003"
-              />
-              <rect x="75" y="37" rx="4" ry="4" width="50" height="8" />
-              <rect x="30" y="76.05" rx="5" ry="5" width="344" height="308" />
-              <rect x="165" y="412.05" rx="0" ry="0" width="0" height="0" />
-              <rect
-                x="50"
-                y="397.05"
-                rx="0"
-                ry="0"
-                width="301.99"
-                height="16"
-              />
-              <rect x="70" y="422.05" rx="0" ry="0" width="258" height="16" />
-              <rect
-                x="92"
-                y="448.05"
-                rx="0"
-                ry="0"
-                width="216.69"
-                height="15"
-              />
-            </ContentLoader>
-          </div>
-          <div style={{ backgroundColor: 'white' }}>
-            <ContentLoader
-              height={475}
-              width={400}
-              speed={2}
-              primaryColor="#f3f3f3"
-              secondaryColor="#ecebeb"
-            >
-              <circle cx="625" cy="-50" r="30" />
-              <rect
-                x="51.53"
-                y="24"
-                rx="4"
-                ry="4"
-                width="297"
-                height="31.590000000000003"
-              />
-              <rect x="75" y="37" rx="4" ry="4" width="50" height="8" />
-              <rect x="30" y="76.05" rx="5" ry="5" width="344" height="308" />
-              <rect x="165" y="412.05" rx="0" ry="0" width="0" height="0" />
-              <rect
-                x="50"
-                y="397.05"
-                rx="0"
-                ry="0"
-                width="301.99"
-                height="16"
-              />
-              <rect x="70" y="422.05" rx="0" ry="0" width="258" height="16" />
-              <rect
-                x="92"
-                y="448.05"
-                rx="0"
-                ry="0"
-                width="216.69"
-                height="15"
-              />
-            </ContentLoader>
-          </div>
-        </React.Fragment>
-      )
+      list = <Placeholder />
     } else {
       list = <List data={recommendationData} />
     }

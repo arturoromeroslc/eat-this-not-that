@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import FoodCard from '../FoodCard/FoodCard'
 
+import './List.css'
+
 export default class List extends Component {
   render() {
     const { data } = this.props
 
     if (data) {
       return (
-        <ul>
+        <ul className="flex">
           {data.map(({ id, label, image, ingredientLines, calories }, i) => (
             <FoodCard
               key={id}
