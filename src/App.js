@@ -34,10 +34,6 @@ export default class App extends Component {
     )
   }
 
-  onLoginClick = () => this.setState({ authed: true })
-
-  onLogoutClick = () => this.setState({ authed: false })
-
   setFoodAndMakeApiCall = foodSearchTerm => {
     this.setState({ foodSearchTerm })
     this.sendRecommendationRequest(foodSearchTerm, this.state.dietFilter)
@@ -90,26 +86,9 @@ export default class App extends Component {
   }
 
   render() {
-    const { error, isLoaded, totalCount, authed, data, fetching } = this.state
+    const { error, isLoaded, totalCount, data, fetching } = this.state
 
     const appClass = data ? 'app app-percent' : 'app app-vh'
-
-    const loginSection = authed ? (
-      <button onClick={this.onLogoutClick} data-testid="logout">
-        Logout
-      </button>
-    ) : (
-      <React.Fragment>
-        <a
-          href="https://eatthis.auth.us-west-2.amazoncognito.com/login?response_type=code&client_id=j0rr0pdrk68hrjrv9phab6qdt&redirect_uri=https://localhost"
-          onClick={this.onLoginClick}
-          data-testid="login"
-        >
-          Login
-        </a>
-        <button data-testid="register">Register</button>
-      </React.Fragment>
-    )
 
     return (
       <div>
@@ -128,7 +107,6 @@ export default class App extends Component {
               >
                 Filter
               </button>
-              {loginSection}
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
             <Typography paragraph>
