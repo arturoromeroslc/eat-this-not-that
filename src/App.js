@@ -3,11 +3,6 @@ import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
 import Typography from '@material-ui/core/Typography'
-<<<<<<< HEAD
-=======
->>>>>>> a949f1d... add responsive cards
-=======
->>>>>>> 23a54fb... wip
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
 import List from './List/List'
@@ -98,22 +93,6 @@ export default class App extends Component {
     const { error, isLoaded, totalCount, authed, data, fetching } = this.state
 
     const appClass = data ? 'app app-percent' : 'app app-vh'
-<<<<<<< HEAD
-=======
-    let list
-
-    if (error) {
-      list = <div>Error: {error.message}</div>
-    } else if (fetching && !isLoaded) {
-      list = <Placeholder />
-    } else {
-      list = <List data={recommendationData} />
-    }
-
-    const appClass = recommendationData ? 'app app-percent' : 'app app-vh'
->>>>>>> a949f1d... add responsive cards
-=======
->>>>>>> 23a54fb... wip
 
     const loginSection = authed ? (
       <button onClick={this.onLogoutClick} data-testid="logout">
