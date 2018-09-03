@@ -21,7 +21,6 @@ export default class App extends Component {
       error: null,
       fetching: false,
       isLoaded: false,
-      authed: false,
       data: undefined,
       foodSearchTerm: '',
       showFilter: false,
