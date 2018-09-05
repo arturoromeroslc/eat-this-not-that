@@ -30,6 +30,12 @@ const styles = theme => ({
       width: '30%',
     },
   },
+  cardHeader: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+    height: '64px',
+  },
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
@@ -63,18 +69,21 @@ class FoodCard extends PureComponent {
   }
 
   render() {
-    const { classes, ingredientLines, label, image, calories } = this.props
+    const { classes, ingredientLines, label, image, calories, url } = this.props
 
     return (
       <Card className={classes.card}>
         <CardHeader
+          className={classes.cardHeader}
+          onClick={() => {
+            window.location = url
+          }}
           action={
-            <IconButton>
+            <IconButton onClick={e => e.preventDefault()}>
               <MoreVertIcon />
             </IconButton>
           }
           title={label}
-          subheader="September 14, 2016"
         />
         <CardMedia className={classes.media} image={image} />
         <CardContent>
@@ -85,38 +94,17 @@ class FoodCard extends PureComponent {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
+          <IconButton
+            onClick={e => e.preventDefault()}
+            aria-label="Add to favorites"
+          >
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="Share">
+          <IconButton onClick={e => e.preventDefault()} aria-label="Share">
             <ShareIcon />
           </IconButton>
           {calories} cal
-          <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
         </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph variant="body2">
-              Method:
-            </Typography>
-            <Typography paragraph>
-              Heat 1/2 cup of the broth in a pot until simmering, add saffron
-              and set aside for 10 minutes.
-            </Typography>
-            <Typography paragraph>
-              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-            </Typography>
-          </CardContent>
-        </Collapse>
       </Card>
     )
   }
@@ -128,6 +116,7 @@ FoodCard.propTypes = {
   label: PropTypes.string,
   image: PropTypes.string,
   calories: PropTypes.string,
+  url: PropTypes.string,
 }
 
 export default withStyles(styles)(FoodCard)
