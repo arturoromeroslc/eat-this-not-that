@@ -5,8 +5,8 @@ import forEach from 'lodash.foreach'
 import Typography from '@material-ui/core/Typography'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
-import List from './List/List'
-import dataNormalizer from './utils/normalize'
+import RecipeList from './RecipeList/RecipeList'
+import normalize from './utils/normalize'
 import './App.css'
 import Placeholder from './Placeholder/Placeholder'
 
@@ -70,7 +70,7 @@ export default class App extends Component {
           this.setState({
             isLoaded: true,
             fetching: false,
-            data: dataNormalizer(result),
+            data: normalize(result),
             totalCount: result.count,
           })
         },
@@ -118,7 +118,7 @@ export default class App extends Component {
             </Typography>
           </div>
           {fetching && !isLoaded && <Placeholder />}
-          {isLoaded && !error && <List data={data} />}
+          {isLoaded && !error && <RecipeList data={data} />}
         </div>
       </div>
     )
