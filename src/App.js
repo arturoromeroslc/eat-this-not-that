@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
 import Typography from '@material-ui/core/Typography'
+import Drawer from '@material-ui/core/Drawer'
 import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
 import RecipeList from './RecipeList/RecipeList'
@@ -26,6 +27,7 @@ export default class App extends Component {
       showFilter: false,
       dietFilter: '',
       totalCount: 0,
+      selectedFilters: {},
     }
     this.sendRecommendationRequest = debounce(
       this.sendRecommendationRequest,
@@ -56,8 +58,12 @@ export default class App extends Component {
     }
   }
 
+  updateSelectedFilters = selectedFilters => this.setState({ selectedFilters })
+
   toggleFilterMenu = () =>
-    this.setState(prevState => ({ showFilter: !prevState.showFilter }))
+    this.setState(prevState => ({
+      showFilter: !prevState.showFilter,
+    }))
 
   sendRecommendationRequest = (foodSearchTerm, dietFilter) => {
     this.setState({ fetching: true })
@@ -85,17 +91,30 @@ export default class App extends Component {
   }
 
   render() {
-    const { error, isLoaded, totalCount, data, fetching } = this.state
+    const {
+      error,
+      isLoaded,
+      totalCount,
+      data,
+      fetching,
+      showFilter,
+      selectedFilters,
+    } = this.state
 
     const appClass = data ? 'app app-percent' : 'app app-vh'
 
     return (
       <div>
-        <Filter
-          show={this.state.showFilter}
-          onToggleFilterMenu={this.toggleFilterMenu}
-          onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
-        />
+        <Drawer anchor="top" open={showFilter} onClose={this.toggleFilterMenu}>
+          <div tabIndex={0} role="button">
+            <Filter
+              updateSelectedFilters={this.updateSelectedFilters}
+              selectedFilters={selectedFilters}
+              onToggleFilterMenu={this.toggleFilterMenu}
+              onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
+            />
+          </div>
+        </Drawer>
         <div className={appClass}>
           <div className="app__header">
             <div className="flex-space-between app__header__container">

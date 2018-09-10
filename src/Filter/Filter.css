@@ -17,6 +17,7 @@
 .filter__category {
 	display: flex;
 	justify-content: space-around;
+	overflow: scroll;
 }
 
 .filter__category__item {
