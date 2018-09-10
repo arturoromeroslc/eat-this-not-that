@@ -2,11 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import shortid from 'shortid'
 import Range from '../Range/Range'
-import {
-  getFilterSelectedIndex,
-  addFilterToCategory,
-  isFilterSelected,
-} from '../utils/filterSelections'
 import './Filter.css'
 
 const DIET_OPTIONS = [
@@ -46,29 +41,28 @@ TextClick.propTypes = {
 export default class Filter extends Component {
   constructor(props) {
     super(props)
-    this.state = { selectedFilters: {}, rangeFilter: DEFAULT_RANGE_FILTER }
+    this.state = {
+      selectedFilters: {},
+      rangeFilter: DEFAULT_RANGE_FILTER,
+      hasFilters: false,
+    }
   }
 
   handleFilterClick = (filter, category) => {
-    const { selectedFilters } = this.state
-    const filterSelectedIndex = getFilterSelectedIndex(
-      selectedFilters[category],
-      filter,
-    )
+    const selectedFilters = Object.assign({}, this.state.selectedFilters)
 
-    if (filterSelectedIndex > -1) {
-      selectedFilters[category] = [
-        ...selectedFilters[category].slice(0, filterSelectedIndex),
-        ...selectedFilters[category].slice(filterSelectedIndex + 1),
-      ]
-    } else {
-      selectedFilters[category] = addFilterToCategory(
-        selectedFilters[category],
-        filter,
-      )
-    }
+    const catergoryArray = Array.isArray(selectedFilters[category])
+      ? selectedFilters[category]
+      : []
 
-    this.setState({ selectedFilters })
+    selectedFilters[category] = !catergoryArray.includes(filter)
+      ? [...catergoryArray, filter]
+      : catergoryArray.filter(item => item !== filter)
+
+    this.setState({
+      selectedFilters,
+      hasFilters: Object.keys(selectedFilters).length > 0,
+    })
   }
 
   handleRanageChange = (filterString, rangeValue) => {
@@ -94,33 +88,29 @@ export default class Filter extends Component {
 
   isFilterItemSelected = (filter, category) => {
     const defaultClass = 'filter__category__item'
+    const filterCategory = this.state.selectedFilters[category]
 
-    if (isFilterSelected(this.state.selectedFilters[category], filter)) {
-      return `${defaultClass} filter__category__item--is-active`
-    }
-    return defaultClass
+    return Array.isArray(filterCategory) && filterCategory.includes(filter)
+      ? `${defaultClass} filter__category__item--is-active`
+      : defaultClass
   }
 
   render() {
     const { show, onToggleFilterMenu } = this.props
-    const { selectedFilters } = this.state
-    const hasFilters = Object.keys(selectedFilters).length > 0
-
-    const close = <TextClick onClicked={onToggleFilterMenu} text="Close" />
-    const apply = <TextClick onClicked={this.applyFilters} text="Apply" />
-    const clear = hasFilters ? (
-      <TextClick onClicked={this.clearFilter} text="Clear" />
-    ) : null
+    const { hasFilters } = this.state
+    console.log(hasFilters)
 
     if (show) {
       return (
         <div className="filter__contatiner">
           <div className="filter__header-container">
-            {close}
+            <TextClick onClicked={onToggleFilterMenu} text="Close" />
             <span className="filter__header-heading">Refine Search</span>
-            {apply}
+            <TextClick onClicked={this.applyFilters} text="Apply" />
           </div>
-          {clear}
+          {hasFilters && (
+            <TextClick onClicked={this.clearFilter} text="Clear" />
+          )}
           <div className="filter__content-flex-container">
             <div className="filter__body-container">
               <h3>Diet</h3>
