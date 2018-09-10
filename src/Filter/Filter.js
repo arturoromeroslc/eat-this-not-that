@@ -13,9 +13,17 @@ import AppBar from '@material-ui/core/AppBar'
 import { withStyles } from '@material-ui/core/styles'
 import { FILTER_OPTIONS, DEFAULT_RANGE_FILTER } from './Filter.constants'
 import Range from '../Range/Range'
-import './Filter.css'
 
 const styles = theme => ({
+  flexContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  filterCategory: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    overflow: 'scroll',
+  },
   chip: {
     margin: theme.spacing.unit,
   },
@@ -140,12 +148,12 @@ class Filter extends Component {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <div className="filter__content-flex-container">
+        <div className={classes.flexContainer}>
           {FILTER_OPTIONS.map(({ type, options }) => (
             <div className={classes.filterSection}>
               <Divider />
               <h3 className={classes.h3}>{type}</h3>
-              <div className="filter__category">
+              <div className={classes.filterCategory}>
                 {options.map(filter => (
                   <Chip
                     key={shortid.generate()}
@@ -182,6 +190,7 @@ Filter.propTypes = {
   onSelectionOfFilters: PropTypes.func,
   classes: PropTypes.shape(),
   updateSelectedFilters: PropTypes.func,
+  selectedFilters: PropTypes.shape(),
 }
 
 export default withStyles(styles)(Filter)
