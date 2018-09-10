@@ -2,6 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import shortid from 'shortid'
 import Chip from '@material-ui/core/Chip'
+import Divider from '@material-ui/core/Divider'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import CancelIcon from '@material-ui/icons/Cancel'
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined'
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined'
+import AppBar from '@material-ui/core/AppBar'
 import { withStyles } from '@material-ui/core/styles'
 import { FILTER_OPTIONS, DEFAULT_RANGE_FILTER } from './Filter.constants'
 import Range from '../Range/Range'
@@ -11,37 +19,32 @@ const styles = theme => ({
   chip: {
     margin: theme.spacing.unit,
   },
+  h3: {
+    textAlign: 'center',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  filterSection: {
+    paddingBottom: '4%',
+  },
+  closeButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
 })
-
-function TextClick({ onClicked, text }) {
-  return (
-    <button
-      className="filter__action-text"
-      onKeyUp={onClicked}
-      onClick={onClicked}
-    >
-      {text}
-    </button>
-  )
-}
-
-TextClick.propTypes = {
-  onClicked: PropTypes.func,
-  text: PropTypes.string,
-}
 
 class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedFilters: {},
       rangeFilter: DEFAULT_RANGE_FILTER,
       hasFilters: false,
     }
   }
 
   handleFilterClick = (filter, category) => {
-    const selectedFilters = Object.assign({}, this.state.selectedFilters)
+    const selectedFilters = Object.assign({}, this.props.selectedFilters)
 
     const catergoryArray = Array.isArray(selectedFilters[category])
       ? selectedFilters[category]
@@ -57,80 +60,111 @@ class Filter extends Component {
     }
 
     this.setState({
-      selectedFilters,
       hasFilters: Object.keys(selectedFilters).length > 0,
     })
+
+    this.props.updateSelectedFilters(selectedFilters)
   }
 
   handleRanageChange = (filterString, rangeValue) => {
-    const updatedSelectedFilters = Object.assign({}, this.state.selectedFilters)
-    updatedSelectedFilters.CALORIES = filterString
+    const selectedFilters = Object.assign({}, this.props.selectedFilters)
+    selectedFilters.CALORIES = filterString
     this.setState({
       rangeFilter: rangeValue,
-      selectedFilters: updatedSelectedFilters,
       hasFilters: true,
     })
+    this.props.updateSelectedFilters(selectedFilters)
   }
 
   clearFilter = () => {
     this.setState({
-      selectedFilters: [],
       rangeFilter: DEFAULT_RANGE_FILTER,
       hasFilters: false,
     })
+    this.props.updateSelectedFilters({})
   }
 
   applyFilters = () => {
-    this.props.onSelectionOfFilters(this.state.selectedFilters)
+    this.props.onSelectionOfFilters(this.props.selectedFilters)
     this.props.onToggleFilterMenu()
   }
 
   isFilterItemSelected = (filter, category) => {
-    const filterCategory = this.state.selectedFilters[category]
+    const filterCategory = this.props.selectedFilters[category]
 
     return Array.isArray(filterCategory) && filterCategory.includes(filter)
   }
 
   render() {
-    const { show, onToggleFilterMenu, classes } = this.props
+    const { onToggleFilterMenu, classes } = this.props
     const {
       hasFilters,
       rangeFilter: { valueMin, valueMax },
     } = this.state
 
-    if (show) {
-      return (
-        <div className="filter__contatiner">
-          <div className="filter__header-container">
-            <TextClick onClicked={onToggleFilterMenu} text="Close" />
-            <span className="filter__header-heading">Refine Search</span>
-            <TextClick onClicked={this.applyFilters} text="Apply" />
-          </div>
-          {hasFilters && (
-            <TextClick onClicked={this.clearFilter} text="Clear" />
-          )}
-          <div className="filter__content-flex-container">
-            {FILTER_OPTIONS.map(({ type, options }) => (
-              <div className="filter__body-container">
-                <h3>{type}</h3>
-                <div className="filter__category">
-                  {options.map(filter => (
-                    <Chip
-                      key={shortid.generate()}
-                      className={classes.chip}
-                      label={filter}
-                      variant={
-                        this.isFilterItemSelected(filter, type)
-                          ? ''
-                          : 'outlined'
-                      }
-                      onClick={() => this.handleFilterClick(filter, type)}
-                    />
-                  ))}
-                </div>
+    return (
+      <React.Fragment>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              className={classes.closeButton}
+              color="inherit"
+              aria-label="Close"
+              onClick={onToggleFilterMenu}
+            >
+              <CancelIcon />
+            </IconButton>
+            {hasFilters && (
+              <IconButton
+                className={classes.closeButton}
+                color="inherit"
+                aria-label="Close"
+                onClick={this.clearFilter}
+              >
+                <DeleteOutlinedIcon />
+              </IconButton>
+            )}
+            <Typography
+              variant="title"
+              color="inherit"
+              className={classes.grow}
+            >
+              Refine Search
+            </Typography>
+            <IconButton
+              color="inherit"
+              aria-label="Close"
+              onClick={this.applyFilters}
+            >
+              <SearchOutlinedIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <div className="filter__content-flex-container">
+          {FILTER_OPTIONS.map(({ type, options }) => (
+            <div className={classes.filterSection}>
+              <Divider />
+              <h3 className={classes.h3}>{type}</h3>
+              <div className="filter__category">
+                {options.map(filter => (
+                  <Chip
+                    key={shortid.generate()}
+                    className={classes.chip}
+                    label={filter}
+                    variant={
+                      this.isFilterItemSelected(filter, type)
+                        ? 'default'
+                        : 'outlined'
+                    }
+                    onClick={() => this.handleFilterClick(filter, type)}
+                  />
+                ))}
               </div>
-            ))}
-            <h3>CALORIES</h3>
+            </div>
+          ))}
+          <Divider />
+          <div className={classes.filterSection}>
+            <h3 className={classes.h3}>CALORIES</h3>
             <Range
               valueMin={valueMin}
               valueMax={valueMax}
@@ -138,17 +172,16 @@ class Filter extends Component {
             />
           </div>
         </div>
-      )
-    }
-    return null
+      </React.Fragment>
+    )
   }
 }
 
 Filter.propTypes = {
-  show: PropTypes.bool,
   onToggleFilterMenu: PropTypes.func,
   onSelectionOfFilters: PropTypes.func,
   classes: PropTypes.shape(),
+  updateSelectedFilters: PropTypes.func,
 }
 
 export default withStyles(styles)(Filter)
