@@ -1,30 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import shortid from 'shortid'
+import Chip from '@material-ui/core/Chip'
+import { withStyles } from '@material-ui/core/styles'
+import { FILTER_OPTIONS, DEFAULT_RANGE_FILTER } from './Filter.constants'
 import Range from '../Range/Range'
-import {
-  getFilterSelectedIndex,
-  addFilterToCategory,
-  isFilterSelected,
-} from '../utils/filterSelections'
 import './Filter.css'
 
-const DIET_OPTIONS = [
-  'balanced',
-  'high-protein',
-  'high-fiber',
-  'low-fat',
-  'low-carb',
-  'low-sodium',
-]
-const HEALTH_OPTIONS = [
-  'peanut-free',
-  'tree-nut-free',
-  'soy-free',
-  'fish-free',
-  'shellfish-free',
-]
-const DEFAULT_RANGE_FILTER = { valueMin: 0, valueMax: 0 }
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: theme.spacing.unit,
+  },
+})
 
 function TextClick({ onClicked, text }) {
   return (
@@ -43,40 +35,45 @@ TextClick.propTypes = {
   text: PropTypes.string,
 }
 
-export default class Filter extends Component {
+class Filter extends Component {
   constructor(props) {
     super(props)
-    this.state = { selectedFilters: {}, rangeFilter: DEFAULT_RANGE_FILTER }
+    this.state = {
+      selectedFilters: {},
+      rangeFilter: DEFAULT_RANGE_FILTER,
+      hasFilters: false,
+    }
   }
 
   handleFilterClick = (filter, category) => {
-    const { selectedFilters } = this.state
-    const filterSelectedIndex = getFilterSelectedIndex(
-      selectedFilters[category],
-      filter,
-    )
+    const selectedFilters = Object.assign({}, this.state.selectedFilters)
 
-    if (filterSelectedIndex > -1) {
-      selectedFilters[category] = [
-        ...selectedFilters[category].slice(0, filterSelectedIndex),
-        ...selectedFilters[category].slice(filterSelectedIndex + 1),
-      ]
-    } else {
-      selectedFilters[category] = addFilterToCategory(
-        selectedFilters[category],
-        filter,
-      )
+    const catergoryArray = Array.isArray(selectedFilters[category])
+      ? selectedFilters[category]
+      : []
+
+    selectedFilters[category] = !catergoryArray.includes(filter)
+      ? [...catergoryArray, filter]
+      : catergoryArray.filter(item => item !== filter)
+
+    /* delete property so we can correctly check the length of Object.keys(selectedFilters) */
+    if (selectedFilters[category].length === 0) {
+      delete selectedFilters[category]
     }
 
-    this.setState({ selectedFilters })
+    this.setState({
+      selectedFilters,
+      hasFilters: Object.keys(selectedFilters).length > 0,
+    })
   }
 
   handleRanageChange = (filterString, rangeValue) => {
     const updatedSelectedFilters = Object.assign({}, this.state.selectedFilters)
-    updatedSelectedFilters.calories = filterString
+    updatedSelectedFilters.CALORIES = filterString
     this.setState({
       rangeFilter: rangeValue,
       selectedFilters: updatedSelectedFilters,
+      hasFilters: true,
     })
   }
 
@@ -84,6 +81,7 @@ export default class Filter extends Component {
     this.setState({
       selectedFilters: [],
       rangeFilter: DEFAULT_RANGE_FILTER,
+      hasFilters: false,
     })
   }
 
@@ -93,69 +91,54 @@ export default class Filter extends Component {
   }
 
   isFilterItemSelected = (filter, category) => {
-    const defaultClass = 'filter__category__item'
+    const filterCategory = this.state.selectedFilters[category]
 
-    if (isFilterSelected(this.state.selectedFilters[category], filter)) {
-      return `${defaultClass} filter__category__item--is-active`
-    }
-    return defaultClass
+    return Array.isArray(filterCategory) && filterCategory.includes(filter)
   }
 
   render() {
-    const { show, onToggleFilterMenu } = this.props
-    const { selectedFilters } = this.state
-    const hasFilters = Object.keys(selectedFilters).length > 0
-
-    const close = <TextClick onClicked={onToggleFilterMenu} text="Close" />
-    const apply = <TextClick onClicked={this.applyFilters} text="Apply" />
-    const clear = hasFilters ? (
-      <TextClick onClicked={this.clearFilter} text="Clear" />
-    ) : null
+    const { show, onToggleFilterMenu, classes } = this.props
+    const {
+      hasFilters,
+      rangeFilter: { valueMin, valueMax },
+    } = this.state
 
     if (show) {
       return (
         <div className="filter__contatiner">
           <div className="filter__header-container">
-            {close}
+            <TextClick onClicked={onToggleFilterMenu} text="Close" />
             <span className="filter__header-heading">Refine Search</span>
-            {apply}
+            <TextClick onClicked={this.applyFilters} text="Apply" />
           </div>
-          {clear}
+          {hasFilters && (
+            <TextClick onClicked={this.clearFilter} text="Clear" />
+          )}
           <div className="filter__content-flex-container">
-            <div className="filter__body-container">
-              <h3>Diet</h3>
-              <div className="filter__category">
-                {DIET_OPTIONS.map(filter => (
-                  <button
-                    className={this.isFilterItemSelected(filter, 'diet')}
-                    key={shortid.generate()}
-                    onKeyUp={() => this.handleFilterClick(filter, 'diet')}
-                    onClick={() => this.handleFilterClick(filter, 'diet')}
-                  >
-                    {filter}
-                  </button>
-                ))}
+            {FILTER_OPTIONS.map(({ type, options }) => (
+              <div className="filter__body-container">
+                <h3>{type}</h3>
+                <div className="filter__category">
+                  {options.map(filter => (
+                    <Chip
+                      key={shortid.generate()}
+                      className={classes.chip}
+                      label={filter}
+                      variant={
+                        this.isFilterItemSelected(filter, type)
+                          ? ''
+                          : 'outlined'
+                      }
+                      onClick={() => this.handleFilterClick(filter, type)}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="filter__body-container">
-              <h3>Health</h3>
-              <div className="filter__category">
-                {HEALTH_OPTIONS.map(filter => (
-                  <button
-                    className={this.isFilterItemSelected(filter, 'health')}
-                    key={shortid.generate()}
-                    onKeyUp={() => this.handleFilterClick(filter, 'health')}
-                    onClick={() => this.handleFilterClick(filter, 'health')}
-                  >
-                    {filter}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <h3>Calories</h3>
+            ))}
+            <h3>CALORIES</h3>
             <Range
-              valueMin={this.state.rangeFilter.valueMin}
-              valueMax={this.state.rangeFilter.valueMax}
+              valueMin={valueMin}
+              valueMax={valueMax}
               onhandleFilterRange={this.handleRanageChange}
             />
           </div>
@@ -170,4 +153,7 @@ Filter.propTypes = {
   show: PropTypes.bool,
   onToggleFilterMenu: PropTypes.func,
   onSelectionOfFilters: PropTypes.func,
+  classes: PropTypes.shape(),
 }
+
+export default withStyles(styles)(Filter)
