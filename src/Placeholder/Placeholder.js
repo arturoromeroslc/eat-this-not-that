@@ -1,30 +1,29 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ContentLoader from 'react-content-loader'
-import styled from 'react-emotion'
+import { withStyles } from '@material-ui/core/styles'
 
-import breakpoints from '../utils/breakpoints'
+const styles = theme => ({
+  ul: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  li: {
+    margin: '10px',
+    display: 'inline-block',
+    backgroundColor: 'white',
+    [theme.breakpoints.down('sm')]: {
+      width: '46%',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '30%',
+    },
+  },
+})
 
-const StyledUl = styled('ul')`
-  diplay: flex;
-  flex-wrap: wrap;
-`
-
-const StyledLi = styled('li')`
-  margin: 10px;
-  display: inline-block;
-
-  ${breakpoints.tablet} {
-    width: 46%;
-  }
-
-  ${breakpoints.desktop} {
-    width: 30%;
-  }
-`
-
-const Placeholder = () => (
-  <StyledUl>
-    <StyledLi style={{ backgroundColor: 'white', margin: '10px' }}>
+const Placeholder = ({ classes: { ul, li } }) => (
+  <ul className={ul}>
+    <li className={li}>
       <ContentLoader
         height={475}
         width={400}
@@ -48,8 +47,8 @@ const Placeholder = () => (
         <rect x="70" y="422.05" rx="0" ry="0" width="258" height="16" />
         <rect x="92" y="448.05" rx="0" ry="0" width="216.69" height="15" />
       </ContentLoader>
-    </StyledLi>
-    <StyledLi style={{ backgroundColor: 'white' }}>
+    </li>
+    <li className={li}>
       <ContentLoader
         height={475}
         width={400}
@@ -73,8 +72,15 @@ const Placeholder = () => (
         <rect x="70" y="422.05" rx="0" ry="0" width="258" height="16" />
         <rect x="92" y="448.05" rx="0" ry="0" width="216.69" height="15" />
       </ContentLoader>
-    </StyledLi>
-  </StyledUl>
+    </li>
+  </ul>
 )
 
-export default Placeholder
+Placeholder.propTypes = {
+  classes: PropTypes.shape({
+    ul: PropTypes.string,
+    li: PropTypes.string,
+  }).isRequired,
+}
+
+export default withStyles(styles)(Placeholder)

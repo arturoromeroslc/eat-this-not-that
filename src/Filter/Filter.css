@@ -24,7 +24,7 @@
 	border: 1px solid black;
 }
 
-.filter__category__item--is-active {
+.filter__category__item.filter__category__item--is-active {
 	background-color: #F7B52D;
 }
 
