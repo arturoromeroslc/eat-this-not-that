@@ -6,7 +6,6 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import MenuItem from '@material-ui/core/MenuItem'
 import debounce from 'lodash.debounce'
-import './AutoComplete.css'
 
 const BASE_END_POINT = 'https://api.nutritionix.com/v2/'
 const APP_ID = process.env.REACT_APP_NUTRITIONIX_API_KEY
@@ -44,10 +43,26 @@ renderSuggestion.propTypes = {
 }
 
 const styles = theme => ({
-  root: {
+  paper: {
     width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
+  },
+  icon: {
+    display: 'inline-block',
+    transform: 'rotate(-45deg)',
+    cursor: 'pointer',
+    left: '1.6rem',
+    position: 'absolute',
+    color: '#2060aa',
+    fontSize: '1.3rem',
+  },
+  input: {
+    width: '100%',
+    fontSize: '18px',
+    border: 'none',
+    lineHeight: '22px',
+    padding: '5px 10px 5px 25px',
+    height: '32px',
   },
 })
 
@@ -83,7 +98,7 @@ class AutoComplete extends Component {
     const { classes } = this.props
     return (
       <span>
-        <span className="autocomplete__icon">⚲</span>
+        <span className={classes.icon}>⚲</span>
         <Downshift onChange={this.props.onSelectedItem}>
           {({
             selectedItem,
@@ -94,7 +109,7 @@ class AutoComplete extends Component {
           }) => (
             <div>
               <input
-                className="autocomplete__input"
+                className={classes.input}
                 placeholder="search"
                 type="search"
                 {...getInputProps({

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import FoodCard from '../FoodCard/FoodCard'
 
-import './RecipeList.css'
+const flex = {
+  display: 'flex',
+  flexWrap: 'wrap',
+}
 
 export default class RecipeList extends Component {
   render() {
@@ -11,7 +14,7 @@ export default class RecipeList extends Component {
 
     if (data.length > 0) {
       return (
-        <ul className="flex">
+        <ul style={flex}>
           {data.map(
             ({ id, label, image, ingredientLines, calories, url }, i) => (
               <FoodCard
