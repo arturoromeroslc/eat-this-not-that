@@ -8,11 +8,6 @@ import Range from '../Range/Range'
 import './Filter.css'
 
 const styles = theme => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-  },
   chip: {
     margin: theme.spacing.unit,
   },
