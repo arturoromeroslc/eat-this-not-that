@@ -127,7 +127,7 @@ export default class App extends Component {
               </button>
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
-            <Typography paragraph>
+            <Typography paragraph data-testid="app-title">
               {error
                 ? 'Please search for a different recipe, we could not find an alternative at this time'
                 : 'Find alternative cooking recipes for your cravings.'}
@@ -136,7 +136,7 @@ export default class App extends Component {
               {totalCount > 0 && `Total alternatives: ${totalCount}`}
             </Typography>
           </div>
-          {fetching && !isLoaded && <Placeholder />}
+          {fetching && !isLoaded && <Placeholder data-testid="placeholder" />}
           {isLoaded && !error && <RecipeList data={data} />}
         </div>
       </div>
