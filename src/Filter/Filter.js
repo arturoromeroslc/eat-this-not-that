@@ -150,7 +150,7 @@ class Filter extends Component {
         </AppBar>
         <div className={classes.flexContainer}>
           {FILTER_OPTIONS.map(({ type, options }) => (
-            <div className={classes.filterSection}>
+            <div key={type} className={classes.filterSection}>
               <Divider />
               <h3 className={classes.h3}>{type}</h3>
               <div className={classes.filterCategory}>
