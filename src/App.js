@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, Suspense } from 'react'
 import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
-import Typography from '@material-ui/core/Typography'
-import Drawer from '@material-ui/core/Drawer'
-import Filter from './Filter/Filter'
 import AutoComplete from './AutoComplete/AutoComplete'
-import RecipeList from './RecipeList/RecipeList'
 import normalize from './utils/normalize'
 import './App.css'
-import Placeholder from './Placeholder/Placeholder'
+
+const Placeholder = React.lazy(() => import('./Placeholder/Placeholder'))
+const RecipeList = React.lazy(() => import('./RecipeList/RecipeList'))
+const FilterDrawer = React.lazy(() => import('./FilterDrawer/FilterDrawer'))
 
 const DOMAIN = 'https://api.edamam.com/search?q='
 const APP_ID_AND_KEY = process.env.REACT_APP_EDAMAM_API_KEY
@@ -105,16 +104,16 @@ export default class App extends Component {
 
     return (
       <div>
-        <Drawer anchor="top" open={showFilter} onClose={this.toggleFilterMenu}>
-          <div tabIndex={0} role="button">
-            <Filter
-              updateSelectedFilters={this.updateSelectedFilters}
-              selectedFilters={selectedFilters}
-              onToggleFilterMenu={this.toggleFilterMenu}
-              onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
-            />
-          </div>
-        </Drawer>
+        <Suspense fallback={null}>
+          <FilterDrawer
+            showFilter={showFilter}
+            toggleFilterMenu={this.toggleFilterMenu}
+            updateSelectedFilters={this.updateSelectedFilters}
+            selectedFilters={selectedFilters}
+            onToggleFilterMenu={this.toggleFilterMenu}
+            onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
+          />
+        </Suspense>
         <div className={appClass}>
           <div className="app__header">
             <div className="flex-space-between app__header__container">
@@ -127,17 +126,25 @@ export default class App extends Component {
               </button>
             </div>
             <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
-            <Typography paragraph>
+            <p>
               {error
                 ? 'Please search for a different recipe, we could not find an alternative at this time'
                 : 'Find alternative cooking recipes for your cravings.'}
-            </Typography>
-            <Typography span>
-              {totalCount > 0 && `Total alternatives: ${totalCount}`}
-            </Typography>
+            </p>
+            <span>{totalCount > 0 && `Total alternatives: ${totalCount}`}</span>
           </div>
-          {fetching && !isLoaded && <Placeholder />}
-          {isLoaded && !error && <RecipeList data={data} />}
+          {fetching &&
+            !isLoaded && (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Placeholder />
+              </Suspense>
+            )}
+          {isLoaded &&
+            !error && (
+              <Suspense fallback={<div>Loading...</div>}>
+                <RecipeList data={data} />
+              </Suspense>
+            )}
         </div>
       </div>
     )
