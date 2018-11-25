@@ -2,18 +2,26 @@ import React, { Component, Suspense } from 'react'
 import debounce from 'lodash.debounce'
 import isEmpty from 'lodash.isempty'
 import forEach from 'lodash.foreach'
-import Typography from '@material-ui/core/Typography'
 import AutoComplete from './AutoComplete/AutoComplete'
 import normalize from './utils/normalize'
 import './App.css'
-import Placeholder from './Placeholder/Placeholder'
 
-import RecipeList from './RecipeList/RecipeList'
+const Placeholder = React.lazy(() => import('./Placeholder/Placeholder'))
+const RecipeList = React.lazy(() => import('./RecipeList/RecipeList'))
 const FilterDrawer = React.lazy(() => import('./FilterDrawer/FilterDrawer'))
 
 const DOMAIN = 'https://api.edamam.com/search?q='
 const APP_ID_AND_KEY = process.env.REACT_APP_EDAMAM_API_KEY
 const ANCHOR = '&from=0&to=25&'
+
+const inputStyles = {
+  width: '100%',
+  border: 'none',
+  height: '28px',
+  padding: '5px 10px 5px 25px',
+  fontSize: '18px',
+  lineHeight: '22px',
+}
 
 export default class App extends Component {
   constructor(props) {
@@ -106,7 +114,7 @@ export default class App extends Component {
     return (
       <div>
         <div>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={null}>
             <FilterDrawer
               showFilter={showFilter}
               toggleFilterMenu={this.toggleFilterMenu}
@@ -128,21 +136,30 @@ export default class App extends Component {
                 Filter
               </button>
             </div>
-            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
-            <Typography paragraph>
+            <div>
+              <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
+            </div>
+            <p>
               {error
                 ? 'Please search for a different recipe, we could not find an alternative at this time'
                 : 'Find alternative cooking recipes for your cravings.'}
-            </Typography>
-            <Typography span>
-              {totalCount > 0 && `Total alternatives: ${totalCount}`}
-            </Typography>
+            </p>
+            <span>{totalCount > 0 && `Total alternatives: ${totalCount}`}</span>
           </div>
-          {fetching && !isLoaded && <Placeholder />}
+          {fetching &&
+            !isLoaded && (
+              <div>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Placeholder />
+                </Suspense>
+              </div>
+            )}
           {isLoaded &&
             !error && (
               <div>
-                <RecipeList data={data} />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <RecipeList data={data} />
+                </Suspense>
               </div>
             )}
         </div>
