@@ -104,18 +104,16 @@ export default class App extends Component {
 
     return (
       <div>
-        <div>
-          <Suspense fallback={null}>
-            <FilterDrawer
-              showFilter={showFilter}
-              toggleFilterMenu={this.toggleFilterMenu}
-              updateSelectedFilters={this.updateSelectedFilters}
-              selectedFilters={selectedFilters}
-              onToggleFilterMenu={this.toggleFilterMenu}
-              onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
-            />
-          </Suspense>
-        </div>
+        <Suspense fallback={null}>
+          <FilterDrawer
+            showFilter={showFilter}
+            toggleFilterMenu={this.toggleFilterMenu}
+            updateSelectedFilters={this.updateSelectedFilters}
+            selectedFilters={selectedFilters}
+            onToggleFilterMenu={this.toggleFilterMenu}
+            onSelectionOfFilters={this.getRecoomendationListWithDietFilter}
+          />
+        </Suspense>
         <div className={appClass}>
           <div className="app__header">
             <div className="flex-space-between app__header__container">
@@ -127,9 +125,7 @@ export default class App extends Component {
                 Filter
               </button>
             </div>
-            <div>
-              <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
-            </div>
+            <AutoComplete onSelectedItem={this.setFoodAndMakeApiCall} />
             <p>
               {error
                 ? 'Please search for a different recipe, we could not find an alternative at this time'
@@ -139,19 +135,15 @@ export default class App extends Component {
           </div>
           {fetching &&
             !isLoaded && (
-              <div>
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Placeholder />
-                </Suspense>
-              </div>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Placeholder />
+              </Suspense>
             )}
           {isLoaded &&
             !error && (
-              <div>
-                <Suspense fallback={<div>Loading...</div>}>
-                  <RecipeList data={data} />
-                </Suspense>
-              </div>
+              <Suspense fallback={<div>Loading...</div>}>
+                <RecipeList data={data} />
+              </Suspense>
             )}
         </div>
       </div>
