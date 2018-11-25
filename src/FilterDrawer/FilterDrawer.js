@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Drawer from '@material-ui/core/Drawer'
 import Filter from '../Filter/Filter'
 
@@ -21,5 +22,14 @@ const FilterDrawer = ({
     </div>
   </Drawer>
 )
+
+FilterDrawer.propTypes = {
+  showFilter: PropTypes.bool,
+  toggleFilterMenu: PropTypes.func,
+  updateSelectedFilters: PropTypes.func,
+  selectedFilters: PropTypes.shape(),
+  onSelectionOfFilters: PropTypes.func,
+  onToggleFilterMenu: PropTypes.func,
+}
 
 export default FilterDrawer

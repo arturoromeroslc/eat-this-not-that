@@ -14,15 +14,6 @@ const DOMAIN = 'https://api.edamam.com/search?q='
 const APP_ID_AND_KEY = process.env.REACT_APP_EDAMAM_API_KEY
 const ANCHOR = '&from=0&to=25&'
 
-const inputStyles = {
-  width: '100%',
-  border: 'none',
-  height: '28px',
-  padding: '5px 10px 5px 25px',
-  fontSize: '18px',
-  lineHeight: '22px',
-}
-
 export default class App extends Component {
   constructor(props) {
     super(props)
