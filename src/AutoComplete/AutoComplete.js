@@ -70,9 +70,7 @@ class AutoComplete extends Component {
   constructor(props) {
     super(props)
     this.debouncedAutoComplete = debounce(this.AutoComplete, 250)
-    this.state = {
-      items: [],
-    }
+    this.state = { items: [], showFetchError: false }
   }
 
   AutoComplete = event => {
@@ -82,20 +80,26 @@ class AutoComplete extends Component {
     }
 
     fetch(`${BASE_END_POINT}autocomplete?q=${value}${APP_ID}`)
-      .then(res => res.json())
-      .then(
-        result => {
-          const items = result.map(item => item.text)
-          this.setState({ items })
-        },
-        error => {
-          console.error(error)
-        },
-      )
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+
+        throw new Error(res.statusText)
+      })
+      .then(result => {
+        const items = result.map(item => item.text)
+        this.setState({ items })
+      })
+      .catch(err => {
+        this.setState({ showFetchError: true })
+        console.error('err in catch', err.message)
+      })
   }
 
   render() {
     const { classes } = this.props
+    const { showFetchError } = this.state
     return (
       <span>
         <span className={classes.icon}>⚲</span>
@@ -136,14 +140,20 @@ class AutoComplete extends Component {
           )}
           )}
         </Downshift>
+        {showFetchError && (
+          <span>
+            We are sorry. Please try again later.{' '}
+            <span role="img" aria-label="sad emoji">
+              😭
+            </span>
+          </span>
+        )}
       </span>
     )
   }
 }
-
 AutoComplete.propTypes = {
   onSelectedItem: PropTypes.func,
   classes: PropTypes.string,
 }
-
 export default withStyles(styles)(AutoComplete)
