@@ -27,6 +27,7 @@ export default class App extends Component {
       dietFilter: '',
       totalCount: 0,
       selectedFilters: {},
+      hasMore: false,
     }
     this.sendRecommendationRequest = debounce(
       this.sendRecommendationRequest,
@@ -77,6 +78,7 @@ export default class App extends Component {
             fetching: false,
             data: normalize(result),
             totalCount: result.count,
+            hasMore: result.more,
           })
         },
         error => {
@@ -98,6 +100,7 @@ export default class App extends Component {
       fetching,
       showFilter,
       selectedFilters,
+      hasMore,
     } = this.state
 
     const appClass = data ? 'app app-percent' : 'app app-vh'
@@ -142,7 +145,7 @@ export default class App extends Component {
           {isLoaded &&
             !error && (
               <Suspense fallback={<div>Loading...</div>}>
-                <RecipeList data={data} />
+                <RecipeList data={data} hasMore={hasMore} />
               </Suspense>
             )}
         </div>

@@ -10,7 +10,7 @@ const flex = {
 
 export default class RecipeList extends Component {
   render() {
-    const { data } = this.props
+    const { data, hasMore } = this.props
 
     if (data.length > 0) {
       return (
@@ -49,6 +49,7 @@ RecipeList.defaultProps = {
 }
 
 RecipeList.propTypes = {
+  hasMore: PropTypes.bool.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
