@@ -11,6 +11,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined'
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined'
 import AppBar from '@material-ui/core/AppBar'
 import { withStyles } from '@material-ui/core/styles'
+
 import { FILTER_OPTIONS, DEFAULT_RANGE_FILTER } from './Filter.constants'
 import Range from '../Range/Range'
 
@@ -46,7 +47,9 @@ class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      rangeFilter: DEFAULT_RANGE_FILTER,
+      // This needs to be read from props
+      rangeFilter:
+        props.selectedFilters.CALORIES_RANGE_VALUES || DEFAULT_RANGE_FILTER,
       hasFilters: false,
     }
   }
@@ -77,6 +80,7 @@ class Filter extends Component {
   handleRanageChange = (filterString, rangeValue) => {
     const selectedFilters = Object.assign({}, this.props.selectedFilters)
     selectedFilters.CALORIES = filterString
+    selectedFilters.CALORIES_RANGE_VALUES = rangeValue
     this.setState({
       rangeFilter: rangeValue,
       hasFilters: true,

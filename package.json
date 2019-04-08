@@ -6,7 +6,6 @@
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.0",
-    "eslint": "5.6.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
@@ -14,7 +13,7 @@
     "jsdom": "^11.1.0",
     "pm2": "^2.6.1",
     "prettier": "1.14.2",
-    "react-scripts": "^2.1.1",
+    "react-scripts": "^2.1.8",
     "react-test-renderer": "^16.0.0"
   },
   "dependencies": {
@@ -29,9 +28,9 @@
     "lodash.isempty": "^4.4.0",
     "lodash.omit": "^4.5.0",
     "prop-types": "^15.6.2",
-    "react": "^16.6.0",
+    "react": "^16.8.0",
     "react-content-loader": "^3.1.2",
-    "react-dom": "^16.6.0",
+    "react-dom": "^16.8.0",
     "shortid": "^2.2.6"
   },
   "scripts": {
