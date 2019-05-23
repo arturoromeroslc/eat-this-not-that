@@ -1,0 +1,24 @@
+{
+  "name": "static-website",
+  "version": "1.0.0",
+  "description": "Infrastructure for an HTTPS static site using S3 and CloudFront",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^12.0.2",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cloudfront": "^0.31.0",
+    "@aws-cdk/aws-iam": "^0.31.0",
+    "@aws-cdk/aws-route53": "^0.31.0",
+    "@aws-cdk/aws-s3": "^0.31.0",
+    "@aws-cdk/aws-ssm": "^0.31.0",
+    "@aws-cdk/cdk": "^0.31.0"
+  }
+}
