@@ -13,7 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^12.0.2",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "prettier": "^1.17.1"
   },
   "dependencies": {
     "@aws-cdk/aws-cloudfront": "^0.31.0",
@@ -21,7 +22,6 @@
     "@aws-cdk/aws-route53": "^0.31.0",
     "@aws-cdk/aws-s3": "^0.31.0",
     "@aws-cdk/aws-ssm": "^0.31.0",
-    "@aws-cdk/cdk": "^0.31.0",
-    "prettier": "^1.17.1"
+    "@aws-cdk/cdk": "^0.31.0"
   }
 }
