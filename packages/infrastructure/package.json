@@ -6,7 +6,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk",
-    "synth": "cdk synth"
+    "synth": "cdk synth",
+    "format": "prettier --write '**/*.ts'"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@aws-cdk/aws-route53": "^0.31.0",
     "@aws-cdk/aws-s3": "^0.31.0",
     "@aws-cdk/aws-ssm": "^0.31.0",
-    "@aws-cdk/cdk": "^0.31.0"
+    "@aws-cdk/cdk": "^0.31.0",
+    "prettier": "^1.17.1"
   }
 }
