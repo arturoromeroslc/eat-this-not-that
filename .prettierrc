@@ -1,5 +1,5 @@
 {
-  "parser": "flow",
+  "parser": "babel",
   "semi": false,
   "singleQuote": true,
   "trailingComma": "all",
