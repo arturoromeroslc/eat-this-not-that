@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "synth": "cdk synth"
   },
   "author": "",
   "license": "ISC",
