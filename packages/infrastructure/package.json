@@ -7,21 +7,28 @@
     "watch": "tsc -w",
     "cdk": "cdk",
     "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy": "cdk deploy",
     "format": "prettier --write '**/*.ts'"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^12.0.2",
-    "typescript": "^3.4.5",
-    "prettier": "^1.17.1"
+    "prettier": "^1.17.1",
+    "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-cloudfront": "^0.31.0",
-    "@aws-cdk/aws-iam": "^0.31.0",
-    "@aws-cdk/aws-route53": "^0.31.0",
-    "@aws-cdk/aws-s3": "^0.31.0",
-    "@aws-cdk/aws-ssm": "^0.31.0",
-    "@aws-cdk/cdk": "^0.31.0"
+    "@aws-cdk/aws-apigateway": "^0.34.0",
+    "@aws-cdk/aws-cloudfront": "0.34.0",
+    "@aws-cdk/aws-cognito": "^0.34.0",
+    "@aws-cdk/aws-iam": "0.34.0",
+    "@aws-cdk/aws-lambda": "0.34.0",
+    "@aws-cdk/aws-route53": "0.34.0",
+    "@aws-cdk/aws-s3": "0.34.0",
+    "@aws-cdk/aws-ssm": "0.34.0",
+    "@aws-cdk/cdk": "0.34.0",
+    "aws-cdk": "0.34.0",
+    "aws-sdk": "^2.476.0"
   }
 }

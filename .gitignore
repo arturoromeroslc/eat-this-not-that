@@ -15,4 +15,7 @@ yarn-error.log
 .env
 .vscode
 npm-debug.log
-/infrastructure/index.js
+packages/infrastructure/**/*.js
+packages/infrastructure/cdk.out
+packages/infrastructure/cognito/cognito_arn.js
+packages/infrastructure/cognito/cognito_arn.ts
