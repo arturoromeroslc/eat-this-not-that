@@ -19,3 +19,5 @@ packages/infrastructure/**/*.js
 packages/infrastructure/cdk.out
 packages/infrastructure/cognito/cognito_arn.js
 packages/infrastructure/cognito/cognito_arn.ts
+packages/infrastructure/service/cognito/cognito_arn.ts 
+packages/infrastructure/service/cognito/cognito_arn.js
