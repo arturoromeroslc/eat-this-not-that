@@ -10,7 +10,7 @@ const flex = {
 
 export default class RecipeList extends Component {
   render() {
-    const { data, hasMore } = this.props
+    const { data } = this.props
 
     if (data.length > 0) {
       return (
