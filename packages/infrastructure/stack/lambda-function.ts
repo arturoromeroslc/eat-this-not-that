@@ -2,9 +2,11 @@ import apigateway = require('@aws-cdk/aws-apigateway')
 import cdk = require('@aws-cdk/cdk')
 import lambda = require('@aws-cdk/aws-lambda')
 
-const LambdaFunction = require('../service/lambda/create')
-const { addCorsOptions } = require('./add-cors')
-const { cognito } = require('../cognito/cognito_arn')
+const { LambdaFunction } = require('../service/lambda/create')
+const { addCorsOptions } = require('../service/lambda/add-cors')
+const { cognito } = require('../service/cognito/cognito_arn')
+
+console.log(LambdaFunction)
 
 export class LambdaFunctionStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -37,10 +39,12 @@ export class LambdaFunctionStack extends cdk.Stack {
       alias,
     )
 
-    const authorizer = new apigateway.CfnAuthorizer(this, 'HelloAuthorizer', {
+    //This will create a COGNITO_USER_POOLS authorizer which uses the user pool added in providerArns
+    // how can we test this?
+    const authorizer = new apigateway.CfnAuthorizer(this, 'HelloTest1', {
       authType: apigateway.AuthorizationType.Cognito,
       providerArns: [cognito.default.arn],
-      name: 'HelloAuthorizer',
+      name: 'HelloTest1',
       restApiId: apiService.restApiId,
       identitySource: 'method.request.header.Authorization',
       type: apigateway.AuthorizationType.Cognito,

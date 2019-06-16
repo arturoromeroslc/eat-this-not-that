@@ -7,7 +7,7 @@ interface Lamdba {
   handler: string
 }
 
-class LambdaFunction {
+export class LambdaFunction {
   static CreateLambdaFunction({ self, functionName, handler }: Lamdba) {
     return new lambda.Function(self, functionName, {
       functionName,
@@ -17,5 +17,3 @@ class LambdaFunction {
     })
   }
 }
-
-export default LambdaFunction
