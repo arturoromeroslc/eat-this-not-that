@@ -154,6 +154,6 @@ class AutoComplete extends Component {
 }
 AutoComplete.propTypes = {
   onSelectedItem: PropTypes.func,
-  classes: PropTypes.string,
+  classes: PropTypes.object,
 }
 export default withStyles(styles)(AutoComplete)
