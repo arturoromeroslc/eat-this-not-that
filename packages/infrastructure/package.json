@@ -19,16 +19,16 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^0.34.0",
-    "@aws-cdk/aws-cloudfront": "0.34.0",
-    "@aws-cdk/aws-cognito": "^0.34.0",
-    "@aws-cdk/aws-iam": "0.34.0",
-    "@aws-cdk/aws-lambda": "0.34.0",
-    "@aws-cdk/aws-route53": "0.34.0",
-    "@aws-cdk/aws-s3": "0.34.0",
-    "@aws-cdk/aws-ssm": "0.34.0",
-    "@aws-cdk/cdk": "0.34.0",
-    "aws-cdk": "0.34.0",
+    "@aws-cdk/aws-apigateway": "1.0.0",
+    "@aws-cdk/aws-cloudfront": "1.0.0",
+    "@aws-cdk/aws-cognito": "^1.0.0",
+    "@aws-cdk/aws-iam": "1.0.0",
+    "@aws-cdk/aws-lambda": "1.0.0",
+    "@aws-cdk/aws-route53": "1.0.0",
+    "@aws-cdk/aws-s3": "1.0.0",
+    "@aws-cdk/aws-ssm": "1.0.0",
+    "@aws-cdk/cdk": "1.0.0",
+    "aws-cdk": "1.0.0",
     "aws-sdk": "^2.476.0"
   }
 }
