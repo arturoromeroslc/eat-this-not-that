@@ -134,7 +134,11 @@ export default class App extends Component {
                 ? 'Please search for a different recipe, we could not find an alternative at this time'
                 : 'Find alternative cooking recipes for your cravings.'}
             </p>
-            <span>{totalCount > 0 && `Total alternatives: ${totalCount}`}</span>
+            {totalCount > 0 ?
+              <span>
+                <span>Total alternatives</span> <span id="total-count">{totalCount}</span>
+              </span>
+              : null}
           </div>
           {fetching &&
             !isLoaded && (
