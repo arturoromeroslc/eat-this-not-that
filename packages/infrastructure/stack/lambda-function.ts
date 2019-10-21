@@ -1,5 +1,5 @@
 import apigateway = require('@aws-cdk/aws-apigateway')
-import cdk = require('@aws-cdk/cdk')
+import cdk = require('@aws-cdk/core')
 import lambda = require('@aws-cdk/aws-lambda')
 
 const { LambdaFunction } = require('../service/lambda/create')

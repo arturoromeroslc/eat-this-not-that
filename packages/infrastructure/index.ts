@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import cdk = require('@aws-cdk/cdk')
+import cdk = require('@aws-cdk/core')
 
 const { LambdaFunctionStack } = require('./stack/lambda-function')
 
