@@ -29,6 +29,6 @@
     "@aws-cdk/aws-ssm": "1.0.0",
     "@aws-cdk/core": "^1.3.0",
     "aws-cdk": "1.0.0",
-    "aws-sdk": "^2.476.0"
+    "aws-sdk": "^2.814.0"
   }
 }
