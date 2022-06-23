@@ -11,7 +11,7 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
-    "jsdom": "^11.1.0",
+    "jsdom": "^16.5.0",
     "lerna": "^3.14.1",
     "pm2": "^2.6.1",
     "prettier": "1.14.2",
